@@ -127,6 +127,23 @@
         </div>
     </div>
 
+            <!-- DIESER BLOCK WIRD DIREKT UNTER DEN BESTEHENDEN VERLAUFSKASTEN GESETZT -->
+        <div id="global-explorer" style="background: #030712; border: 2px solid #2563eb; border-radius: 12px; padding: 20px; margin-top: 30px; font-family: sans-serif;">
+            <h3 style="color: #38bdf8; font-size: 16px; font-weight: bold; margin-top: 0; border-bottom: 2px solid #2563eb; padding-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">🌐 Global Inter-Institutionell Explorer</h3>
+            
+            <div style="background: #111827; padding: 15px; border-radius: 6px; border: 1px solid #2563eb; font-family: monospace; font-size: 11px;">
+                <div style="color: #38bdf8; font-weight: bold; margin-bottom: 8px; text-transform: uppercase;">🔍 Vektor-Positions-Analyse (Inspektion)</div>
+                <div id="explorer-display-details" style="color: #f8fafc; line-height: 1.6;">Warte auf Klick im lokalen Ledger... Klicke oben auf einen der drei unverkürzten Hashes, um die hierarchische Übertragungs-Position im globalen Register einzusehen.</div>
+            </div>
+            
+            <button onclick="window.scrollTo({top:0, behavior:'smooth'})" style="background: #1f2937; color: #9ca3af; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 12px; font-size: 11px;">▲ Zurück zum Nutzer-Dashboard</button>
+        </div>
+    </div> <!-- Schließt den max-width Container falls vorhanden -->
+
+    <!-- LÄDT DIE UNANTASTBARE BASIS-BLOCKCHAIN -->
     <script src="app.js"></script>
+
+    <!-- LÄDT DIE NEUE, AUSGELAGERTE EXPLORER-EBENE DAZU (OHNE DIE APP.JS ZU STÖREN) -->
+    <script src="explorer.js"></script>
 </body>
 </html>
