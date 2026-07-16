@@ -8,24 +8,19 @@
         body { font-family: sans-serif; background: #0f172a; color: #f8fafc; padding: 20px; margin: 0; }
         .box { background: #1e293b; padding: 15px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
         input { display: block; width: 100%; margin: 10px 0; padding: 12px; border-radius: 4px; border: 1px solid #475569; background: #334155; color: white; box-sizing: border-box; }
-        
         .copy-row { display: flex; justify-content: space-between; align-items: center; background: #020617; padding: 8px; border-radius: 4px; margin: 5px 0; gap: 10px; border: 1px solid #334155; }
         .copy-text { word-break: break-all; font-family: monospace; font-size: 11px; color: #38bdf8; flex: 1; }
-        
         .copy-btn { background: #475569; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 14px; display: flex; align-items: center; min-width: 40px; justify-content: center; }
         .copy-btn:active { background: #10b981; }
-
         button.action-btn { background: #2563eb; color: white; border: none; padding: 12px 20px; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 5px; }
         button.action-btn:hover { background: #1d4ed8; }
         .hidden { display: none; }
-        
         .chain-log { font-family: monospace; background: #020617; padding: 12px; border-radius: 4px; color: #10b981; max-height: 350px; overflow-y: auto; font-size: 12px; line-height: 1.6; -webkit-overflow-scrolling: touch; }
         hr { border: 0; border-top: 1px dashed #475569; margin: 15px 0; }
         .section-title { color: #f97316; font-size: 13px; font-weight: bold; margin-top: 10px; margin-bottom: 2px; text-transform: uppercase; }
     </style>
 </head>
 <body>
-
     <div style="max-width: 600px; margin: 0 auto; padding-top: 20px;">
         <h1>🦅 Golden Phoenix Central Bank (IICB)</h1>
         
@@ -116,29 +111,27 @@
                     <button class="copy-btn" onclick="system.copyToClipboard('privkey-display')">🗐</button>
                 </div>
             </div>
-
             <button class="action-btn" onclick="system.logout()" style="background:#dc2626; margin-top:20px;">System verlassen (Logout)</button>
         </div>
 
         <!-- SIMULTANE BLOCKCHAIN KETTE -->
         <div class="box">
             <h3>Simultane Status- & Verifikationskette (Unveränderbar)</h3>
-            <div id="chain-output" class="chain-log" style="font-family: monospace; background: #020617; padding: 12px; border-radius: 4px; color: #10b981; max-height: 350px; overflow-y: auto; font-size: 12px; line-height: 1.6; -webkit-overflow-scrolling: touch; word-break: break-all;">System bereit. Warte auf Interaktion...</div>
+            <div id="chain-output" class="chain-log">System bereit. Warte auf Interaktion...</div>
         </div>
-        </div>
+    </div>
 
-            <!-- DIESER BLOCK WIRD DIREKT UNTER DEN BESTEHENDEN VERLAUFSKASTEN GESETZT -->
-        <div id="global-explorer" style="background: #030712; border: 2px solid #2563eb; border-radius: 12px; padding: 20px; margin-top: 30px; font-family: sans-serif;">
-            <h3 style="color: #38bdf8; font-size: 16px; font-weight: bold; margin-top: 0; border-bottom: 2px solid #2563eb; padding-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">🌐 Global Inter-Institutionell Explorer</h3>
-            
-            <div style="background: #111827; padding: 15px; border-radius: 6px; border: 1px solid #2563eb; font-family: monospace; font-size: 11px;">
-                <div style="color: #38bdf8; font-weight: bold; margin-bottom: 8px; text-transform: uppercase;">🔍 Vektor-Positions-Analyse (Inspektion)</div>
-                <div id="explorer-display-details" style="color: #f8fafc; line-height: 1.6;">Warte auf Klick im lokalen Ledger... Klicke oben auf einen der drei unverkürzten Hashes, um die hierarchische Übertragungs-Position im globalen Register einzusehen.</div>
-            </div>
-            
-            <button onclick="window.scrollTo({top:0, behavior:'smooth'})" style="background: #1f2937; color: #9ca3af; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 12px; font-size: 11px;">▲ Zurück zum Nutzer-Dashboard</button>
+    <!-- DIESER BLOCK WIRD DIREKT UNTER DEN BESTEHENDEN VERLAUFSKASTEN GESETZT -->
+    <div id="global-explorer" style="background: #030712; border: 2px solid #2563eb; border-radius: 12px; padding: 20px; margin: 20px auto; max-width: 600px; font-family: sans-serif; box-shadow: 0 0 15px rgba(37, 99, 235, 0.15);">
+        <h3 style="color: #38bdf8; font-size: 16px; font-weight: bold; margin-top: 0; border-bottom: 2px solid #2563eb; padding-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">🌐 Global Inter-Institutionell Explorer</h3>
+        
+        <div style="background: #111827; padding: 15px; border-radius: 6px; border: 1px solid #2563eb; font-family: monospace; font-size: 11px;">
+            <div style="color: #38bdf8; font-weight: bold; margin-bottom: 8px; text-transform: uppercase;">🔍 Vektor-Positions-Analyse (Inspektion)</div>
+            <div id="explorer-display-details" style="color: #f8fafc; line-height: 1.6;">Warte auf Klick im lokalen Ledger... Klicke oben auf einen der drei unverkürzten Hashes, um die hierarchische Übertragungs-Position im globalen Register einzusehen.</div>
         </div>
-    </div> <!-- Schließt den max-width Container falls vorhanden -->
+        
+        <button onclick="window.scrollTo({top:0, behavior:'smooth'})" style="background: #1f2937; color: #9ca3af; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 12px; font-size: 11px;">▲ Zurück zum Nutzer-Dashboard</button>
+    </div>
 
     <!-- LÄDT DIE UNANTASTBARE BASIS-BLOCKCHAIN -->
     <script src="app.js"></script>
