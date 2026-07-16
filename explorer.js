@@ -49,7 +49,7 @@
         detailsDisplay.innerHTML = analysisText;
     },
 
-    // Globale, mobile-kompatible Kopierfunktion für die Zwischenablage
+    // Globale, mobile-kompatible Kopierfunktion für die Zwischenablage via echtem Unicode-Button
     copyText: function(text) {
         navigator.clipboard.writeText(text).then(() => {
             alert("Hash erfolgreich in die Zwischenablage kopiert!");
@@ -58,96 +58,118 @@
         });
     },
 
-    // AUTOMATISCHE INTERZEPTIONS-MASCHINE: Formatiert die Rohdaten der app.js im RAM um
+    // REPARIERTE INTERZEPTIONS-MASCHINE: Teilt die Rohdaten anhand der Zeilenumbrüche (\n)
     interceptAndTransform: function() {
         const outputBox = document.getElementById('chain-output');
         if (!outputBox) return;
 
-        // Extrahiert den rohen Textinhalt, den Ihre app.js hineingeschrieben hat
         const rawText = outputBox.innerText || outputBox.textContent;
-        if (!rawText || rawText.includes("System bereit") || rawText.includes("explorer-row")) return;
+        // Verhindert doppeltes Formatieren, wenn die Struktur bereits aufgebaut wurde
+        if (!rawText || rawText.includes("System bereit") || rawText.includes("display: flex")) return;
 
-        // Zerlegt den Text in einzelne Blöcke, falls mehrere vorhanden sind
-        const blocks = rawText.split(/Block #/g);
+        // Zerlegt den unformatierten Gesamttext sauber in Zeilen
+        const lines = rawText.split('\n');
         let finalHTML = "";
+        
+        let currentBlockIndex = 0;
+        let currentTime = "00:00:00";
+        let currentType = "INTERAKTION";
+        let currentDetails = "";
+        let idHash = "";
+        let prevHash = "";
+        let currHash = "";
 
-        blocks.forEach(blockStr => {
-            if (!blockStr.trim()) return;
+        // Wandelt die Rohdaten-Zeilen Schritt für Schritt im RAM in HTML-Vektoren um
+        lines.forEach(line => {
+            const trimmed = line.trim();
+            if (!trimmed) return;
 
-            // Extrahiert den Index des Blocks
-            const indexMatch = blockStr.match(/^(\document|\d+)/);
-            const blockIndex = indexMatch ? parseInt(indexMatch[0]) : 0;
-
-            // Sucht nach den unverkürzten Hashes im Text via regulärer Ausdrücke
-            const idHashMatch = blockStr.match(/ID-Hash:\s*([a-fA-F0-9]{16,64})/);
-            const prevHashMatch = blockStr.match(/Prev-Hash:\s*([a-fA-F0-9]{16,64})/);
-            const currHashMatch = blockStr.match(/Curr-Hash:\s*([a-fA-F0-9]{16,64})/);
-            
-            const idHash = idHashMatch ? idHashMatch[1] : "Inaktiv / Nicht deklariert";
-            const prevHash = prevHashMatch ? prevHashMatch[1] : "0000000000000000000000000000000000000000000000000000000000000000";
-            const currHash = currHashMatch ? currHashMatch[1] : "Nicht versiegelt";
-
-            // Holt den Typ des Blocks (z.B. LOGIN oder WALLET_EVALUATION)
-            const typeMatch = blockStr.match(/\[(.*?)\]/);
-            const blockType = typeMatch ? typeMatch[1] : "INTERAKTION";
-
-            // Holt eventuelle Zusatzdetails
-            const detailsMatch = blockStr.match(/•\s*(.*?)(?=\n|Prev-Hash|$)/);
-            const blockDetails = detailsMatch ? detailsMatch[1] : "Aktion im Inland-Status verzeichnet.";
-
-            // Zieht den Zeitstempel aus den eckigen Klammern am Anfang extrahiert heraus
-            const timeMatch = blockStr.match(/^\[(.*?)\]/);
-            const blockTime = timeMatch ? timeMatch[1] : "00:00:00";
-
-            // Generiert das symmetrische, fraktale HTML-Layout im RAM
-            finalHTML += `
-                <div style="padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px dashed #334155;">
-                    <strong style="color: #10b981;">[${blockTime}] ⛓️ Block #${blockIndex} [${blockType}]</strong><br>
-                    <span style="color: #f8fafc;">• Details: ${blockDetails}</span><br>
-                    
-                    <!-- ID-HASH ZEILE -->
-                    <div style="display: flex; justify-content: space-between; align-items: center; background: #090d16; padding: 6px 10px; border-radius: 4px; margin: 6px 0; gap: 10px; border: 1px solid #1e293b;">
-                        <span style="color: #38bdf8; font-family: monospace; font-size: 11px; cursor: pointer; text-decoration: underline; flex: 1; word-break: break-all;" onclick="GlobalExplorer.inspect('${idHash}', 'ID', ${blockIndex})">ID-Hash: ${idHash}</span>
-                        <button style="background: #334155; color: #f8fafc; border: 1px solid #475569; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; min-width: 38px;" onclick="GlobalExplorer.copyText('${idHash}')">📋</button>
-                    </div>
-                    
-                    <!-- PREV-HASH ZEILE -->
-                    <div style="display: flex; justify-content: space-between; align-items: center; background: #090d16; padding: 6px 10px; border-radius: 4px; margin: 6px 0; gap: 10px; border: 1px solid #1e293b;">
-                        <span style="color: #38bdf8; font-family: monospace; font-size: 11px; cursor: pointer; text-decoration: underline; flex: 1; word-break: break-all;" onclick="GlobalExplorer.inspect('${prevHash}', 'PREV', ${blockIndex})">Prev-Hash: ${prevHash}</span>
-                        <button style="background: #334155; color: #f8fafc; border: 1px solid #475569; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; min-width: 38px;" onclick="GlobalExplorer.copyText('${prevHash}')">📋</button>
-                    </div>
-                    
-                    <!-- CURR-HASH ZEILE -->
-                    <div style="display: flex; justify-content: space-between; align-items: center; background: #090d16; padding: 6px 10px; border-radius: 4px; margin: 6px 0; gap: 10px; border: 1px solid #1e293b;">
-                        <span style="color: #38bdf8; font-family: monospace; font-size: 11px; cursor: pointer; text-decoration: underline; flex: 1; word-break: break-all;" onclick="GlobalExplorer.inspect('${currHash}', 'CURR', ${blockIndex})">Curr-Hash: ${currHash}</span>
-                        <button style="background: #334155; color: #f8fafc; border: 1px solid #475569; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; min-width: 38px;" onclick="GlobalExplorer.copyText('${currHash}')">📋</button>
-                    </div>
-                </div>
-            `;
+            if (trimmed.includes("Block #")) {
+                // Falls ein neuer Block startet, verarbeite erst den vorherigen (falls vorhanden)
+                if (idHash || prevHash || currHash) {
+                    finalHTML += this.buildBlockHTML(currentBlockIndex, currentTime, currentType, currentDetails, idHash, prevHash, currHash);
+                }
+                
+                // Extrahiert die Metadaten des neuen Blocks
+                const timeMatch = trimmed.match(/^\[(.*?)\]/);
+                currentTime = timeMatch ? timeMatch[1] : "00:00:00";
+                
+                const indexMatch = trimmed.match(/Block #(\d+)/);
+                currentBlockIndex = indexMatch ? parseInt(indexMatch[1]) : 0;
+                
+                const typeMatch = trimmed.match(/\[([^\]]+)\]$/);
+                currentType = typeMatch ? typeMatch[1] : "INTERAKTION";
+                
+                // Setze Hashes für den neuen Block zurück
+                idHash = ""; prevHash = ""; currHash = ""; currentDetails = "";
+            } 
+            else if (trimmed.startsWith("• Details:")) {
+                currentDetails = trimmed.replace("• Details:", "").trim();
+            } 
+            else if (trimmed.includes("ID-Hash:")) {
+                idHash = trimmed.split("ID-Hash:")[1].trim();
+            } 
+            else if (trimmed.includes("Prev-Hash:")) {
+                prevHash = trimmed.split("Prev-Hash:")[1].trim();
+            } 
+            else if (trimmed.includes("Curr-Hash:")) {
+                currHash = trimmed.split("Curr-Hash:")[1].trim();
+            }
         });
 
-        // Überschreibt die Anzeige mit der neuen hochfunktionellen Fraktal-Struktur
+        // Schreibt den letzten verbleibenden Block in das HTML-Register
+        if (idHash || prevHash || currHash) {
+            finalHTML += this.buildBlockHTML(currentBlockIndex, currentTime, currentType, currentDetails, idHash, prevHash, currHash);
+        }
+
+        // Überschreibt den Kasten mit der neuen, sauberen Klick- und Kopierstruktur
         outputBox.innerHTML = finalHTML;
         outputBox.scrollTop = outputBox.scrollHeight;
+    },
+
+    // Baut die symmetrische HTML-Zeilenstruktur mit echten Kopier-Vierecken im RAM auf
+    buildBlockHTML: function(index, time, type, details, id, prev, curr) {
+        return `
+            <div style="padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px dashed #334155; font-family: monospace;">
+                <strong style="color: #10b981;">[${time}] ⛓️ Block #${index} [${type}]</strong><br>
+                <span style="color: #f8fafc;">• Details: ${details}</span><br>
+                
+                <!-- ECHTE ID-HASH REIHE -->
+                <div style="display: flex; justify-content: space-between; align-items: center; background: #090d16; padding: 6px 10px; border-radius: 4px; margin: 6px 0; gap: 10px; border: 1px solid #1e293b;">
+                    <span style="color: #38bdf8; cursor: pointer; text-decoration: underline; flex: 1; word-break: break-all; font-size: 11px;" onclick="GlobalExplorer.inspect('${id}', 'ID', ${index})">ID-Hash: ${id}</span>
+                    <button style="background: #334155; color: #f8fafc; border: 1px solid #475569; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; min-width: 38px;" onclick="GlobalExplorer.copyText('${id}')">📋</button>
+                </div>
+                
+                <!-- ECHTE PREV-HASH REIHE -->
+                <div style="display: flex; justify-content: space-between; align-items: center; background: #090d16; padding: 6px 10px; border-radius: 4px; margin: 6px 0; gap: 10px; border: 1px solid #1e293b;">
+                    <span style="color: #38bdf8; cursor: pointer; text-decoration: underline; flex: 1; word-break: break-all; font-size: 11px;" onclick="GlobalExplorer.inspect('${prev}', 'PREV', ${index})">Prev-Hash: ${prev}</span>
+                    <button style="background: #334155; color: #f8fafc; border: 1px solid #475569; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; min-width: 38px;" onclick="GlobalExplorer.copyText('${prev}')">📋</button>
+                </div>
+                
+                <!-- ECHTE CURR-HASH REIHE -->
+                <div style="display: flex; justify-content: space-between; align-items: center; background: #090d16; padding: 6px 10px; border-radius: 4px; margin: 6px 0; gap: 10px; border: 1px solid #1e293b;">
+                    <span style="color: #38bdf8; cursor: pointer; text-decoration: underline; flex: 1; word-break: break-all; font-size: 11px;" onclick="GlobalExplorer.inspect('${curr}', 'CURR', ${index})">Curr-Hash: ${curr}</span>
+                    <button style="background: #334155; color: #f8fafc; border: 1px solid #475569; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; min-width: 38px;" onclick="GlobalExplorer.copyText('${curr}')">📋</button>
+                </div>
+            </div>
+        `;
     }
 };
-// ERWEITERUNGS-LOGIK: Überwacht das chain-output Feld permanent auf Datenänderungen durch die app.js
-window.addEventListener('load', () => {
-    if (typeof system !== 'undefined') {
-        console.log("EuroChain-Kern erkannt. Modulares Explorer-System ist aktiv.");
-        
-        const targetNode = document.getElementById('chain-output');
-        if (targetNode) {
-            // Ein MutationObserver reagiert in Echtzeit, sobald Text in die Box geschüttet wird
-            const observer = new MutationObserver(() => {
-                // Verhindert Endlosschleifen beim Umschreiben
 
+
+// Startet das automatische Überwachungs-Auge im Hintergrund
+window.addEventListener('load', () => {
+if (typeof system !== 'undefined') {
+const targetNode = document.getElementById('chain-output');
+if (targetNode) {
+// Führe die Umwandlung sofort einmal aus, falls bereits Daten geladen wurden
+GlobalExplorer.interceptAndTransform();
+const observer = new MutationObserver(() => {
 observer.disconnect();
 GlobalExplorer.interceptAndTransform();
-// Schaltet den Observer nach dem RAM-Umschreiben sofort wieder scharf
-observer.observe(targetNode, { childList: true, characterData: true, subtree: true });
+observer.observe(targetNode, { childList: true, subtree: true, characterData: true });
 });
-observer.observe(targetNode, { childList: true, characterData: true, subtree: true });
+observer.observe(targetNode, { childList: true, subtree: true, characterData: true });
 }
 }
 });
