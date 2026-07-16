@@ -361,7 +361,7 @@ class EuroChainSystem {
         this.temporaryAddressToMap = null;
     }
 
-    renderWalletUI() {
+        renderWalletUI() {
         document.getElementById('wallet-setup').classList.add('hidden');
         document.getElementById('wallet-2fa').classList.add('hidden');
         document.getElementById('wallet-active').classList.remove('hidden');
@@ -381,11 +381,21 @@ class EuroChainSystem {
         const prevHash = this.chain.length > 0 ? this.chain[this.chain.length - 1].currentHash : "0000000000000000000000000000000000000000000000000000000000000000";
         const timestamp = new Date().toISOString();
         
+        // Extrahiert den reinen ID-Hash aus den Details, falls es der Login-Block ist, um Brüche zu verhindern
+        let calculatedIdHash = "0000000000000000000000000000000000000000000000000000000000000000";
+        if (details.includes("ID-Hash: ")) {
+            calculatedIdHash = details.split("ID-Hash: ")[1];
+        } else if (this.currentUser) {
+            // Generiert den permanenten Vektor-ID-Hash aus dem aktiven Sitzungsnamen im RAM
+            calculatedIdHash = await this.hash(this.currentUser + "_salt_for_session");
+        }
+
         const blockData = {
             index: this.chain.length,
             timestamp: timestamp,
             typ: typ,
             details: details,
+            idHash: calculatedIdHash,
             prevHash: prevHash
         };
 
@@ -405,45 +415,52 @@ class EuroChainSystem {
         }
     }
 
+    // Schreibt die puren unverkürzten Textdaten in den Kasten, damit explorer.js sie im RAM abfängt
     updateChainUI() {
         const output = document.getElementById('chain-output');
+        if (!output) return;
         if (this.chain.length === 0) {
             output.innerHTML = "System bereit. Warte auf Interaktion...";
             return;
         }
         
-        output.innerHTML = this.chain.map((b, i) => {
-            const timePart = b.timestamp.includes('T') ? b.timestamp.split('T')[1].substring(0, 8) : "00:00:00";
+        output.innerHTML = this.chain.map((b) => {
+            // Absolut ausfallsicheres Zeit-Parsing ohne Substring-Abstürze
+            let timePart = "00:00:00";
+            if (b.timestamp && b.timestamp.includes('T')) {
+                const parts = b.timestamp.split('T');
+                if (parts[1]) {
+                    timePart = parts[1].split('.')[0] || parts[1].substring(0, 8);
+                }
+            }
+            
             return `
-                <div style="padding-bottom: 5px;">
-                    <strong>[${timePart}] ⛓️ Block #${b.index} [${b.typ}]</strong><br>
+                [${timePart}] Block #${b.index} [${b.typ}]
+                • Details: ${b.details}
+                ID-Hash: ${b.idHash}
+                Prev-Hash: ${b.prevHash}
+                Curr-Hash: ${b.currentHash}
+            `;
+        }).join('\n');
+        
+        output.scrollTop = output.scrollHeight;
+    }
 
-• Details: ${b.details}
+    logout() {
+        this.currentUser = null;
+        this.currentWallet = null;
+        this.chain = [];
+        localStorage.clear();
 
-
-Prev-Hash: ${b.prevHash}
-🗐
-
-
-Curr-Hash: ${b.currentHash}
-🗐
-
-
-`;
-}).join('');
-output.scrollTop = output.scrollHeight;
+        document.getElementById('auth-section').classList.remove('hidden');
+        document.getElementById('dashboard-section').classList.add('hidden');
+        document.getElementById('wallet-active').classList.add('hidden');
+        document.getElementById('wallet-setup').classList.remove('hidden');
+        document.getElementById('wallet-2fa').classList.add('hidden');
+        
+        this.updateChainUI();
+    }
 }
-logout() {
-this.currentUser = null;
-this.currentWallet = null;
-this.chain = [];
-localStorage.clear();
-document.getElementById('auth-section').classList.remove('hidden');
-document.getElementById('dashboard-section').classList.add('hidden');
-document.getElementById('wallet-active').classList.add('hidden');
-document.getElementById('wallet-setup').classList.remove('hidden');
-document.getElementById('wallet-2fa').classList.add('hidden');
-this.updateChainUI();
-}
-}
+
+// Deklariert das unantastbare System-Objekt im globalen RAM des Browsers
 const system = new EuroChainSystem();
