@@ -94,3 +94,86 @@ Sobald ein Nutzer im lokalen Ledger auf einen nackten Hash-Text klickt, löst di
 Der Explorer berechnet die hierarchische Kette im globalen Gesamtregister unbestechlich:
 * **Der Urheber-Status:** Loggt sich der allererste Nutzer (der Erfinder) im System ein und klickt im Block #0 auf seinen `Prev-Hash`, erkennt der Explorer, dass vor dieser ID-History kein anderer Block existiert. Er spiegelt das übergeordnete System-Vakuum (pures Null-Zustand-Feld `00000...`) wider und deklariert diese Position schriftlich als die absolute **Genesis-Singularität**.
 * **Die nachfolgenden Institutionen:** Tritt später ein zweiter Nutzer dem System bei und klickt auf seinen Eintritts-Vektor, leitet der Explorer ihn übergeordnet im Register zurück zur Master-Linie und zeigt an, dass sein Startpunkt unumkehrbar an den finalen `Curr-Hash` des allerersten Urhebers andockt. Die Privatsphäre der Klardaten bleibt dabei geschützt; sichtbar sind im globalen Fenster ausschließlich die anonymen Hash-Puzzleteile, die Interaktionszeiten und der Beitrag zum System.
+
+---
+
+## 📱 Kapitel 5: Die Soziale Interaktions-Ebene (Ansicht 4)
+
+Dieses Modul deklariert die Erweiterung des Dashboards nach dem erfolgreichen System-Eintritt. Es bettet ein dezentrales Kommunikations- und Reputationsnetzwerk ein, das direkt an den anonymen `ID-Hash` des Nutzers gekoppelt ist.
+
+### 5.1 Der Profil-Navigations-Anker (★1)
+Direkt in Klammern hinter der `Sitzungs-Willkommenszeile` (nach erfolgreichem Login über der Fiat- und System-Status-Ebene) wird der **Profil-Button** verankert. Seine Ansicht und alle untergeordneten Funktionen werden erst dann im RAM konstruiert und sichtbar, wenn der Nutzer aktiv darauf klickt.
+
+*   **Profil-Innenansicht:** 
+    *   **Profilbild:** Vollständig bearbeitbar und austauschbar (Lokaler Dateipfad oder Base64-String).
+    *   **Benutzername:** Absolut gesperrt und **NICHT BEARBEITBAR**. Die Identität bleibt permanent an den ursprünglichen Registrierungs-Hash gekoppelt.
+    *   **Bio-Description:** Ein freies Textfeld unter dem Profilbild, das mit einer individuellen Beschreibung befüllt und editiert werden kann.
+
+### 5.2 Das Interbanken-Kommunikationssystem (Peer-to-Peer Chat)
+Innerhalb der Profil-Ansicht öffnet sich das Tor zur interinstitutionellen Kommunikation:
+*   **Globale Nutzersuche:** 1x Suchleiste zum Scannen des Netzwerks nach den Benutzernamen anderer Institutionen.
+*   **Chat-Aktivierung:** 1x Papierflieger-Button neben dem Suchergebnis. Ein Klick darauf konstruiert augenblicklich die geschützte Chat-Ansicht.
+*   **Das Interface:** Besteht aus 1x Nachrichten-Fenster und 1x Eingabebalken für den Text.
+*   **Sende-Vektor:** 1x Sende-Button (ebenfalls als Papierflieger-Symbol codiert), der die Nachricht verschlüsselt absendet.
+*   **Der Nachrichten- & Kontakte-Verlauf:** Beim Verlassen eines aktiven Chats wird im Hintergrund ein chronologischer Kommunikations-Verlauf erzeugt. Dieser Verlauf enthält eine eigene 1x Suchleiste, um Chats nach Namen blitzschnell zu filtern.
+
+### 5.3 Das Reputations- und Beitrags-System (Plus-Symbol)
+Befindet sich der Nutzer im Haupt-Dashboard und nicht in einer der sozialen Chat-Unterfunktionen, wird das **Plus-Symbol (+)** als globaler Aktions-Knopf freigeschaltet.
+*   **Beitrags-Erstellung:** Ein Klick darauf erlaubt das Posten von Beiträgen und Updates (Missionen/Öko-Berichte).
+*   **Inhalts-Struktur:** Jeder Post verfügt über 1x Textfeld (Description) für mechatronische oder gemeinschaftliche Protokolle.
+
+---
+
+## ⚙️ Kapitel 6: Das duale Settings-Modell (Die Klon-Architektur)
+
+Um die Liquiditätskontrolle strikt von der administrativen Nutzersphäre zu trennen, wird das Einstellungs-System in zwei funktional voneinander isolierte Klone aufgeteilt:
+
+### 6.1 Der Administrative Master-Settings-Button (Über Profil-Ansicht)
+Wird aufgerufen, wenn der Settings-Button *innerhalb* der Profil-Ansicht (★1) geklickt wird. Dies ist das vollumfängliche Kontrollzentrum des Accounts.
+*   **System-Passwort:** Im Klartext einsehbar und jederzeit **veränderbar**. Das Passwort ist die einzige Komponente, die nicht direkt Krypto-basiert ist.
+*   **Krypto-Schlüsselverwaltung:** Listet alle systemseitig generierten und extern verknüpften Datensätze auf.
+*   **Die Phrasen-Sicherheitsregel:** Alle 12- und 24-Wort Seed Phrasen sind in diesem Bereich zum Schutz vor unbedachten Fehlern **nur einsehbar, aber absolut unveränderbar**.
+
+### 6.2 Der Krypto-Settings-Klon (Oben rechts auf der Krypto-Ebene)
+Dieser Button existiert als strategischer Klon oben rechts direkt auf der Krypto-Ebene (noch vor dem Betreten des Profils, direkt nach dem frisch Einloggen). Er dient der reinen Liquiditäts-Überwachung und filtert alle administrativen Klardaten heraus:
+*   **Sicherheits-Filter:** Das System-Passwort ist in dieser Ansicht **vollständig unsichtbar und nicht hinterlegt**.
+*   **Krypto-Fokus:** Es werden ausschließlich die Krypto-Infos, Wallet-Adressen und deren zugeteilte Seed Phrasen angezeigt.
+
+### 6.3 Die eiserne Sovereign-Trennungsregel für Wallets
+Das System unterscheidet im RAM und im Ledger messerscharf zwischen zwei Datensatz-Typen:
+
+1.  **Externe verknüpfte Wallets (Option B / Trust Wallet / Importe):** 
+    *   Diese Adressen und Phrasen wurden nachträglich in das System importiert. 
+    *   **Eiserne Regel:** Sie können im Master-Settings-Bereich jederzeit rückstandslos wieder **entknüpft und gelöscht** werden.
+2.  **Interne systemseitige Wallets (Option A / Generierte Ur-Kanäle):**
+    *   Diese wurden von der internen BIP-39 Engine aus der Account-Entropie errechnet.
+    *   **Eiserne Regel:** Sie bleiben für immer unveränderlich und fest mit dem Account verschmolzen. Sie können niemals gelöscht oder entknüpft werden.
+3.  **Der Akkumulations-Vektor (Neu-Generierung):**
+    *   Wird im Dashboard ein weiteres Mal auf „Neue autonome Wallet generieren“ geklickt, überschreibt das System die alten Daten nicht. 
+    *   Die Engine berechnet einen komplett **neuen, eigenständigen Datenblock** (wieder bestehend aus 2 Phrasen und 4 Adressen) und reiht diesen als chronologisches Folge-Glied in das Settings-Register ein. Alle bisher generierten Blöcke bleiben parallel nebeneinander bestehen und zu 100 % nutzbar.
+
+---
+
+## 📊 Kapitel 7: Das Live-Interaktions-Volumen & Statistischer Network-Viewer
+
+Dieses Modul deklariert die Erweiterung des *Global Inter-Institutionell Explorers* ganz unten im Interface zu einem dynamischen Makro-Dashboard. Es aggregiert die Datenströme aller Nutzer-Identitäten autonom und visualisiert sie in Echtzeit.
+
+### 7.1 Der Live-Status-Interaktions-Ticker
+Jeder im System registrierte Statustyp erhält im Global Explorer eine eigene, dynamisch pulsierende Live-Verlaufsanzeige. Sobald eine Institution im Netzwerk aktiv wird, verarbeitet der Viewer die Taktung:
+
+*   **⚡ [LOGIN] Live-Vektor:** Visualisiert die globale Frequenz der interinstitutionellen System-Eintritte. Jede Anmeldung auf dem Kontinent treibt den globalen Aktivitäts-Vektor (Hz) nach oben.
+*   **🔒 [WALLET_EVALUATION] Live-Vektor:** Protokolliert das sekündliche Entstehen neuer, systemseitiger Ur-Kanäle (4 Adressen aus 2 Phrasen) im gesamten `@RFOF-NETWORK`.
+*   **🔗 [WALLET_2FA_IMPORT] Live-Vektor:** Überwacht das kryptografisch validierte Einbinden und Entknüpfen externer Kanäle (z. B. Trust Wallet) im Netzwerk-Verbund.
+
+Der Viewer zeigt nicht nur historische Daten, sondern füttert das Interface ununterbrochen mit **aktiv neu reinkommenden Live-Interaktionen**. Jede Miksekunde verändern diese Vektoren das statistische Volumen.
+
+### 7.2 Das Dezentrale System-Adressregister (Globale Wallet-Liste)
+Um die absolute Transparenz und die unmanipulierbare Validität der Blockchain zu garantieren, enthält der Explorer ein öffentliches Ledger-Verzeichnis:
+*   **Die System-Adressliste:** Eine fortlaufend aktualisierte, scrollbare Liste **ALLER Wallet-Adressen**, die jemals systemseitig durch irgendeinen Nutzer in der Blockchain generiert wurden und somit im dezentralen Raum existieren.
+*   **Anonymitäts-Wahrung:** Die Liste legt die mathematische Existenz der Kanäle offen, enthält jedoch keinerlei Verknüpfungen zu Benutzernamen oder Passwörtern. Sie zeigt das reine Vorhandensein der dezentralen Liquiditäts-Slots.
+
+### 📈 7.3 Makroökonomische Grafik- & Metrik-Panels
+Unter der Adressliste generiert die Engine rein mathematisch determinierte, statistische Visualisierungen, die für den Nutzer indirekt nutzbar sind, um den Vektor der Schnelligkeit zu bestimmen:
+1.  **Interaktions-Volumen-Kurve (Live):** Eine Echtzeit-Grafik, die das Verhältnis zwischen der Interaktions-Frequenz und dem exponentiellen Preisanstieg abbildet, sobald der verfügbare digitale Supply sich der Null-Linie nähert.
+2.  **Akkumulations-Metrik:** Zeigt die kumulierte Anzahl aller jemals erzeugten Datensatz-Blöcke im Settings-Register des Gesamtnetzwerks an.
+3.  **Global EU Debt Reducer Tracker:** Ein digitaler Großbild-Zähler, der die mathematische Verschmelzung zwischen lokaler Nutzer-Aktivität und dem autonomen Abbau der EU-Verbindlichkeiten grafisch als sinkenden Schuldenberg darstellt.
