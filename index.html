@@ -1,42 +1,37 @@
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@RFOF-NETWORK - EuroChain / IICB</title>
-    <style>
+        <style>
         body { font-family: sans-serif; background: #0f172a; color: #f8fafc; padding: 20px; margin: 0; }
         .box { background: #1e293b; padding: 15px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
         input { display: block; width: 100%; margin: 10px 0; padding: 12px; border-radius: 4px; border: 1px solid #475569; background: #334155; color: white; box-sizing: border-box; }
         
-        /* Lokales Kette-Layout */
+        /* Symmetrischer Flex-Container für die unverkürzten Hash-Fraktalzeilen im Ledger */
         .explorer-row { display: flex; justify-content: space-between; align-items: center; background: #090d16; padding: 6px 10px; border-radius: 4px; margin: 6px 0; gap: 10px; border: 1px solid #1e293b; }
+        
+        /* Die blau leuchtende, unterstrichene Klickbarkeit für den direkten Global-Explorer-Routingvektor */
         .hash-link { color: #38bdf8; font-family: monospace; font-size: 11px; cursor: pointer; text-decoration: underline; flex: 1; word-break: break-all; transition: color 0.15s ease; }
         .hash-link:hover { color: #60a5fa; background: rgba(56, 189, 248, 0.08); }
+        
+        /* Das echte, unfehlbare Standard-Kopier-Viereck (📋) als nativer System-Button */
         .real-copy-btn { background: #334155; color: #f8fafc; border: 1px solid #475569; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; min-width: 38px; }
         .real-copy-btn:active { background: #10b981; border-color: #10b981; }
 
-        /* Krypto-Kanal-Anzeige */
-        .copy-row { display: flex; justify-content: space-between; align-items: center; background: #020617; padding: 8px; border-radius: 4px; margin: 5px 0; gap: 10px; border: 1px solid #334155; }
-        .copy-text { word-break: break-all; font-family: monospace; font-size: 11px; color: #38bdf8; flex: 1; }
-        .copy-btn { background: #475569; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 14px; display: flex; align-items: center; min-width: 40px; justify-content: center; }
-        .copy-btn:active { background: #10b981; }
-
         button.action-btn { background: #2563eb; color: white; border: none; padding: 12px 20px; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 5px; }
         button.action-btn:hover { background: #1d4ed8; }
-        .hidden { display: none !important; }
+        .hidden { display: none; }
+        
+        /* Der touch-scrollbare Kasten verhindert Zeichenbrüche auf mobilen Bildschirmen */
         .chain-log { font-family: monospace; background: #020617; padding: 12px; border-radius: 4px; color: #10b981; max-height: 350px; overflow-y: auto; font-size: 12px; line-height: 1.6; -webkit-overflow-scrolling: touch; word-break: break-all; }
         hr { border: 0; border-top: 1px dashed #475569; margin: 15px 0; }
         .section-title { color: #f97316; font-size: 13px; font-weight: bold; margin-top: 10px; margin-bottom: 2px; text-transform: uppercase; }
-        
-        /* Soziale Stile */
-        .history-item { display:flex; justify-content:space-between; align-items:center; background:#111827; padding:6px; border-radius:4px; margin-bottom:4px; font-size:11px; border:1px solid #1e293b; }
-        .chart-bar { flex:1; background:#2563eb; border-radius:2px 2px 0 0; transition: height 0.3s ease; min-height:4px; }
     </style>
+
 </head>
 <body>
-
     <div style="max-width: 600px; margin: 0 auto; padding-top: 20px;">
         <h1>🦅 Golden Phoenix Central Bank (IICB)</h1>
         
@@ -50,14 +45,8 @@
 
         <!-- SCHRITT 2: DASHBOARD (NACH LOGIN) -->
         <div id="dashboard-section" class="box hidden">
-            <!-- Profil-Button korrigiert: Enthält nun ein kleines, anonymes Instagram-artiges Avatar-Bild und das Wort "Profil" -->
-            <h2 style="display: flex; align-items: center; gap: 8px;">
-                Willkommen, <span id="user-display" style="color:#38bdf8;"></span>
-                <span id="profil-trigger" style="display: inline-flex; align-items: center; gap: 4px; color:#f97316; cursor:pointer; font-size:16px; text-decoration:underline;" onclick="SocialSystem.openProfile()">
-                    <img id="dashboard-avatar-icon" src="data:image/svg+xml;utf8,<svg xmlns='http://w3.org' viewBox='0 0 24 24' fill='%239ca3af'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>" style="width:20px; height:20px; border-radius:50%; background:#334155; border:1px solid #475569; object-fit:cover;">
-                    (Profil)
-                </span>
-            </h2>
+            <h2>Willkommen, <span id="user-display" style="color:#38bdf8;"></span></h2>
+            <p>System-Status: <span style="color:#10b981;">● Autonom & Validiert</span></p>
             
             <!-- FIAT PORTFOLIO -->
             <div class="box" style="background:#334155;">
@@ -65,9 +54,8 @@
                 <p>Guthaben: <strong>100.000,00 EUR</strong> (Verbriefte Liquidität)</p>
             </div>
 
-            <!-- WALLET VERWALTUNG (ORIGINAL BESCHRIFTUNG 1 + INTERNES SPEZIFISCHES ZAHNRAD) -->
-            <div id="wallet-setup" class="box" style="background:#334155; position:relative;">
-                <span style="position:absolute; top:10px; right:15px; cursor:pointer; font-size:18px;" onclick="SocialSystem.openCryptoSettingsKlon()">⚙️</span>
+            <!-- WALLET VERWALTUNG (EXAKTE BESCHRIFTUNG 1) -->
+            <div id="wallet-setup" class="box" style="background:#334155;">
                 <h3>Krypto-Ebene (EVM & BTC Ready)</h3>
                 <button class="action-btn" onclick="system.generateFourChannels()" style="background:#10b981;">Neue autonome Wallet generieren</button>
                 <p style="text-align: center; margin: 10px 0;">oder</p>
@@ -88,6 +76,7 @@
             <div id="wallet-active" class="box hidden" style="background:#020617; border: 1px solid #10b981;">
                 <h3>Aktive Wallet-Verbindung</h3>
                 
+                <!-- LAYER 1: 12 WÖRTER -->
                 <div class="section-title">12-Wort Kanal-Ebene</div>
                 <p style="margin:2px 0; font-size:11px;">Öffentliche EVM Adresse (12w):</p>
                 <div class="copy-row">
@@ -107,6 +96,7 @@
 
                 <hr style="margin:10px 0; border-top:1px dashed #334155;">
 
+                <!-- LAYER 2: 24 WÖRTER -->
                 <div class="section-title">24-Wort Kanal-Ebene</div>
                 <p style="margin:2px 0; font-size:11px;">Öffentliche EVM Adresse (24w):</p>
                 <div class="copy-row">
@@ -131,475 +121,164 @@
                     <span class="copy-text" id="privkey-display" style="color:#ef4444;"></span>
                     <button class="copy-btn" onclick="system.copyToClipboard('privkey-display')">🗐</button>
                 </div>
-
-System verlassen (Logout)
-
-Simultane Status- & Verifikationskette (Unveränderbar)
-System bereit. Warte auf Interaktion...
-
-
-🌐 Global Inter-Institutionell Explorer
-
-🔍 Vektor-Positions-Analyse (Inspektion)
-Warte auf Klick im lokalen Ledger... Klicke oben auf einen der drei unverkürzten Hashes, um die hierarchische Übertragungs-Position im globalen Register einzusehen.
-▲ Zurück zum Nutzer-Dashboard
-
-
-👤 INSTITUTIONELLES PROFIL
-
-
-
-
-✎
-
-
-NICHT BEARBEITBARER NUTZERNAME
--
-
-
-
-BIO / DESCRIPTION
-
-Bio Sichern
-
-
-
-💬 P2P Messenger & Posts
-⚙️ System Settings
-
-Dashboard Ansicht
-
-💬 PEER-TO-PEER NETWORK NET
-
-
-🔍 Suchen & Chatten 🚀
-NACHRICHTEN & KONTAKTE VERLAUF
-
-
-
-➕ Neuen Beitrag / Post erstellen
-
-
-
-Chat
-✕
-
-
-
-
-🚀
-
-
-
-➕ GLOBAL REPUTATION POST
-
-Beitrag im Netzwerk veröffentlichen
-Zurück
-
-Back to Profil
-
-⚙️ ACCOUNT SETTINGS
-
-Passwort Aktualisieren
-
-
-🔒 VALIDIERTE KRYPTO-KANÄLE
-
-
-Settings Verlassen
-
-
-
-📊 Live-Interaktions Volumen Statistischer Viewer
-
-
-[LOGIN]
-0 v/m
-
-
-[EVALUATION]
-0 v/m
-
-
-[2FA_IMPORT]
-0 v/m
-
-
-
-📈 Aggregierte Interaktions-Frequenz (Live)
-
-
-
-⛓️ Existierende Blockchain Gesamt-Adressliste
-
-bc1qUr-Genesis-Anker_Kanal_aktiviert_0x00000
-
-
-
-const GlobalExplorerHelper = {
-copyText: function(text) {
-navigator.clipboard.writeText(text).then(() => {
-alert("Hash erfolgreich kopiert!");
-}).catch(err => console.error("Fehler beim Kopieren: ", err));
-},
-inspect: function(hashValue, hashType, blockIndex) {
-const explorerBox = document.getElementById('global-explorer');
-if (explorerBox) { explorerBox.scrollIntoView({ behavior: 'smooth' }); }
-const detailsDisplay = document.getElementById('explorer-display-details');
-if (!detailsDisplay) return;
-const isAbsoluteFirstUser = (parseInt(blockIndex) === 0 && hashValue !== "0000000000000000000000000000000000000000000000000000000000000000");
-let analysisText = <strong>Geklickter Vektortyp:</strong> ${hashType}-Fraktal<br>;
-analysisText += <strong>Eingelesener String:</strong> <span style="color:#facc15; word-break:break-all;">${hashValue}</span><br><br>;
-if (hashType === 'ID') {
-analysisText += <strong>Hierarchischer Status:</strong> Übergeordnete ID-Kettenstruktur.<br>;
-if (isAbsoluteFirstUser) {
-analysisText += <strong>Befund:</strong> Du bist der <strong>allererste Urheber (Genesis-Singularität)</strong>. Vor diesem Interaktions-Hash existieren keine anderen globalen Ledger-Daten. Dein lokaler Start ist das Fundament des Netzwerks!;
-} else {
-analysisText += <strong>Befund:</strong> Dieser Vektor filtert die lückenlose, anonyme Lebenslinie dieser spezifischen Institution im globalen Register heraus.;
-}
-} else if (hashType === 'PREV') {
-analysisText += <strong>Hierarchischer Status:</strong> Untergeordneter Verknüpfungs-Vektor.<br>;
-if (hashValue.startsWith("0000000000000000") || hashValue === "0000000000000000000000000000000000000000000000000000000000000000") {
-analysisText += <strong>Befund:</strong> Lokaler Nutzer-Genesis-Punkt (Null-Zustand). ;
-if (parseInt(blockIndex) === 0) {
-analysisText += Da du das Gesamtsystem als erster Nutzer aktivierst, spiegelt das übergeordnete Fenster die totale Knappheit wider. Es existiert kein vorheriger Akteur.;
-} else {
-analysisText += Dockt im übergeordneten Gesamtregister direkt an den Zustand derjenigen Institution an, die eine Mikrosekunde vor dir aktiv war.;
-}
-} else {
-analysisText += <strong>Befund:</strong> Verknüpft diesen Interaktionsschritt mathematisch unumkehrbar mit dem direkten Vorgänger-Block.;
-}
-} else if (hashType === 'CURR') {
-analysisText += <strong>Hierarchischer Status:</strong> Zustands-Versiegelung.<br>;
-analysisText += <strong>Befund:</strong> Finaler Block-Hash im globalen Gesamt-Kontext validiert. Jede Interaktion unter diesem Hash verändert den globalen Liquiditäts-Supply im Netzwerk.;
-}
-detailsDisplay.innerHTML = analysisText;
-},
-// Interzeptiert den unformatierten Fließtext aus app.js im RAM und baut das Flex-Layout mit echten Buttons
-transformUI: function() {
-const outputBox = document.getElementById('chain-output');
-if (!outputBox) return;
-let rawText = outputBox.innerText || outputBox.textContent;
-if (!rawText || rawText.includes("System bereit") || rawText.includes("explorer-row")) return;
-// Bereinigt eventuelle doppelte Umbrüche
-rawText = rawText.replace(/\n\s*\n/g, '\n');
-const blocks = rawText.split(/Block\s*#/g);
-let finalHTML = "";
-blocks.forEach(blockStr => {
-if (!blockStr.trim()) return;
-const indexMatch = blockStr.match(/^(\d+)/);
-const blockIndex = indexMatch ? parseInt(indexMatch[1]) : 0;
-const timeMatch = blockStr.match(/$$(\d{2}:\d{2}:\d{2})$$ /);
-const blockTime = timeMatch ? timeMatch[1] : "00:00:00";
-const typeMatch = blockStr.match(/$$([A-Z_]+)$$ /);
-const blockType = typeMatch ? typeMatch[1] : "INTERAKTION";
-const detailsMatch = blockStr.match(/•\sDetails:\s([^\n]*)/i);
-const blockDetails = detailsMatch ? detailsMatch[1].trim() : "Aktion verzeichnet.";
-const idMatch = blockStr.match(/ID-Hash:\s*([a-fA-F0-9xX_]+)/i);
-const prevMatch = blockStr.match(/Prev-Hash:\s*([a-fA-F0-9]+)/i);
-const currMatch = blockStr.match(/Curr-Hash:\s*([a-fA-F0-9]+)/i);
-const idHash = idMatch ? idMatch[1].trim() : "0000000000000000000000000000000000000000000000000000000000000000";
-const prevHash = prevMatch ? prevMatch[1].trim() : "0000000000000000000000000000000000000000000000000000000000000000";
-const currHash = currMatch ? currMatch[1].trim() : "0000000000000000000000000000000000000000000000000000000000000000";
-finalHTML += `
-
-[${blockTime}] ⛓️ Block #${blockIndex} [${blockType}]
-
-• Details: ${blockDetails}
-
-ID-Hash: ${idHash}
-📋
-
-Prev-Hash: ${prevHash}
-📋
-
-Curr-Hash: ${currHash}
-📋
-
-
-`;
-});
-outputBox.innerHTML = finalHTML;
-outputBox.scrollTop = outputBox.scrollHeight;
-}
-};
-const SocialSystem = {
-chatPartner: null, chats: {}, posts: [], isKlonMode: false,
-openProfile: function() {
-if(typeof system === 'undefined' || !system.currentUser) return alert("Bitte logge dich zuerst im Inland-Status ein!");
-document.getElementById('dashboard-section').classList.add('hidden');
-document.getElementById('social-profile-layer').classList.remove('hidden');
-document.getElementById('profile-username-display').innerText = "@" + system.currentUser;
-const savedBio = localStorage.getItem('bio_' + system.currentUser);
-document.getElementById('profile-bio').value = savedBio ? savedBio : "";
-const savedAvatar = localStorage.getItem('avatar_' + system.currentUser);
-if(savedAvatar) {
-document.getElementById('user-avatar').src = savedAvatar;
-document.getElementById('dashboard-avatar-icon').src = savedAvatar;
-}
-},
-closeProfile: function() {
-document.getElementById('social-profile-layer').classList.add('hidden');
-document.getElementById('dashboard-section').classList.remove('hidden');
-},
-updateAvatar: function(input) {
-if (input.files && input.files[0]) {
-const reader = new FileReader();
-reader.onload = function(e) {
-document.getElementById('user-avatar').src = e.target.result;
-document.getElementById('dashboard-avatar-icon').src = e.target.result;
-localStorage.setItem('avatar_' + system.currentUser, e.target.result);
-};
-reader.readAsDataURL(input.files[0]);
-}
-},
-saveBio: function() {
-const bioVal = document.getElementById('profile-bio').value;
-localStorage.setItem('bio_' + system.currentUser, bioVal);
-alert("Bio-Description erfolgreich gesichert!");
-},
-openSearchAndHistory: function() {
-document.getElementById('social-profile-layer').classList.add('hidden');
-document.getElementById('social-messenger-layer').classList.remove('hidden');
-this.renderHistory();
-},
-backToProfile: function() {
-document.getElementById('social-messenger-layer').classList.add('hidden');
-document.getElementById('social-profile-layer').classList.remove('hidden');
-},
-searchUser: function() {
-let target = document.getElementById('user-search-input').value.trim();
-if(!target) return alert("Bitte gib einen Suchnamen ein!");
-if(!target.startsWith("@")) target = "@" + target;
-this.chatPartner = target;
-document.getElementById('mess-history-view').classList.add('hidden');
-document.getElementById('active-chat-view').classList.remove('hidden');
-document.getElementById('chat-partner-title').innerText = "Kanal: " + target;
-this.renderMessages();
-},
-sendMessage: function() {
-const input = document.getElementById('chat-message-input');
-const text = input.value.trim();
-if(!text) return;
-if(!this.chats[this.chatPartner]) this.chats[this.chatPartner] = [];
-this.chats[this.chatPartner].push({ sender: 'me', text: text, time: new Date().toLocaleTimeString() });
-input.value = "";
-this.renderMessages();
-setTimeout(() => {
-if(this.chats[this.chatPartner]) {
-this.chats[this.chatPartner].push({ sender: 'partner', text: "Interaktions-Vektor verifiziert. Empfang bestätigt.", time: new Date().toLocaleTimeString() });
-this.renderMessages();
-ExplorerLiveViewer.triggerLiveEvent('LOGIN');
-}
-}, 1000);
-},
-renderMessages: function() {
-const box = document.getElementById('chat-messages-box');
-const msgData = this.chats[this.chatPartner] || [];
-box.innerHTML = msgData.map(m => <div style="align-self: ${m.sender === 'me' ? 'flex-end' : 'flex-start'}; background: ${m.sender === 'me' ? '#1e3a8a' : '#1e293b'}; padding: 5px 8px; border-radius: 4px; max-width: 80%;"> <span style="color:#9ca3af; font-size:9px;">[${m.time}]</span> <strong>${m.sender === 'me' ? 'Mee:' : 'Peer:'}</strong> ${m.text} </div>).join('');
-box.scrollTop = box.scrollHeight;
-},
-closeActiveChat: function() {
-this.chatPartner = null;
-document.getElementById('active-chat-view').classList.add('hidden');
-document.getElementById('mess-history-view').classList.remove('hidden');
-this.renderHistory();
-},
-renderHistory: function() {
-const box = document.getElementById('chat-history-list');
-const keys = Object.keys(this.chats);
-if(keys.length === 0) {
-box.innerHTML = "Keine aktiven Verläufe verzeichnet.";
-return;
-}
-box.innerHTML = keys.map(k => <div class="history-item"> <span style="color:#38bdf8; font-weight:bold;">${k}</span> <button onclick="SocialSystem.reopenChat('${k}')" style="background:#2563eb; color:white; border:none; padding:2px 6px; border-radius:3px; font-size:10px; cursor:pointer;">Öffnen</button> </div>).join('');
-},
-reopenChat: function(partner) {
-this.chatPartner = partner;
-document.getElementById('mess-history-view').classList.add('hidden');
-document.getElementById('active-chat-view').classList.remove('hidden');
-document.getElementById('chat-partner-title').innerText = "Kanal: " + partner;
-this.renderMessages();
-},
-filterHistory: function() {
-const q = document.getElementById('history-search-input').value.toLowerCase();
-const items = document.querySelectorAll('.history-item');
-items.forEach(item => {
-const name = item.querySelector('span').innerText.toLowerCase();
-if(name.includes(q)) item.style.display = "flex";
-else item.style.display = "none";
-});
-},
-openPostField: function() {
-document.getElementById('mess-history-view').classList.add('hidden');
-document.getElementById('create-post-view').classList.remove('hidden');
-},
-cancelPost: function() {
-document.getElementById('create-post-view').classList.add('hidden');
-document.getElementById('mess-history-view').classList.remove('hidden');
-},
-submitPost: function() {
-const desc = document.getElementById('post-description').value.trim();
-if(!desc) return alert("Bitte eine Description eingeben!");
-this.posts.push({ desc: desc, time: new Date().toISOString() });
-document.getElementById('post-description').value = "";
-alert("Post wurde erfolgreich als autonomer Block registriert!");
-this.cancelPost();
-if(typeof system !== 'undefined') {
-system.logToChain("GLOBAL_REPUTATION_POST", Description: ${desc});
-}
-},
-openMasterSettings: function() {
-this.isKlonMode = false;
-document.getElementById('social-profile-layer').classList.add('hidden');
-document.getElementById('system-settings-layer').classList.remove('hidden');
-document.getElementById('settings-title-ui').innerText = "⚙️ ADMINISTRATIVE MASTER SETTINGS";
-document.getElementById('admin-password-zone').classList.remove('hidden');
-const passField = document.getElementById('password');
-document.getElementById('settings-pass-input').value = passField ? passField.value : "";
-this.renderSettingsWallets();
-},
-openCryptoSettingsKlon: function() {
-this.isKlonMode = true;
-document.getElementById('dashboard-section').classList.add('hidden');
-document.getElementById('system-settings-layer').classList.remove('hidden');
-document.getElementById('settings-title-ui').innerText = "⚙️ KRYPTO-STATUS SETTINGS (KLON)";
-document.getElementById('admin-password-zone').classList.add('hidden');
-this.renderSettingsWallets();
-},
-closeSettings: function() {
-document.getElementById('system-settings-layer').classList.add('hidden');
-if(this.isKlonMode) {
-document.getElementById('dashboard-section').classList.remove('hidden');
-} else {
-document.getElementById('social-profile-layer').classList.remove('hidden');
-}
-},
-saveNewPassword: function() {
-const newPass = document.getElementById('settings-pass-input').value.trim();
-if(!newPass) return alert("Passwort darf nicht leer sein!");
-const originalPassInput = document.getElementById('password');
-if(originalPassInput) originalPassInput.value = newPass;
-alert("System-Passwort erfolgreich abgeändert!");
-},
-renderSettingsWallets: function() {
-const container = document.getElementById('settings-wallets-register');
-if(typeof system === 'undefined' || !system.currentWallet) {
-container.innerHTML = "Keine aktiven Datensätze deklariert.";
-return;
-}
-let html = ""; const w = system.currentWallet;
-if(w.evm12 && w.evm12 !== "Nicht importiert") {
-html += <div style="background:#020617; padding:8px; border-radius:4px; font-size:11px; border-left:3px solid #10b981;"> <span style="color:#10b981; font-weight:bold;">[INTERNAL SYSTEM BLOCK]</span><br> EVM (12w): ${w.evm12}<br>BTC (12w): ${w.btc12}<br> <span style="color:#ef4444; font-size:10px;">Mnemonic (Gesperrt): ${w.mnemonic12}</span> </div>;
-}
-if(w.evm24 && w.evm24 !== "Nicht importiert") {
-html += <div style="background:#020617; padding:8px; border-radius:4px; font-size:11px; border-left:3px solid #10b981;"> <span style="color:#10b981; font-weight:bold;">[INTERNAL SYSTEM BLOCK]</span><br> EVM (24w): ${w.evm24}<br>BTC (24w): ${w.btc24}<br> <span style="color:#ef4444; font-size:10px;">Mnemonic (Gesperrt): ${w.mnemonic24}</span> </div>;
-}
-const isImport12 = w.mnemonic12 && w.mnemonic12 !== "Nicht importiert" && !w.evm24;
-const isImport24 = w.mnemonic24 && w.mnemonic24 !== "Nicht importiert" && !w.evm12;
-if(isImport12 || isImport24) {
-const is12 = isImport12;
-html += <div id="external-wallet-row" style="background:#020617; padding:8px; border-radius:4px; font-size:11px; border-left:3px solid #f97316;"> <div style="display:flex; justify-content:space-between; align-items:center;"> <span style="color:#f97316; font-weight:bold;">[EXTERNAL MAPPED CHANNEL]</span> ${!this.isKlonMode ?ENTKNÜPFEN: ''} </div> EVM: ${is12 ? w.evm12 : w.evm24}<br>BTC: ${is12 ? w.btc12 : w.btc24}<br> <span style="color:#ef4444; font-size:10px;">Mnemonic: ${is12 ? w.mnemonic12 : w.mnemonic24}</span> </div>;
-}
-container.innerHTML = html || "Keine aktiven Datensätze deklariert.";
-},
-unlinkExternalWallet: function() {
-if(confirm("Möchtest du diese externe Wallet-Verbindung wirklich entknüpfen?")) {
-if(typeof system !== 'undefined' && system.currentWallet) {
-system.currentWallet = null;
-localStorage.removeItem('eurochain_wallet');
-alert("Externe Verbindung erfolgreich entknüpft!");
-this.renderSettingsWallets();
-ExplorerLiveViewer.triggerLiveEvent('2FA_IMPORT');
-const setupBox = document.getElementById('wallet-setup');
-const activeBox = document.getElementById('wallet-active');
-if(setupBox && activeBox) {
-activeBox.classList.add('hidden');
-setupBox.classList.remove('hidden');
-}
-}
-}
-}
-};
-const ExplorerLiveViewer = {
-counts: { LOGIN: 0, EVALUATION: 0, '2FA_IMPORT': 0 },
-chartBarsCount: 20,
-init: function() {
-this.buildChartSkeleton();
-this.startUpdateLoop();
-this.interceptMainLedger();
-},
-buildChartSkeleton: function() {
-const chart = document.getElementById('live-frequency-chart');
-if(!chart) return; chart.innerHTML = "";
-for(let i=0; i < this.chartBarsCount; i++) {
-const bar = document.createElement('div');
-bar.className = "chart-bar";
-bar.style.height = "10%";
-chart.appendChild(bar);
-}
-},
-triggerLiveEvent: function(type) {
-if(this.counts[type] !== undefined) {
-this.counts[type]++;
-this.registerNewGlobalAddress(type);
-}
-},
-registerNewGlobalAddress: function(type) {
-const ledger = document.getElementById('global-blockchain-address-ledger');
-if(!ledger) return;
-const pseudoEntropy = Math.random().toString(16).substring(2, 12);
-let newAddr = "";
-if(type === 'EVALUATION') newAddr = "0x" + pseudoEntropy + "... [USER_FOUR_CHANNELS_BLOCK]";
-else if(type === '2FA_IMPORT') newAddr = "bc1q" + pseudoEntropy + "... [EXTERNAL_MAPPED_LINK]";
-else newAddr = "id_" + pseudoEntropy + "... [INSTITUTION_INTERACTION]";
-const div = document.createElement('div');
-div.style.color = "#a855f7"; div.style.borderBottom = "1px dashed #1e293b"; div.style.paddingBottom = "2px";
-div.innerText = [${new Date().toLocaleTimeString()}] ${newAddr};
-ledger.insertBefore(div, ledger.firstChild);
-},
-interceptMainLedger: function() {
-const targetNode = document.getElementById('chain-output');
-if (targetNode) {
-GlobalExplorerHelper.transformUI();
-const observer = new MutationObserver(() => {
-observer.disconnect();
-const rawText = targetNode.innerText || targetNode.textContent;
-if(rawText.includes("[LOGIN]")) this.triggerLiveEvent('LOGIN');
-if(rawText.includes("[WALLET_EVALUATION]")) this.triggerLiveEvent('EVALUATION');
-if(rawText.includes("[WALLET_2FA_IMPORT]")) this.triggerLiveEvent('2FA_IMPORT');
-GlobalExplorerHelper.transformUI();
-observer.observe(targetNode, { childList: true, subtree: true, characterData: true });
-});
-observer.observe(targetNode, { childList: true, subtree: true, characterData: true });
-}
-},
-startUpdateLoop: function() {
-setInterval(() => {
-const lM = this.counts.LOGIN * 4 + Math.floor(Math.random() * 3);
-const eM = this.counts.EVALUATION * 2 + Math.floor(Math.random() * 2);
-const iM = this.counts.2FA_IMPORT * 1;
-document.getElementById('ticker-login-val').innerText = ${lM} v/m;
-document.getElementById('ticker-eval-val').innerText = ${eM} v/m;
-document.getElementById('ticker-import-val').innerText = ${iM} v/m;
-const bars = document.querySelectorAll('.chart-bar');
-if(bars.length > 0) {
-const totalActivity = lM + eM + iM + 1;
-for(let i=0; i < bars.length - 1; i++) {
-bars[i].style.height = bars[i+1].style.height;
-}
-const dynamicHeight = Math.min(100, Math.max(8, totalActivity * 7));
-bars[bars.length - 1].style.height = ${dynamicHeight}%;
-if(totalActivity > 12) bars[bars.length - 1].style.background = "#eab308";
-else bars[bars.length - 1].style.background = "#2563eb";
-}
-if(this.counts.LOGIN > 0) this.counts.LOGIN--;
-if(this.counts.EVALUATION > 0) this.counts.EVALUATION--;
-if(this.counts.2FA_IMPORT > 0) this.counts.2FA_IMPORT--;
-}, 1500);
-}
-};
-window.addEventListener('load', () => {
-ExplorerLiveViewer.init();
-});
-
+            </div>
+            <button class="action-btn" onclick="system.logout()" style="background:#dc2626; margin-top:20px;">System verlassen (Logout)</button>
+        </div>
+
+        <!-- SIMULTANE BLOCKCHAIN KETTE -->
+        <div class="box">
+            <h3>Simultane Status- & Verifikationskette (Unveränderbar)</h3>
+            <div id="chain-output" class="chain-log">System bereit. Warte auf Interaktion...</div>
+        </div>
+    </div>
+
+    <!-- DIESER BLOCK WIRD DIREKT UNTER DEN BESTEHENDEN VERLAUFSKASTEN GESETZT -->
+    <div id="global-explorer" style="background: #030712; border: 2px solid #2563eb; border-radius: 12px; padding: 20px; margin: 20px auto; max-width: 600px; font-family: sans-serif; box-shadow: 0 0 15px rgba(37, 99, 235, 0.15);">
+        <h3 style="color: #38bdf8; font-size: 16px; font-weight: bold; margin-top: 0; border-bottom: 2px solid #2563eb; padding-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">🌐 Global Inter-Institutionell Explorer</h3>
+        
+        <div style="background: #111827; padding: 15px; border-radius: 6px; border: 1px solid #2563eb; font-family: monospace; font-size: 11px;">
+            <div style="color: #38bdf8; font-weight: bold; margin-bottom: 8px; text-transform: uppercase;">🔍 Vektor-Positions-Analyse (Inspektion)</div>
+            <div id="explorer-display-details" style="color: #f8fafc; line-height: 1.6;">Warte auf Klick im lokalen Ledger... Klicke oben auf einen der drei unverkürzten Hashes, um die hierarchische Übertragungs-Position im globalen Register einzusehen.</div>
+        </div>
+        
+        <button onclick="window.scrollTo({top:0, behavior:'smooth'})" style="background: #1f2937; color: #9ca3af; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 12px; font-size: 11px;">▲ Zurück zum Nutzer-Dashboard</button>
+    </div>
+
+        <!-- LÄDT DIE UNANTASTBARE BASIS-BLOCKCHAIN -->
+    <script src="app.js"></script>
+
+    <!-- VERBESSERTE EXPLORER-LOGIK: ERZWINGT DIE FRAKTALITÄT DIREKT AUS DEM FLIESSTEXT -->
+    <script>
+        const GlobalExplorerHelper = {
+            copyText: function(text) {
+                navigator.clipboard.writeText(text).then(() => {
+                    alert("Hash erfolgreich kopiert!");
+                }).catch(err => console.error("Fehler beim Kopieren: ", err));
+            },
+            
+            inspect: function(hashValue, hashType, blockIndex) {
+                const explorerBox = document.getElementById('global-explorer');
+                if (explorerBox) { explorerBox.scrollIntoView({ behavior: 'smooth' }); }
+                
+                const detailsDisplay = document.getElementById('explorer-display-details');
+                if (!detailsDisplay) return;
+                
+                const isAbsoluteFirstUser = (parseInt(blockIndex) === 0 && hashValue !== "0000000000000000000000000000000000000000000000000000000000000000");
+
+                let analysisText = `<strong>Geklickter Vektortyp:</strong> ${hashType}-Fraktal<br>`;
+                analysisText += `<strong>Eingelesener String:</strong> <span style="color:#facc15; word-break:break-all;">${hashValue}</span><br><br>`;
+
+                if (hashType === 'ID') {
+                    analysisText += `<strong>Hierarchischer Status:</strong> Übergeordnete ID-Kettenstruktur.<br>`;
+                    if (isAbsoluteFirstUser) {
+                        analysisText += `<strong>Befund:</strong> Du bist der <strong>allererste Urheber (Genesis-Singularität)</strong>. Vor diesem Interaktions-Hash existieren keine anderen globalen Ledger-Daten. Dein lokaler Start ist das Fundament des Netzwerks!`;
+                    } else {
+                        analysisText += `<strong>Befund:</strong> Dieser Vektor filtert die lückenlose, anonyme Lebenslinie dieser spezifischen Institution im globalen Register heraus.`;
+                    }
+                } else if (hashType === 'PREV') {
+                    analysisText += `<strong>Hierarchischer Status:</strong> Untergeordneter Verknüpfungs-Vektor.<br>`;
+                    if (hashValue.startsWith("0000000000000000") || hashValue === "0000000000000000000000000000000000000000000000000000000000000000") {
+                        analysisText += `<strong>Befund:</strong> Lokaler Nutzer-Genesis-Punkt (Null-Zustand). `;
+                        if (parseInt(blockIndex) === 0) {
+                            analysisText += `Da du das Gesamtsystem als erster Nutzer aktivierst, spiegelt das übergeordnete Fenster die totale Knappheit wider. Es existiert kein vorheriger Akteur.`;
+                        } else {
+                            analysisText += `Dockt im übergeordneten Gesamtregister direkt an den Zustand derjenigen Institution an, die eine Mikrosekunde vor dir aktiv war.`;
+                        }
+                    } else {
+                        analysisText += `<strong>Befund:</strong> Verknüpft diesen Interaktionsschritt mathematisch unumkehrbar mit dem direkten Vorgänger-Block.`;
+                    }
+                } else if (hashType === 'CURR') {
+                    analysisText += `<strong>Hierarchischer Status:</strong> Zustands-Versiegelung.<br>`;
+                    analysisText += `<strong>Befund:</strong> Finaler Block-Hash im globalen Gesamt-Kontext validiert. Jede Interaktion unter diesem Hash verändert den globalen Liquiditäts-Supply im Netzwerk.`;
+                }
+                detailsDisplay.innerHTML = analysisText;
+            },
+
+            // NEU: Schneidet Hashes unfehlbar direkt aus dem Fließtext heraus
+            transformUI: function() {
+                const outputBox = document.getElementById('chain-output');
+                if (!outputBox) return;
+
+                const rawText = outputBox.innerText || outputBox.textContent;
+                // Verhindert Endlosschleifen, wenn das Design bereits aktiv ist
+                if (!rawText || rawText.includes("System bereit") || rawText.includes("explorer-row")) return;
+
+                // Spaltet den Text anhand von "Block #" auf, um einzelne Blöcke zu isolieren
+                const blocks = rawText.split(/Block\s*#/g);
+                let finalHTML = "";
+
+                blocks.forEach(blockStr => {
+                    if (!blockStr.trim()) return;
+
+                    // 1. Block-Index auslesen
+                    const indexMatch = blockStr.match(/^(\d+)/);
+                    const blockIndex = indexMatch ? parseInt(indexMatch[1]) : 0;
+
+                    // 2. Zeitstempel auslesen
+                    const timeMatch = blockStr.match(/\[(\d{2}:\d{2}:\d{2})\]/);
+                    const blockTime = timeMatch ? timeMatch[1] : "00:00:00";
+
+                    // 3. Block-Typ auslesen (z.B. LOGIN)
+                    const typeMatch = blockStr.match(/\[([A-Z_]+)\]/);
+                    const blockType = typeMatch ? typeMatch[1] : "INTERAKTION";
+
+                    // 4. Details auslesen
+                    const detailsMatch = blockStr.match(/Detail\s*s?:\s*([^\n]*?)(?=ID-Hash|Prev-Hash|$)/i);
+                    const blockDetails = detailsMatch ? detailsMatch[1].trim() : "Aktion verzeichnet.";
+
+                    // 5. Mathematische Extraktion der drei unverkürzten 64-Zeichen-Hashes
+                    const idMatch = blockStr.match(/ID-Hash:\s*([a-fA-F0-9xXuiended]+)/i);
+                    const prevMatch = blockStr.match(/Prev-Hash:\s*([a-fA-F0-9xX]+)/i);
+                    const currMatch = blockStr.match(/Curr-Hash:\s*([a-fA-F0-9xX]+)/i);
+
+                    const idHash = idMatch ? idMatch[1].trim() : "0000000000000000000000000000000000000000000000000000000000000000";
+                    const prevHash = prevMatch ? prevMatch[1].trim() : "0000000000000000000000000000000000000000000000000000000000000000";
+                    const currHash = currMatch ? currMatch[1].trim() : "0000000000000000000000000000000000000000000000000000000000000000";
+
+                    // Baut das neongelbe/blaue Flex-Layout inklusive der echten Buttons
+                    finalHTML += `
+                        <div style="padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px dashed #334155; font-family: monospace; text-align: left;">
+                            <strong style="color: #10b981;">[${blockTime}] ⛓️ Block #${blockIndex} [${blockType}]</strong><br>
+                            <span style="color: #f8fafc;">• Details: ${blockDetails}</span><br>
+                            
+                            <div class="explorer-row">
+                                <span class="hash-link" onclick="GlobalExplorerHelper.inspect('${idHash}', 'ID', ${blockIndex})">ID-Hash: ${idHash}</span>
+                                <button class="real-copy-btn" onclick="GlobalExplorerHelper.copyText('${idHash}')">📋</button>
+                            </div>
+                            
+                            <div class="explorer-row">
+                                <span class="hash-link" onclick="GlobalExplorerHelper.inspect('${prevHash}', 'PREV', ${blockIndex})">Prev-Hash: ${prevHash}</span>
+                                <button class="real-copy-btn" onclick="GlobalExplorerHelper.copyText('${prevHash}')">📋</button>
+                            </div>
+                            
+                            <div class="explorer-row">
+                                <span class="hash-link" onclick="GlobalExplorerHelper.inspect('${currHash}', 'CURR', ${blockIndex})">Curr-Hash: ${currHash}</span>
+                                <button class="real-copy-btn" onclick="GlobalExplorerHelper.copyText('${currHash}')">📋</button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                outputBox.innerHTML = finalHTML;
+                outputBox.scrollTop = outputBox.scrollHeight;
+            }
+        };
+
+        window.addEventListener('load', () => {
+            const targetNode = document.getElementById('chain-output');
+            if (targetNode) {
+                // Führt die Umwandlung sofort aus, falls beim Laden schon Text existiert
+                GlobalExplorerHelper.transformUI();
+
+                // Lauscht auf jede minimale Textänderung, die aus Ihrer app.js hineingeschrieben wird
+                const observer = new MutationObserver(() => {
+                    observer.disconnect();
+                    GlobalExplorerHelper.transformUI();
+                    observer.observe(targetNode, { childList: true, subtree: true, characterData: true });
+                });
+                observer.observe(targetNode, { childList: true, subtree: true, characterData: true });
+            }
+        });
+    </script>
+</body>
+</html>
