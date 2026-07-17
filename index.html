@@ -144,10 +144,10 @@
         <button onclick="window.scrollTo({top:0, behavior:'smooth'})" style="background: #1f2937; color: #9ca3af; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 12px; font-size: 11px;">▲ Zurück zum Nutzer-Dashboard</button>
     </div>
 
-    <!-- LÄDT DIE UNANTASTBARE BASIS-BLOCKCHAIN -->
+        <!-- LÄDT DIE UNANTASTBARE BASIS-BLOCKCHAIN -->
     <script src="app.js"></script>
 
-    <!-- INTEGRIERTE EXPLORER-LOGIK: ERZEUGT DIE FRAKTALITÄT UND DIE ECHTEN KOPIER-VIERECKE DIREKT AUS DER INDEX -->
+    <!-- VERBESSERTE EXPLORER-LOGIK: ERZWINGT DIE FRAKTALITÄT DIREKT AUS DEM FLIESSTEXT -->
     <script>
         const GlobalExplorerHelper = {
             copyText: function(text) {
@@ -194,83 +194,91 @@
                 detailsDisplay.innerHTML = analysisText;
             },
 
+            // NEU: Schneidet Hashes unfehlbar direkt aus dem Fließtext heraus
             transformUI: function() {
                 const outputBox = document.getElementById('chain-output');
                 if (!outputBox) return;
 
                 const rawText = outputBox.innerText || outputBox.textContent;
-                if (!rawText || rawText.includes("System bereit") || rawText.includes("display: flex")) return;
+                // Verhindert Endlosschleifen, wenn das Design bereits aktiv ist
+                if (!rawText || rawText.includes("System bereit") || rawText.includes("explorer-row")) return;
 
-                const lines = rawText.split('\n');
+                // Spaltet den Text anhand von "Block #" auf, um einzelne Blöcke zu isolieren
+                const blocks = rawText.split(/Block\s*#/g);
                 let finalHTML = "";
-                
-                let currentBlockIndex = 0, currentTime = "00:00:00", currentType = "INTERAKTION", currentDetails = "";
-                let idHash = "", prevHash = "", currHash = "";
 
-                lines.forEach(line => {
-                    const trimmed = line.trim();
-                    if (!trimmed) return;
+                blocks.forEach(blockStr => {
+                    if (!blockStr.trim()) return;
 
-                    if (trimmed.includes("Block #")) {
-                        if (idHash || prevHash || currHash) {
-                            finalHTML += this.buildHTML(currentBlockIndex, currentTime, currentType, currentDetails, idHash, prevHash, currHash);
-                        }
-                        const timeMatch = trimmed.match(/^\[(.*?)\]/);
-                        currentTime = timeMatch ? timeMatch[1] : "00:00:00";
-                        const indexMatch = trimmed.match(/Block #(\d+)/);
-                        currentBlockIndex = indexMatch ? parseInt(indexMatch[1]) : 0;
-                        const typeMatch = trimmed.match(/\[([^\]]+)\]$/);
-                        currentType = typeMatch ? typeMatch[1] : "INTERAKTION";
-                        idHash = ""; prevHash = ""; currHash = ""; currentDetails = "";
-                    } 
-                    else if (trimmed.startsWith("• Details:")) { currentDetails = trimmed.replace("• Details:", "").trim(); } 
-                    else if (trimmed.startsWith("ID-Hash:")) { idHash = trimmed.replace("ID-Hash:", "").trim(); } 
-                    else if (trimmed.startsWith("Prev-Hash:")) { prevHash = trimmed.replace("Prev-Hash:", "").trim(); } 
-                    else if (trimmed.startsWith("Curr-Hash:")) { currHash = trimmed.replace("Curr-Hash:", "").trim(); }
+                    // 1. Block-Index auslesen
+                    const indexMatch = blockStr.match(/^(\d+)/);
+                    const blockIndex = indexMatch ? parseInt(indexMatch[1]) : 0;
+
+                    // 2. Zeitstempel auslesen
+                    const timeMatch = blockStr.match(/\[(\d{2}:\d{2}:\d{2})\]/);
+                    const blockTime = timeMatch ? timeMatch[1] : "00:00:00";
+
+                    // 3. Block-Typ auslesen (z.B. LOGIN)
+                    const typeMatch = blockStr.match(/\[([A-Z_]+)\]/);
+                    const blockType = typeMatch ? typeMatch[1] : "INTERAKTION";
+
+                    // 4. Details auslesen
+                    const detailsMatch = blockStr.match(/Detail\s*s?:\s*([^\n]*?)(?=ID-Hash|Prev-Hash|$)/i);
+                    const blockDetails = detailsMatch ? detailsMatch[1].trim() : "Aktion verzeichnet.";
+
+                    // 5. Mathematische Extraktion der drei unverkürzten 64-Zeichen-Hashes
+                    const idMatch = blockStr.match(/ID-Hash:\s*([a-fA-F0-9xXuiended]+)/i);
+                    const prevMatch = blockStr.match(/Prev-Hash:\s*([a-fA-F0-9xX]+)/i);
+                    const currMatch = blockStr.match(/Curr-Hash:\s*([a-fA-F0-9xX]+)/i);
+
+                    const idHash = idMatch ? idMatch[1].trim() : "0000000000000000000000000000000000000000000000000000000000000000";
+                    const prevHash = prevMatch ? prevMatch[1].trim() : "0000000000000000000000000000000000000000000000000000000000000000";
+                    const currHash = currMatch ? currMatch[1].trim() : "0000000000000000000000000000000000000000000000000000000000000000";
+
+                    // Baut das neongelbe/blaue Flex-Layout inklusive der echten Buttons
+                    finalHTML += `
+                        <div style="padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px dashed #334155; font-family: monospace; text-align: left;">
+                            <strong style="color: #10b981;">[${blockTime}] ⛓️ Block #${blockIndex} [${blockType}]</strong><br>
+                            <span style="color: #f8fafc;">• Details: ${blockDetails}</span><br>
+                            
+                            <div class="explorer-row">
+                                <span class="hash-link" onclick="GlobalExplorerHelper.inspect('${idHash}', 'ID', ${blockIndex})">ID-Hash: ${idHash}</span>
+                                <button class="real-copy-btn" onclick="GlobalExplorerHelper.copyText('${idHash}')">📋</button>
+                            </div>
+                            
+                            <div class="explorer-row">
+                                <span class="hash-link" onclick="GlobalExplorerHelper.inspect('${prevHash}', 'PREV', ${blockIndex})">Prev-Hash: ${prevHash}</span>
+                                <button class="real-copy-btn" onclick="GlobalExplorerHelper.copyText('${prevHash}')">📋</button>
+                            </div>
+                            
+                            <div class="explorer-row">
+                                <span class="hash-link" onclick="GlobalExplorerHelper.inspect('${currHash}', 'CURR', ${blockIndex})">Curr-Hash: ${currHash}</span>
+                                <button class="real-copy-btn" onclick="GlobalExplorerHelper.copyText('${currHash}')">📋</button>
+                            </div>
+                        </div>
+                    `;
                 });
-
-                if (idHash || prevHash || currHash) {
-                    finalHTML += this.buildHTML(currentBlockIndex, currentTime, currentType, currentDetails, idHash, prevHash, currHash);
-                }
 
                 outputBox.innerHTML = finalHTML;
                 outputBox.scrollTop = outputBox.scrollHeight;
-            },
+            }
+        };
 
-            buildHTML: function(index, time, type, details, id, prev, curr) {
-                return `
-                    <div style="padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px dashed #334155; font-family: monospace;">
-                        <strong style="color: #10b981;">[${time}] ⛓️ Block #${index} [${type}]</strong><br>
-                        <span style="color: #f8fafc;">• Details: ${details}</span><br>
-                        
-                        <div style="display: flex; justify-content: space-between; align-items: center; background: #090d16; padding: 6px 10px; border-radius: 4px; margin: 6px 0; gap: 10px; border: 1px solid #1e293b;">
-                            <span style="color: #38bdf8; cursor: pointer; text-decoration: underline; flex: 1; word-break: break-all; font-size: 11px;" onclick="GlobalExplorerHelper.inspect('${id}', 'ID', ${index})">ID-Hash: ${id}</span>
-                            <button style="background: #334155; color: #f8fafc; border: 1px solid #475569; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; min-width: 38px;" onclick="GlobalExplorerHelper.copyText('${id}')">📋</button>
-                        </div>
-                        
-                        <div style="display: flex; justify-content: space-between; align-items: center; background: #090d16; padding: 6px 10px; border-radius: 4px; margin: 6px 0; gap: 10px; border: 1px solid #1e293b;">
-                            <span style="color: #38bdf8; cursor: pointer; text-decoration: underline; flex: 1; word-break: break-all; font-size: 11px;" onclick="GlobalExplorerHelper.inspect('${prev}', 'PREV', ${index})">Prev-Hash: ${prev}</span>
-                            <button style="background: #334155; color: #f8fafc; border: 1px solid #475569; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; min-width: 38px;" onclick="GlobalExplorerHelper.copyText('${prev}')">📋</button>
-                        </div>
-                        
+        window.addEventListener('load', () => {
+            const targetNode = document.getElementById('chain-output');
+            if (targetNode) {
+                // Führt die Umwandlung sofort aus, falls beim Laden schon Text existiert
+                GlobalExplorerHelper.transformUI();
 
-
-Curr-Hash: ${curr}
-📋
-
-
-`;
-}
-};
-window.addEventListener('load', () => {
-const targetNode = document.getElementById('chain-output');
-if (targetNode) {
-GlobalExplorerHelper.transformUI();
-const observer = new MutationObserver(() => {
-observer.disconnect();
-GlobalExplorerHelper.transformUI();
-observer.observe(targetNode, { childList: true, subtree: true, characterData: true });
-});
-observer.observe(targetNode, { childList: true, subtree: true, characterData: true });
-}
-});
+                // Lauscht auf jede minimale Textänderung, die aus Ihrer app.js hineingeschrieben wird
+                const observer = new MutationObserver(() => {
+                    observer.disconnect();
+                    GlobalExplorerHelper.transformUI();
+                    observer.observe(targetNode, { childList: true, subtree: true, characterData: true });
+                });
+                observer.observe(targetNode, { childList: true, subtree: true, characterData: true });
+            }
+        });
+    </script>
+</body>
+</html>
