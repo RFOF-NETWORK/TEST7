@@ -173,6 +173,10 @@ class EuroChainSystem {
         document.getElementById('privkey-display').innerText = this.currentWallet.privateKey;
     }
 
+    // ==========================================
+    // AB HIER DEN CODE EINFACH UNTEN ANFÜGEN!
+    // ==========================================
+
     async logToChain(typ, details) {
         const prevHash = this.chain.length > 0 ? this.chain[this.chain.length - 1].currentHash : "0000000000000000000000000000000000000000000000000000000000000000";
         const timestamp = new Date().toISOString();
@@ -256,9 +260,7 @@ class EuroChainSystem {
 
     exploreHash(hashValue, hashType, blockIndex) {
         const explorerBox = document.getElementById('global-explorer');
-        if (explorerBox) {
-            explorerBox.scrollIntoView({ behavior: 'smooth' });
-        }
+        if (explorerBox) { explorerBox.scrollIntoView({ behavior: 'smooth' }); }
         
         const detailsDisplay = document.getElementById('explorer-display-details');
         if (!detailsDisplay) return;
@@ -291,75 +293,45 @@ class EuroChainSystem {
             analysisText += `<strong>Hierarchischer Status:</strong> Zustands-Versiegelung.<br>`;
             analysisText += `<strong>Befund:</strong> Finaler Block-Hash im globalen Gesamt-Kontext validiert. Jede Interaktion unter diesem Hash verändert den globalen Liquiditäts-Supply im Netzwerk.`;
         }
-
         detailsDisplay.innerHTML = analysisText;
     }
 }
 // INSTANZIIERUNG DER MASTER-KLASSEconst system = new EuroChainSystem();
-// AUTONOME INTERZEPTIONS-LOGIK (Verschmilzt die explorer.js direkt im RAM)const GlobalExplorerHelper = {
+// AUTONOME INTERZEPTIONS-LOGIK (Ersetzt die explorer.js zu 100% direkt im RAM)const GlobalExplorerHelper = {
     copyText: function(text) {
-        navigator.clipboard.writeText(text).then(() => {
-            alert("Hash erfolgreich kopiert!");
-        }).catch(err => {
-            console.error("Fehler beim Kopieren: ", err);
-        });
+        navigator.clipboard.writeText(text).then(() => { alert("Hash erfolgreich kopiert!"); });
     },
     transformUI: function() {
         const outputBox = document.getElementById('chain-output');
         if (!outputBox) return;
-
         const rawText = outputBox.innerText || outputBox.textContent;
         if (!rawText || rawText.includes("System bereit") || rawText.includes("display: flex")) return;
 
-        // Splittet den rohen Textblock sauber in seine Zeilenbestandteile auf
         const lines = rawText.split('\n');
         let finalHTML = "";
-        
-        let currentBlockIndex = 0;
-        let currentTime = "00:00:00";
-        let currentType = "INTERAKTION";
-        let currentDetails = "";
-        let idHash = "";
-        let prevHash = "";
-        let currHash = "";
+        let currentBlockIndex = 0, currentTime = "00:00:00", currentType = "INTERAKTION", currentDetails = "";
+        let idHash = "", prevHash = "", currHash = "";
 
         lines.forEach(line => {
             const trimmed = line.trim();
             if (!trimmed) return;
-
             if (trimmed.includes("Block #")) {
-                if (idHash || prevHash || currHash) {
-                    finalHTML += this.buildHTML(currentBlockIndex, currentTime, currentType, currentDetails, idHash, prevHash, currHash);
-                }
+                if (idHash || prevHash || currHash) { finalHTML += this.buildHTML(currentBlockIndex, currentTime, currentType, currentDetails, idHash, prevHash, currHash); }
                 const timeMatch = trimmed.match(/^\[(.*?)\]/);
                 currentTime = timeMatch ? timeMatch[1] : "00:00:00";
-                
                 const indexMatch = trimmed.match(/Block #(\d+)/);
                 currentBlockIndex = indexMatch ? parseInt(indexMatch[1]) : 0;
-                
                 const typeMatch = trimmed.match(/\[([^\]]+)\]$/);
                 currentType = typeMatch ? typeMatch[1] : "INTERAKTION";
-                
                 idHash = ""; prevHash = ""; currHash = ""; currentDetails = "";
             } 
-            else if (trimmed.startsWith("• Details:")) {
-                currentDetails = trimmed.replace("• Details:", "").trim();
-            } 
-            else if (trimmed.startsWith("ID-Hash:")) {
-                idHash = trimmed.replace("ID-Hash:", "").trim();
-            } 
-            else if (trimmed.startsWith("Prev-Hash:")) {
-                prevHash = trimmed.replace("Prev-Hash:", "").trim();
-            } 
-            else if (trimmed.startsWith("Curr-Hash:")) {
-                currHash = trimmed.replace("Curr-Hash:", "").trim();
-            }
+            else if (trimmed.startsWith("• Details:")) { currentDetails = trimmed.replace("• Details:", "").trim(); } 
+            else if (trimmed.includes("ID-Hash:")) { idHash = trimmed.split("ID-Hash:")[1].trim(); } 
+            else if (trimmed.includes("Prev-Hash:")) { prevHash = trimmed.split("Prev-Hash:")[1].trim(); } 
+            else if (trimmed.includes("Curr-Hash:")) { currHash = trimmed.split("Curr-Hash:")[1].trim(); }
         });
 
-        if (idHash || prevHash || currHash) {
-            finalHTML += this.buildHTML(currentBlockIndex, currentTime, currentType, currentDetails, idHash, prevHash, currHash);
-        }
-
+        if (idHash || prevHash || currHash) { finalHTML += this.buildHTML(currentBlockIndex, currentTime, currentType, currentDetails, idHash, prevHash, currHash); }
         outputBox.innerHTML = finalHTML;
         outputBox.scrollTop = outputBox.scrollHeight;
     },
@@ -368,14 +340,15 @@ class EuroChainSystem {
             <div style="padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px dashed #334155; font-family: monospace;">
                 <strong style="color: #10b981;">[${time}] ⛓️ Block #${index} [${type}]</strong><br>
                 <span style="color: #f8fafc;">• Details: ${details}</span><br>
-                
                 <div style="display: flex; justify-content: space-between; align-items: center; background: #090d16; padding: 6px 10px; border-radius: 4px; margin: 6px 0; gap: 10px; border: 1px solid #1e293b;">
                     <span style="color: #38bdf8; cursor: pointer; text-decoration: underline; flex: 1; word-break: break-all; font-size: 11px;" onclick="system.exploreHash('${id}', 'ID', ${index})">ID-Hash: ${id}</span>
-
-📋
+                    <button style="background: #334155; color: #f8fafc; border: 1px solid #475569; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; min-width: 38px;" onclick="GlobalExplorerHelper.copyText('${id}')">📋</button>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; background: #090d16; padding: 6px 10px; border-radius: 4px; margin: 6px 0; gap: 10px; border: 1px solid #1e293b;">
 
 Prev-Hash: ${prev}
 📋
+
 
 Curr-Hash: ${curr}
 📋
@@ -384,7 +357,7 @@ Curr-Hash: ${curr}
 `;
 }
 };
-// Überwachungs-Schleife schaltet sich vollautomatisch beim Laden des Fensters scharf
+// Überwachungsschleife klinkt sich unbemerkt direkt in das DOM-Feld ein
 window.addEventListener('load', () => {
 const targetNode = document.getElementById('chain-output');
 if (targetNode) {
@@ -397,3 +370,5 @@ observer.observe(targetNode, { childList: true, subtree: true, characterData: tr
 observer.observe(targetNode, { childList: true, subtree: true, characterData: true });
 }
 });
+
+
