@@ -45,7 +45,8 @@
 
         <!-- SCHRITT 2: DASHBOARD (NACH LOGIN) -->
         <div id="dashboard-section" class="box hidden">
-            <h2>Willkommen, <span id="user-display" style="color:#38bdf8;"></span></h2>
+            <h2>Willkommen, <span id="user-display" style="color:#38bdf8;"></span> <span id="profil-trigger" style="color:#f97316; cursor:pointer; font-size:16px; text-decoration:underline;" onclick="SocialSystem.openProfile()">(★1)</span></h2>
+            
             <p>System-Status: <span style="color:#10b981;">● Autonom & Validiert</span></p>
             
             <!-- FIAT PORTFOLIO -->
@@ -53,9 +54,10 @@
                 <h3>Fiat-Ebene (Account-Basiert)</h3>
                 <p>Guthaben: <strong>100.000,00 EUR</strong> (Verbriefte Liquidität)</p>
             </div>
-
+    
             <!-- WALLET VERWALTUNG (EXAKTE BESCHRIFTUNG 1) -->
-            <div id="wallet-setup" class="box" style="background:#334155;">
+            <div id="wallet-setup" class="box" style="background:#334155; position:relative;">
+                <span style="position:absolute; top:10px; right:15px; cursor:pointer; font-size:18px;" onclick="SocialSystem.openCryptoSettingsKlon()">⚙️</span>
                 <h3>Krypto-Ebene (EVM & BTC Ready)</h3>
                 <button class="action-btn" onclick="system.generateFourChannels()" style="background:#10b981;">Neue autonome Wallet generieren</button>
                 <p style="text-align: center; margin: 10px 0;">oder</p>
@@ -281,121 +283,6 @@
         });
     
     <!-- ================================================================= -->
-
-    <!-- SOZIALE INTERAKTIONS-LAYERS (ANMELDUNG / PROFIL / CHAT) -->
-    <div id="social-profile-layer" class="box hidden" style="background: #0f172a; border: 2px solid #f97316; border-radius: 12px; padding: 20px; margin-top: 20px;">
-        <h3 style="color:#f97316; margin-top:0; border-bottom:1px solid #f97316; padding-bottom:5px;">👤 INSTITUTIONELLES PROFIL</h3>
-        
-        <div style="display:flex; align-items:center; gap:15px; margin-bottom:15px;">
-            <div style="position:relative;">
-                <img id="user-avatar" src="data:image/svg+xml;utf8,<svg xmlns='http://w3.org' viewBox='0 0 24 24' fill='%239ca3af'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>" style="width:70px; height:70px; border-radius:50%; background:#334155; border:2px solid #475569; object-fit:cover;">
-                <input type="file" id="avatar-upload" accept="image/*" style="display:none;" onchange="SocialSystem.updateAvatar(this)">
-                <button onclick="document.getElementById('avatar-upload').click()" style="position:absolute; bottom:0; right:0; background:#f97316; color:white; border:none; border-radius:50%; width:24px; height:24px; font-size:12px; cursor:pointer;">✎</button>
-            </div>
-            <div>
-                <div style="font-size:12px; color:#9ca3af;">NICHT BEARBEITBARER NUTZERNAME</div>
-                <strong id="profile-username-display" style="font-size:18px; color:#38bdf8;">-</strong>
-            </div>
-        </div>
-
-        <div style="margin-bottom:15px;">
-            <div style="font-size:11px; color:#9ca3af; margin-bottom:4px;">BIO / DESCRIPTION</div>
-            <textarea id="profile-bio" placeholder="Füge eine institutionelle Beschreibung hinzu..." style="width:100%; height:60px; background:#334155; border:1px solid #475569; color:white; border-radius:4px; padding:8px; box-sizing:border-box; font-family:sans-serif; resize:none;"></textarea>
-            <button class="action-btn" onclick="SocialSystem.saveBio()" style="background:#f97316; font-size:11px; padding:6px; margin-top:5px; width:auto; float:right;">Bio Sichern</button>
-            <div style="clear:both;"></div>
-        </div>
-
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:15px;">
-            <button class="action-btn" onclick="SocialSystem.openSearchAndHistory()" style="background:#2563eb;">💬 P2P Messenger & Posts</button>
-            <button class="action-btn" onclick="SocialSystem.openMasterSettings()" style="background:#475569;">⚙️ System Settings</button>
-        </div>
-        <button class="action-btn" onclick="SocialSystem.closeProfile()" style="background:#1f2937; color:#9ca3af; border:1px solid #475569;">Dashboard Ansicht</button>
-    </div>
-
-    <!-- MESSENGER, VERLAUF & POST SYSTEM -->
-    <div id="social-messenger-layer" class="box hidden" style="background:#0f172a; border:1px solid #2563eb; padding:15px; margin-top:15px;">
-        <h3 style="color:#38bdf8; margin-top:0;">💬 PEER-TO-PEER NETWORK NET</h3>
-        
-        <!-- SEARCH & HISTORY LIST -->
-        <div id="mess-history-view">
-            <input type="text" id="user-search-input" placeholder="Nutzer Suchen (z.B. @Zentralbank_B)...">
-            <button class="action-btn" onclick="SocialSystem.searchUser()" style="background:#2563eb; margin-bottom:15px;">🔍 Suchen & Chatten 🚀</button>
-            
-            <div style="font-size:11px; color:#9ca3af; margin-bottom:4px;">NACHRICHTEN & KONTAKTE VERLAUF</div>
-            <input type="text" id="history-search-input" placeholder="Verlauf durchsuchen..." oninput="SocialSystem.filterHistory()" style="margin-bottom:10px;">
-            <div id="chat-history-list" style="max-height:150px; overflow-y:auto; background:#020617; border-radius:4px; padding:5px;"></div>
-            
-            <hr style="border-top:1px dashed #334155; margin:15px 0;">
-            <button class="action-btn" onclick="SocialSystem.openPostField()" style="background:#10b981;">➕ Neuen Beitrag / Post erstellen</button>
-        </div>
-
-        <!-- AKTIVER CHAT WINDOW -->
-        <div id="active-chat-view" class="hidden">
-            <div style="display:flex; justify-content:space-between; align-items:center; background:#1e293b; padding:8px; border-radius:4px; margin-bottom:10px;">
-                <span id="chat-partner-title" style="color:#38bdf8; font-weight:bold;">Chat</span>
-                <button onclick="SocialSystem.closeActiveChat()" style="background:none; border:none; color:#ef4444; cursor:pointer; font-weight:bold;">✕</button>
-            </div>
-            <div id="chat-messages-box" style="height:180px; overflow-y:auto; background:#020617; border-radius:4px; padding:10px; margin-bottom:10px; font-family:monospace; font-size:11px; display:flex; flex-direction:column; gap:5px;"></div>
-            <div style="display:flex; gap:5px;">
-                <input type="text" id="chat-message-input" placeholder="Nachricht schreiben..." style="margin:0; flex:1;">
-                <button onclick="SocialSystem.sendMessage()" style="background:#2563eb; color:white; border:none; padding:0 15px; border-radius:4px; cursor:pointer; font-size:14px;">🚀</button>
-            </div>
-        </div>
-
-        <!-- POST FIELD -->
-        <div id="create-post-view" class="hidden">
-            <h4>➕ GLOBAL REPUTATION POST</h4>
-            <textarea id="post-description" placeholder="Schreibe eine Description für deinen Post..." style="width:100%; height:60px; background:#334155; border:1px solid #475569; color:white; border-radius:4px; padding:8px; box-sizing:border-box; font-family:sans-serif; resize:none;"></textarea>
-            <button class="action-btn" onclick="SocialSystem.submitPost()" style="background:#10b981; margin-top:5px;">Beitrag im Netzwerk veröffentlichen</button>
-            <button class="action-btn" onclick="SocialSystem.cancelPost()" style="background:#475569; margin-top:5px;">Zurück</button>
-        </div>
-
-        <button class="action-btn" onclick="SocialSystem.backToProfile()" style="background:#1f2937; margin-top:15px; font-size:12px; padding:6px;">Back to Profil</button>
-    </div>
-
-    <!-- DUALES SETTINGS SYSTEM MODAL -->
-    <div id="system-settings-layer" class="box hidden" style="background:#0f172a; border:2px solid #475569; padding:20px; margin-top:15px;">
-        <h3 id="settings-title-ui" style="color:#f8fafc; margin-top:0;">⚙️ ACCOUNT SETTINGS</h3>
-        
-        <!-- ADMINISTRATIVE PASSWORT-ZONE -->
-        <div id="admin-password-zone" class="box" style="background:#1e293b;">
-            <label style="font-size:12px; color:#9ca3af;">SYSTEM-PASSWORT (EINSEHBAR & ÄNDERBAR)</label>
-            <input type="text" id="settings-pass-input" style="color:#facc15; font-family:monospace; font-weight:bold;">
-            <button class="action-btn" onclick="SocialSystem.saveNewPassword()" style="background:#2563eb; font-size:12px; padding:6px;">Passwort Aktualisieren</button>
-        </div>
-
-        <!-- KRYPTO DATENSATZ REGISTER -->
-        <div class="box" style="background:#1e293b; max-height:220px; overflow-y:auto;">
-            <h4 style="margin-top:0; color:#38bdf8;">🔒 VALIDIERTE KRYPTO-KANÄLE</h4>
-            <div id="settings-wallets-register" style="display:flex; flex-direction:column; gap:10px;"></div>
-        </div>
-
-        <button class="action-btn" onclick="SocialSystem.closeSettings()" style="background:#1f2937; margin-top:10px;">Settings Verlassen</button>
-    </div>
-
-    <!-- ERWEITERUNG: GLOBAL INTER-INSTITUTIONELL EXPLORER LIVE-VIEWER AREA -->
-    <!-- Dieser Bereich fügt sich nahtlos UNTEN in den bestehenden Kasten ein, ohne Vorhandenes zu verändern -->
-    <div id="explorer-live-viewer-extension" style="background: #030712; border: 2px solid #2563eb; border-top:none; border-radius: 0 0 12px 12px; padding: 0 20px 20px 20px; margin: -15px auto 20px auto; max-width: 600px; font-family: sans-serif; box-shadow: 0 10px 15px rgba(37, 99, 235, 0.15);">
-        <hr style="border:0; border-top:1px dashed #2563eb; margin:0 0 15px 0;">
-        <h4 style="color:#eab308; margin-top:0; text-transform:uppercase; font-size:12px; letter-spacing:1px;">📊 Live-Interaktions Volumen Statistischer Viewer</h4>
-        
-        <!-- LIVE TICKER MATRIX -->
-        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:5px; margin-bottom:15px; font-family:monospace; font-size:10px; text-align:center;">
-            <div style="background:#111827; padding:5px; border-radius:4px; border:1px solid #1e293b;">
-                <span style="color:#38bdf8;">[LOGIN]</span><br><span id="ticker-login-val" style="color:#10b981; font-weight:bold;">0 v/m</span>
-            </div>
-            <div style="background:#111827; padding:5px; border-radius:4px; border:1px solid #1e293b;">
-                <span style="color:#10b981;">[EVALUATION]</span><br><span id="ticker-eval-val" style="color:#eab308; font-weight:bold;">0 v/m</span>
-            </div>
-            <div style="background:#111827; padding:5px; border-radius:4px; border:1px solid #1e293b;">
-                <span style="color:#f97316;">[2FA_IMPORT]</span><br><span id="ticker-import-val" style="color:#ef4444; font-weight:bold;">0 v/m</span>
-            </div>
-        </div>
-
-        <!-- STATISTISCHE GRAFIK/BALKEN SIMULATION -->
-        <div style="background:#111827; border:1px solid #1e293b; padding:10px; border-radius:6px; margin-bottom:15px;">
-            <div style="font-size:10px; color:#9ca3af; margin-bottom:5px; text-transform:uppercase; font-family:monospace;">📈 Aggregierte Interaktions-Frequenz (Live)</div>
-
 
 
 ⛓️ Existierende Blockchain Gesamt-Adressliste
