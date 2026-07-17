@@ -377,18 +377,16 @@ class EuroChainSystem {
         document.getElementById('privkey-display').innerText = this.currentWallet.privateKey;
     }
 
-    // ==========================================
-    // AB HIER DEN CODE EINFACH UNTEN ANFÜGEN!
-    // ==========================================
-
     async logToChain(typ, details) {
         const prevHash = this.chain.length > 0 ? this.chain[this.chain.length - 1].currentHash : "0000000000000000000000000000000000000000000000000000000000000000";
         const timestamp = new Date().toISOString();
         
+        // Extrahiert den reinen ID-Hash aus den Details, falls es der Login-Block ist, um Brüche zu verhindern
         let calculatedIdHash = "0000000000000000000000000000000000000000000000000000000000000000";
         if (details.includes("ID-Hash: ")) {
             calculatedIdHash = details.split("ID-Hash: ")[1];
         } else if (this.currentUser) {
+            // Generiert den permanenten Vektor-ID-Hash aus dem aktiven Sitzungsnamen im RAM
             calculatedIdHash = await this.hash(this.currentUser + "_salt_for_session");
         }
 
@@ -417,6 +415,7 @@ class EuroChainSystem {
         }
     }
 
+    // Schreibt die puren unverkürzten Textdaten in den Kasten, damit explorer.js sie im RAM abfängt
     updateChainUI() {
         const output = document.getElementById('chain-output');
         if (!output) return;
@@ -426,6 +425,7 @@ class EuroChainSystem {
         }
         
         output.innerHTML = this.chain.map((b) => {
+            // Absolut ausfallsicheres Zeit-Parsing ohne Substring-Abstürze
             let timePart = "00:00:00";
             if (b.timestamp && b.timestamp.includes('T')) {
                 const parts = b.timestamp.split('T');
@@ -458,121 +458,9 @@ class EuroChainSystem {
         document.getElementById('wallet-setup').classList.remove('hidden');
         document.getElementById('wallet-2fa').classList.add('hidden');
         
-        document.getElementById('explorer-display-details').innerHTML = `Warte auf Klick im lokalen Ledger... Klicke oben auf einen der drei unverkürzten Hashes, um die hierarchische Übertragungs-Position im globalen Register einzusehen.`;
         this.updateChainUI();
     }
-
-    exploreHash(hashValue, hashType, blockIndex) {
-        const explorerBox = document.getElementById('global-explorer');
-        if (explorerBox) { explorerBox.scrollIntoView({ behavior: 'smooth' }); }
-        
-        const detailsDisplay = document.getElementById('explorer-display-details');
-        if (!detailsDisplay) return;
-        
-        const isAbsoluteFirstUser = (blockIndex === 0 && hashValue !== "0000000000000000000000000000000000000000000000000000000000000000");
-
-        let analysisText = `<strong>Geklickter Vektortyp:</strong> ${hashType}-Fraktal<br>`;
-        analysisText += `<strong>Eingelesener String:</strong> <span style="color:#facc15; word-break:break-all;">${hashValue}</span><br><br>`;
-
-        if (hashType === 'ID') {
-            analysisText += `<strong>Hierarchischer Status:</strong> Übergeordnete ID-Kettenstruktur.<br>`;
-            if (isAbsoluteFirstUser) {
-                analysisText += `<strong>Befund:</strong> Du bist der <strong>allererste Urheber (Genesis-Singularität)</strong>. Vor diesem Interaktions-Hash existieren keine anderen globalen Ledger-Daten. Dein lokaler Start ist das Fundament des Netzwerks!`;
-            } else {
-                analysisText += `<strong>Befund:</strong> Dieser Vektor filtert die lückenlose, anonyme Lebenslinie dieser spezifischen Institution im globalen Register heraus.`;
-            }
-        } else if (hashType === 'PREV') {
-            analysisText += `<strong>Hierarchischer Status:</strong> Untergeordneter Verknüpfungs-Vektor.<br>`;
-            if (hashValue.startsWith("0000000000000000") || hashValue === "0000000000000000000000000000000000000000000000000000000000000000") {
-                analysisText += `<strong>Befund:</strong> Lokaler Nutzer-Genesis-Punkt (Null-Zustand). `;
-                if (blockIndex === 0) {
-                    analysisText += `Da du das Gesamtsystem als erster Nutzer aktivierst, spiegelt das übergeordnete Fenster die totale Knappheit wider. Es existiert kein vorheriger Akteur.`;
-                } else {
-                    analysisText += `Dockt im übergeordneten Gesamtregister direkt an den Zustand derjenigen Institution an, die eine Mikrosekunde vor dir aktiv war.`;
-                }
-            } else {
-                analysisText += `<strong>Befund:</strong> Verknüpft diesen Interaktionsschritt mathematisch unumkehrbar mit dem direkten Vorgänger-Block.`;
-            }
-        } else if (hashType === 'CURR') {
-            analysisText += `<strong>Hierarchischer Status:</strong> Zustands-Versiegelung.<br>`;
-            analysisText += `<strong>Befund:</strong> Finaler Block-Hash im globalen Gesamt-Kontext validiert. Jede Interaktion unter diesem Hash verändert den globalen Liquiditäts-Supply im Netzwerk.`;
-        }
-        detailsDisplay.innerHTML = analysisText;
-    }
 }
-// INSTANZIIERUNG DER MASTER-KLASSEconst system = new EuroChainSystem();
-// AUTONOME INTERZEPTIONS-LOGIK (Ersetzt die explorer.js zu 100% direkt im RAM)const GlobalExplorerHelper = {
-    copyText: function(text) {
-        navigator.clipboard.writeText(text).then(() => { alert("Hash erfolgreich kopiert!"); });
-    },
-    transformUI: function() {
-        const outputBox = document.getElementById('chain-output');
-        if (!outputBox) return;
-        const rawText = outputBox.innerText || outputBox.textContent;
-        if (!rawText || rawText.includes("System bereit") || rawText.includes("display: flex")) return;
 
-        const lines = rawText.split('\n');
-        let finalHTML = "";
-        let currentBlockIndex = 0, currentTime = "00:00:00", currentType = "INTERAKTION", currentDetails = "";
-        let idHash = "", prevHash = "", currHash = "";
-
-        lines.forEach(line => {
-            const trimmed = line.trim();
-            if (!trimmed) return;
-            if (trimmed.includes("Block #")) {
-                if (idHash || prevHash || currHash) { finalHTML += this.buildHTML(currentBlockIndex, currentTime, currentType, currentDetails, idHash, prevHash, currHash); }
-                const timeMatch = trimmed.match(/^\[(.*?)\]/);
-                currentTime = timeMatch ? timeMatch[1] : "00:00:00";
-                const indexMatch = trimmed.match(/Block #(\d+)/);
-                currentBlockIndex = indexMatch ? parseInt(indexMatch[1]) : 0;
-                const typeMatch = trimmed.match(/\[([^\]]+)\]$/);
-                currentType = typeMatch ? typeMatch[1] : "INTERAKTION";
-                idHash = ""; prevHash = ""; currHash = ""; currentDetails = "";
-            } 
-            else if (trimmed.startsWith("• Details:")) { currentDetails = trimmed.replace("• Details:", "").trim(); } 
-            else if (trimmed.includes("ID-Hash:")) { idHash = trimmed.split("ID-Hash:")[1].trim(); } 
-            else if (trimmed.includes("Prev-Hash:")) { prevHash = trimmed.split("Prev-Hash:")[1].trim(); } 
-            else if (trimmed.includes("Curr-Hash:")) { currHash = trimmed.split("Curr-Hash:")[1].trim(); }
-        });
-
-        if (idHash || prevHash || currHash) { finalHTML += this.buildHTML(currentBlockIndex, currentTime, currentType, currentDetails, idHash, prevHash, currHash); }
-        outputBox.innerHTML = finalHTML;
-        outputBox.scrollTop = outputBox.scrollHeight;
-    },
-    buildHTML: function(index, time, type, details, id, prev, curr) {
-        return `
-            <div style="padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px dashed #334155; font-family: monospace;">
-                <strong style="color: #10b981;">[${time}] ⛓️ Block #${index} [${type}]</strong><br>
-                <span style="color: #f8fafc;">• Details: ${details}</span><br>
-                <div style="display: flex; justify-content: space-between; align-items: center; background: #090d16; padding: 6px 10px; border-radius: 4px; margin: 6px 0; gap: 10px; border: 1px solid #1e293b;">
-                    <span style="color: #38bdf8; cursor: pointer; text-decoration: underline; flex: 1; word-break: break-all; font-size: 11px;" onclick="system.exploreHash('${id}', 'ID', ${index})">ID-Hash: ${id}</span>
-                    <button style="background: #334155; color: #f8fafc; border: 1px solid #475569; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; min-width: 38px;" onclick="GlobalExplorerHelper.copyText('${id}')">📋</button>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; background: #090d16; padding: 6px 10px; border-radius: 4px; margin: 6px 0; gap: 10px; border: 1px solid #1e293b;">
-
-Prev-Hash: ${prev}
-📋
-
-
-Curr-Hash: ${curr}
-📋
-
-
-`;
-}
-};
-// Überwachungsschleife klinkt sich unbemerkt direkt in das DOM-Feld ein
-window.addEventListener('load', () => {
-const targetNode = document.getElementById('chain-output');
-if (targetNode) {
-GlobalExplorerHelper.transformUI();
-const observer = new MutationObserver(() => {
-observer.disconnect();
-GlobalExplorerHelper.transformUI();
-observer.observe(targetNode, { childList: true, subtree: true, characterData: true });
-});
-observer.observe(targetNode, { childList: true, subtree: true, characterData: true });
-}
-});
-
-
+// Deklariert das unantastbare System-Objekt im globalen RAM des Browsers
+const system = new EuroChainSystem();
