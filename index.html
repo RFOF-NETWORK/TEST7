@@ -279,6 +279,434 @@
                 observer.observe(targetNode, { childList: true, subtree: true, characterData: true });
             }
         });
-    </script>
+    
+    <!-- ================================================================= -->
+
+    <!-- SOZIALE INTERAKTIONS-LAYERS (ANMELDUNG / PROFIL / CHAT) -->
+    <div id="social-profile-layer" class="box hidden" style="background: #0f172a; border: 2px solid #f97316; border-radius: 12px; padding: 20px; margin-top: 20px;">
+        <h3 style="color:#f97316; margin-top:0; border-bottom:1px solid #f97316; padding-bottom:5px;">👤 INSTITUTIONELLES PROFIL</h3>
+        
+        <div style="display:flex; align-items:center; gap:15px; margin-bottom:15px;">
+            <div style="position:relative;">
+                <img id="user-avatar" src="data:image/svg+xml;utf8,<svg xmlns='http://w3.org' viewBox='0 0 24 24' fill='%239ca3af'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>" style="width:70px; height:70px; border-radius:50%; background:#334155; border:2px solid #475569; object-fit:cover;">
+                <input type="file" id="avatar-upload" accept="image/*" style="display:none;" onchange="SocialSystem.updateAvatar(this)">
+                <button onclick="document.getElementById('avatar-upload').click()" style="position:absolute; bottom:0; right:0; background:#f97316; color:white; border:none; border-radius:50%; width:24px; height:24px; font-size:12px; cursor:pointer;">✎</button>
+            </div>
+            <div>
+                <div style="font-size:12px; color:#9ca3af;">NICHT BEARBEITBARER NUTZERNAME</div>
+                <strong id="profile-username-display" style="font-size:18px; color:#38bdf8;">-</strong>
+            </div>
+        </div>
+
+        <div style="margin-bottom:15px;">
+            <div style="font-size:11px; color:#9ca3af; margin-bottom:4px;">BIO / DESCRIPTION</div>
+            <textarea id="profile-bio" placeholder="Füge eine institutionelle Beschreibung hinzu..." style="width:100%; height:60px; background:#334155; border:1px solid #475569; color:white; border-radius:4px; padding:8px; box-sizing:border-box; font-family:sans-serif; resize:none;"></textarea>
+            <button class="action-btn" onclick="SocialSystem.saveBio()" style="background:#f97316; font-size:11px; padding:6px; margin-top:5px; width:auto; float:right;">Bio Sichern</button>
+            <div style="clear:both;"></div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:15px;">
+            <button class="action-btn" onclick="SocialSystem.openSearchAndHistory()" style="background:#2563eb;">💬 P2P Messenger & Posts</button>
+            <button class="action-btn" onclick="SocialSystem.openMasterSettings()" style="background:#475569;">⚙️ System Settings</button>
+        </div>
+        <button class="action-btn" onclick="SocialSystem.closeProfile()" style="background:#1f2937; color:#9ca3af; border:1px solid #475569;">Dashboard Ansicht</button>
+    </div>
+
+    <!-- MESSENGER, VERLAUF & POST SYSTEM -->
+    <div id="social-messenger-layer" class="box hidden" style="background:#0f172a; border:1px solid #2563eb; padding:15px; margin-top:15px;">
+        <h3 style="color:#38bdf8; margin-top:0;">💬 PEER-TO-PEER NETWORK NET</h3>
+        
+        <!-- SEARCH & HISTORY LIST -->
+        <div id="mess-history-view">
+            <input type="text" id="user-search-input" placeholder="Nutzer Suchen (z.B. @Zentralbank_B)...">
+            <button class="action-btn" onclick="SocialSystem.searchUser()" style="background:#2563eb; margin-bottom:15px;">🔍 Suchen & Chatten 🚀</button>
+            
+            <div style="font-size:11px; color:#9ca3af; margin-bottom:4px;">NACHRICHTEN & KONTAKTE VERLAUF</div>
+            <input type="text" id="history-search-input" placeholder="Verlauf durchsuchen..." oninput="SocialSystem.filterHistory()" style="margin-bottom:10px;">
+            <div id="chat-history-list" style="max-height:150px; overflow-y:auto; background:#020617; border-radius:4px; padding:5px;"></div>
+            
+            <hr style="border-top:1px dashed #334155; margin:15px 0;">
+            <button class="action-btn" onclick="SocialSystem.openPostField()" style="background:#10b981;">➕ Neuen Beitrag / Post erstellen</button>
+        </div>
+
+        <!-- AKTIVER CHAT WINDOW -->
+        <div id="active-chat-view" class="hidden">
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#1e293b; padding:8px; border-radius:4px; margin-bottom:10px;">
+                <span id="chat-partner-title" style="color:#38bdf8; font-weight:bold;">Chat</span>
+                <button onclick="SocialSystem.closeActiveChat()" style="background:none; border:none; color:#ef4444; cursor:pointer; font-weight:bold;">✕</button>
+            </div>
+            <div id="chat-messages-box" style="height:180px; overflow-y:auto; background:#020617; border-radius:4px; padding:10px; margin-bottom:10px; font-family:monospace; font-size:11px; display:flex; flex-direction:column; gap:5px;"></div>
+            <div style="display:flex; gap:5px;">
+                <input type="text" id="chat-message-input" placeholder="Nachricht schreiben..." style="margin:0; flex:1;">
+                <button onclick="SocialSystem.sendMessage()" style="background:#2563eb; color:white; border:none; padding:0 15px; border-radius:4px; cursor:pointer; font-size:14px;">🚀</button>
+            </div>
+        </div>
+
+        <!-- POST FIELD -->
+        <div id="create-post-view" class="hidden">
+            <h4>➕ GLOBAL REPUTATION POST</h4>
+            <textarea id="post-description" placeholder="Schreibe eine Description für deinen Post..." style="width:100%; height:60px; background:#334155; border:1px solid #475569; color:white; border-radius:4px; padding:8px; box-sizing:border-box; font-family:sans-serif; resize:none;"></textarea>
+            <button class="action-btn" onclick="SocialSystem.submitPost()" style="background:#10b981; margin-top:5px;">Beitrag im Netzwerk veröffentlichen</button>
+            <button class="action-btn" onclick="SocialSystem.cancelPost()" style="background:#475569; margin-top:5px;">Zurück</button>
+        </div>
+
+        <button class="action-btn" onclick="SocialSystem.backToProfile()" style="background:#1f2937; margin-top:15px; font-size:12px; padding:6px;">Back to Profil</button>
+    </div>
+
+    <!-- DUALES SETTINGS SYSTEM MODAL -->
+    <div id="system-settings-layer" class="box hidden" style="background:#0f172a; border:2px solid #475569; padding:20px; margin-top:15px;">
+        <h3 id="settings-title-ui" style="color:#f8fafc; margin-top:0;">⚙️ ACCOUNT SETTINGS</h3>
+        
+        <!-- ADMINISTRATIVE PASSWORT-ZONE -->
+        <div id="admin-password-zone" class="box" style="background:#1e293b;">
+            <label style="font-size:12px; color:#9ca3af;">SYSTEM-PASSWORT (EINSEHBAR & ÄNDERBAR)</label>
+            <input type="text" id="settings-pass-input" style="color:#facc15; font-family:monospace; font-weight:bold;">
+            <button class="action-btn" onclick="SocialSystem.saveNewPassword()" style="background:#2563eb; font-size:12px; padding:6px;">Passwort Aktualisieren</button>
+        </div>
+
+        <!-- KRYPTO DATENSATZ REGISTER -->
+        <div class="box" style="background:#1e293b; max-height:220px; overflow-y:auto;">
+            <h4 style="margin-top:0; color:#38bdf8;">🔒 VALIDIERTE KRYPTO-KANÄLE</h4>
+            <div id="settings-wallets-register" style="display:flex; flex-direction:column; gap:10px;"></div>
+        </div>
+
+        <button class="action-btn" onclick="SocialSystem.closeSettings()" style="background:#1f2937; margin-top:10px;">Settings Verlassen</button>
+    </div>
+
+    <!-- ERWEITERUNG: GLOBAL INTER-INSTITUTIONELL EXPLORER LIVE-VIEWER AREA -->
+    <!-- Dieser Bereich fügt sich nahtlos UNTEN in den bestehenden Kasten ein, ohne Vorhandenes zu verändern -->
+    <div id="explorer-live-viewer-extension" style="background: #030712; border: 2px solid #2563eb; border-top:none; border-radius: 0 0 12px 12px; padding: 0 20px 20px 20px; margin: -15px auto 20px auto; max-width: 600px; font-family: sans-serif; box-shadow: 0 10px 15px rgba(37, 99, 235, 0.15);">
+        <hr style="border:0; border-top:1px dashed #2563eb; margin:0 0 15px 0;">
+        <h4 style="color:#eab308; margin-top:0; text-transform:uppercase; font-size:12px; letter-spacing:1px;">📊 Live-Interaktions Volumen Statistischer Viewer</h4>
+        
+        <!-- LIVE TICKER MATRIX -->
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:5px; margin-bottom:15px; font-family:monospace; font-size:10px; text-align:center;">
+            <div style="background:#111827; padding:5px; border-radius:4px; border:1px solid #1e293b;">
+                <span style="color:#38bdf8;">[LOGIN]</span><br><span id="ticker-login-val" style="color:#10b981; font-weight:bold;">0 v/m</span>
+            </div>
+            <div style="background:#111827; padding:5px; border-radius:4px; border:1px solid #1e293b;">
+                <span style="color:#10b981;">[EVALUATION]</span><br><span id="ticker-eval-val" style="color:#eab308; font-weight:bold;">0 v/m</span>
+            </div>
+            <div style="background:#111827; padding:5px; border-radius:4px; border:1px solid #1e293b;">
+                <span style="color:#f97316;">[2FA_IMPORT]</span><br><span id="ticker-import-val" style="color:#ef4444; font-weight:bold;">0 v/m</span>
+            </div>
+        </div>
+
+        <!-- STATISTISCHE GRAFIK/BALKEN SIMULATION -->
+        <div style="background:#111827; border:1px solid #1e293b; padding:10px; border-radius:6px; margin-bottom:15px;">
+            <div style="font-size:10px; color:#9ca3af; margin-bottom:5px; text-transform:uppercase; font-family:monospace;">📈 Aggregierte Interaktions-Frequenz (Live)</div>
+
+
+
+⛓️ Existierende Blockchain Gesamt-Adressliste
+
+bc1qUr-Genesis-Anker_Kanal_aktiviert_0x00000
+
+
+
+.hidden { display: none !important; }
+#social-messenger-layer input[type="text"], #system-settings-layer input[type="text"] { margin: 8px 0; padding: 10px; background:#334155; border:1px solid #475569; color:white; width:100%; box-sizing:border-box; border-radius:4px; }
+.history-item { display:flex; justify-content:space-between; align-items:center; background:#111827; padding:6px; border-radius:4px; margin-bottom:4px; font-size:11px; border:1px solid #1e293b; }
+.chart-bar { flex:1; background:#2563eb; border-radius:2px 2px 0 0; transition: height 0.3s ease; min-height:4px; }
+
+const SocialSystem = {
+chatPartner: null,
+chats: {},
+posts: [],
+isKlonMode: false,
+openProfile: function() {
+if(typeof system === 'undefined' || !system.currentUser) return alert("Bitte logge dich zuerst im Inland-Status ein!");
+document.getElementById('dashboard-section').classList.add('hidden');
+document.getElementById('social-profile-layer').classList.remove('hidden');
+document.getElementById('profile-username-display').innerText = "@" + system.currentUser;
+// Trage gespeicherte Bio ein falls vorhanden
+const savedBio = localStorage.getItem('bio_' + system.currentUser);
+document.getElementById('profile-bio').value = savedBio ? savedBio : "";
+// Trage Avatar ein
+const savedAvatar = localStorage.getItem('avatar_' + system.currentUser);
+if(savedAvatar) document.getElementById('user-avatar').src = savedAvatar;
+},
+closeProfile: function() {
+document.getElementById('social-profile-layer').classList.add('hidden');
+document.getElementById('dashboard-section').classList.remove('hidden');
+},
+updateAvatar: function(input) {
+if (input.files && input.files[0]) {
+const reader = new FileReader();
+reader.onload = function(e) {
+document.getElementById('user-avatar').src = e.target.result;
+localStorage.setItem('avatar_' + system.currentUser, e.target.result);
+};
+reader.readAsDataURL(input.files[0]);
+}
+},
+saveBio: function() {
+const bioVal = document.getElementById('profile-bio').value;
+localStorage.setItem('bio_' + system.currentUser, bioVal);
+alert("Bio-Description erfolgreich gesichert!");
+},
+openSearchAndHistory: function() {
+document.getElementById('social-profile-layer').classList.add('hidden');
+document.getElementById('social-messenger-layer').classList.remove('hidden');
+this.renderHistory();
+},
+backToProfile: function() {
+document.getElementById('social-messenger-layer').classList.add('hidden');
+document.getElementById('social-profile-layer').classList.remove('hidden');
+},
+searchUser: function() {
+let target = document.getElementById('user-search-input').value.trim();
+if(!target) return alert("Bitte gib einen Suchnamen ein!");
+if(!target.startsWith("@")) target = "@" + target;
+this.chatPartner = target;
+document.getElementById('mess-history-view').classList.add('hidden');
+document.getElementById('active-chat-view').classList.remove('hidden');
+document.getElementById('chat-partner-title').innerText = "Verschlüsselter Kanal: " + target;
+this.renderMessages();
+},
+sendMessage: function() {
+const input = document.getElementById('chat-message-input');
+const text = input.value.trim();
+if(!text) return;
+if(!this.chats[this.chatPartner]) this.chats[this.chatPartner] = [];
+this.chats[this.chatPartner].push({ sender: 'me', text: text, time: new Date().toLocaleTimeString() });
+input.value = "";
+this.renderMessages();
+// Simuliere automatische Gegen-Antwort für Verlauf-Aktivierung nach Interaktion
+setTimeout(() => {
+if(this.chats[this.chatPartner]) {
+this.chats[this.chatPartner].push({ sender: 'partner', text: "Interaktions-Vektor verifiziert. Empfang bestätigt.", time: new Date().toLocaleTimeString() });
+this.renderMessages();
+ExplorerLiveViewer.triggerLiveEvent('LOGIN');
+}
+}, 1000);
+},
+renderMessages: function() {
+const box = document.getElementById('chat-messages-box');
+const msgData = this.chats[this.chatPartner] || [];
+box.innerHTML = msgData.map(m => <div style="align-self: ${m.sender === 'me' ? 'flex-end' : 'flex-start'}; background: ${m.sender === 'me' ? '#1e3a8a' : '#1e293b'}; padding: 5px 8px; border-radius: 4px; max-width: 80%;"> <span style="color:#9ca3af; font-size:9px;">[${m.time}]</span> <strong>${m.sender === 'me' ? 'Mee:' : 'Peer:'}</strong> ${m.text} </div>).join('');
+box.scrollTop = box.scrollHeight;
+},
+closeActiveChat: function() {
+this.chatPartner = null;
+document.getElementById('active-chat-view').classList.add('hidden');
+document.getElementById('mess-history-view').classList.remove('hidden');
+this.renderHistory();
+},
+renderHistory: function() {
+const box = document.getElementById('chat-history-list');
+const keys = Object.keys(this.chats);
+if(keys.length === 0) {
+box.innerHTML = "Keine aktiven Verläufe verzeichnet.";
+return;
+}
+box.innerHTML = keys.map(k => <div class="history-item"> <span style="color:#38bdf8; font-weight:bold;">${k}</span> <button onclick="SocialSystem.reopenChat('${k}')" style="background:#2563eb; color:white; border:none; padding:2px 6px; border-radius:3px; font-size:10px; cursor:pointer;">Öffnen</button> </div>).join('');
+},
+reopenChat: function(partner) {
+this.chatPartner = partner;
+document.getElementById('mess-history-view').classList.add('hidden');
+document.getElementById('active-chat-view').classList.remove('hidden');
+document.getElementById('chat-partner-title').innerText = "Verschlüsselter Kanal: " + partner;
+this.renderMessages();
+},
+filterHistory: function() {
+const q = document.getElementById('history-search-input').value.toLowerCase();
+const items = document.querySelectorAll('.history-item');
+items.forEach(item => {
+const name = item.querySelector('span').innerText.toLowerCase();
+if(name.includes(q)) item.style.display = "flex";
+else item.style.display = "none";
+});
+},
+openPostField: function() {
+document.getElementById('mess-history-view').classList.add('hidden');
+document.getElementById('create-post-view').classList.remove('hidden');
+},
+cancelPost: function() {
+document.getElementById('create-post-view').classList.add('hidden');
+document.getElementById('mess-history-view').classList.remove('hidden');
+},
+submitPost: function() {
+const desc = document.getElementById('post-description').value.trim();
+if(!desc) return alert("Bitte eine Description eingeben!");
+this.posts.push({ desc: desc, time: new Date().toISOString() });
+document.getElementById('post-description').value = "";
+alert("Post wurde erfolgreich als autonomer Block registriert!");
+this.cancelPost();
+if(typeof system !== 'undefined') {
+system.logToChain("GLOBAL_REPUTATION_POST", Description: ${desc});
+}
+},
+openMasterSettings: function() {
+this.isKlonMode = false;
+document.getElementById('social-profile-layer').classList.add('hidden');
+document.getElementById('system-settings-layer').classList.remove('hidden');
+document.getElementById('settings-title-ui').innerText = "⚙️ ADMINISTRATIVE MASTER SETTINGS";
+document.getElementById('admin-password-zone').classList.remove('hidden');
+// Lese Passwort aus HTML-Feld
+const passField = document.getElementById('password');
+document.getElementById('settings-pass-input').value = passField ? passField.value : "12345";
+this.renderSettingsWallets();
+},
+openCryptoSettingsKlon: function() {
+this.isKlonMode = true;
+document.getElementById('dashboard-section').classList.add('hidden');
+document.getElementById('system-settings-layer').classList.remove('hidden');
+document.getElementById('settings-title-ui').innerText = "⚙️ KRYPTO-STATUS SETTINGS (KLON)";
+document.getElementById('admin-password-zone').classList.add('hidden'); // Passwort ausgeblendet!
+this.renderSettingsWallets();
+},
+closeSettings: function() {
+document.getElementById('system-settings-layer').classList.add('hidden');
+if(this.isKlonMode) {
+document.getElementById('dashboard-section').classList.remove('hidden');
+} else {
+document.getElementById('social-profile-layer').classList.remove('hidden');
+}
+},
+saveNewPassword: function() {
+const newPass = document.getElementById('settings-pass-input').value.trim();
+if(!newPass) return alert("Passwort darf nicht leer sein!");
+const originalPassInput = document.getElementById('password');
+if(originalPassInput) originalPassInput.value = newPass;
+alert("System-Passwort erfolgreich abgeändert!");
+},
+renderSettingsWallets: function() {
+const container = document.getElementById('settings-wallets-register');
+if(typeof system === 'undefined' || !system.currentWallet) {
+container.innerHTML = "Keine aktiven Datensätze deklariert.";
+return;
+}
+let html = "";
+const w = system.currentWallet;
+// INTERNER SYSTEMSEITIGER DATENSATZBLOCK (Niemals veränderbar)
+if(w.evm12 && w.evm12 !== "Nicht importiert") {
+html += <div style="background:#020617; padding:8px; border-radius:4px; font-size:11px; border-left:3px solid #10b981;"> <span style="color:#10b981; font-weight:bold;">[INTERNAL SYSTEM BLOCK]</span><br> EVM (12w): ${w.evm12}<br>BTC (12w): ${w.btc12}<br> <span style="color:#ef4444; font-size:10px;">Mnemonic (Gesperrt): ${w.mnemonic12}</span> </div>;
+}
+if(w.evm24 && w.evm24 !== "Nicht importiert") {
+html += <div style="background:#020617; padding:8px; border-radius:4px; font-size:11px; border-left:3px solid #10b981;"> <span style="color:#10b981; font-weight:bold;">[INTERNAL SYSTEM BLOCK]</span><br> EVM (24w): ${w.evm24}<br>BTC (24w): ${w.btc24}<br> <span style="color:#ef4444; font-size:10px;">Mnemonic (Gesperrt): ${w.mnemonic24}</span> </div>;
+}
+// PRÜFE OB EXTERNER IMPORT ODER ENTKNÜPFBARER DATENSATZ VORLIEGT
+const isImport12 = w.mnemonic12 && w.mnemonic12 !== "Nicht importiert" && !w.evm24;
+const isImport24 = w.mnemonic24 && w.mnemonic24 !== "Nicht importiert" && !w.evm12;
+if(isImport12 || isImport24) {
+const is12 = isImport12;
+html += <div id="external-wallet-row" style="background:#020617; padding:8px; border-radius:4px; font-size:11px; border-left:3px solid #f97316;"> <div style="display:flex; justify-content:space-between; align-items:center;"> <span style="color:#f97316; font-weight:bold;">[EXTERNAL MAPPED CHANNEL]</span> ${!this.isKlonMode ?ENTKNÜPFEN: ''} </div> EVM: ${is12 ? w.evm12 : w.evm24}<br>BTC: ${is12 ? w.btc12 : w.btc24}<br> <span style="color:#ef4444; font-size:10px;">Mnemonic: ${is12 ? w.mnemonic12 : w.mnemonic24}</span> </div>;
+}
+container.innerHTML = html || "Keine aktiven Datensätze deklariert.";
+},
+unlinkExternalWallet: function() {
+if(confirm("Möchtest du diese externe Wallet-Verbindung wirklich entknüpfen?")) {
+if(typeof system !== 'undefined' && system.currentWallet) {
+system.currentWallet = null;
+localStorage.removeItem('eurochain_wallet');
+alert("Externe Verbindung erfolgreich entknüpft!");
+this.renderSettingsWallets();
+ExplorerLiveViewer.triggerLiveEvent('2FA_IMPORT');
+// Setze UI im Hauptdashboard zurück
+const setupBox = document.getElementById('wallet-setup');
+const activeBox = document.getElementById('wallet-active');
+if(setupBox && activeBox) {
+activeBox.classList.add('hidden');
+setupBox.classList.remove('hidden');
+}
+}
+}
+}
+};
+// AUTOMATISCHE LIVE INTERAKTIONS ANZEIGE & BLOCKCHAIN EXPLORER ERWEITERUNG
+const ExplorerLiveViewer = {
+counts: { LOGIN: 0, EVALUATION: 0, '2FA_IMPORT': 0 },
+chartBarsCount: 20,
+init: function() {
+this.buildChartSkeleton();
+this.startUpdateLoop();
+this.interceptMainLedger();
+},
+buildChartSkeleton: function() {
+const chart = document.getElementById('live-frequency-chart');
+if(!chart) return;
+chart.innerHTML = "";
+for(let i=0; i < this.chartBarsCount; i++) {
+const bar = document.createElement('div');
+bar.className = "chart-bar";
+bar.style.height = "10%";
+chart.appendChild(bar);
+}
+},
+triggerLiveEvent: function(type) {
+if(this.counts[type] !== undefined) {
+this.counts[type]++;
+this.registerNewGlobalAddress(type);
+}
+},
+registerNewGlobalAddress: function(type) {
+const ledger = document.getElementById('global-blockchain-address-ledger');
+if(!ledger) return;
+// Simuliere eine reinkommende verschlüsselte Netzwerk-Adresse passend zum Typ
+const pseudoEntropy = Math.random().toString(16).substring(2, 10);
+let newAddr = "";
+if(type === 'EVALUATION') newAddr = "0x" + pseudoEntropy + "... [USER_FOUR_CHANNELS_BLOCK]";
+else if(type === '2FA_IMPORT') newAddr = "bc1q" + pseudoEntropy + "... [EXTERNAL_MAPPED_LINK]";
+else newAddr = "id_" + pseudoEntropy + "... [INSTITUTION_INTERACTION]";
+const div = document.createElement('div');
+div.style.color = "#a855f7";
+div.style.borderBottom = "1px dashed #1e293b";
+div.style.paddingBottom = "2px";
+div.innerText = [${new Date().toLocaleTimeString()}] ${newAddr};
+ledger.insertBefore(div, ledger.firstChild);
+},
+interceptMainLedger: function() {
+const targetNode = document.getElementById('chain-output');
+if (targetNode) {
+const observer = new MutationObserver(() => {
+const rawText = targetNode.innerText || targetNode.textContent;
+if(rawText.includes("[LOGIN]")) this.triggerLiveEvent('LOGIN');
+if(rawText.includes("[WALLET_EVALUATION]")) this.triggerLiveEvent('EVALUATION');
+if(rawText.includes("[WALLET_2FA_IMPORT]")) this.triggerLiveEvent('2FA_IMPORT');
+});
+observer.observe(targetNode, { childList: true, subtree: true, characterData: true });
+}
+},
+startUpdateLoop: function() {
+setInterval(() => {
+// Berechne simulierte systemseitige Hintergrund-Interaktionen pro Minute
+const lM = this.counts.LOGIN * 4 + Math.floor(Math.random() * 3);
+const eM = this.counts.EVALUATION * 2 + Math.floor(Math.random() * 2);
+const iM = this.counts.2FA_IMPORT * 1;
+document.getElementById('ticker-login-val').innerText = ${lM} v/m;
+document.getElementById('ticker-eval-val').innerText = ${eM} v/m;
+document.getElementById('ticker-import-val').innerText = ${iM} v/m;
+// Aktualisiere die Live-Balken der Frequenz-Grafik autonom im RAM
+const bars = document.querySelectorAll('.chart-bar');
+if(bars.length > 0) {
+const totalActivity = lM + eM + iM + 2;
+// Schiebe Balken nach links
+for(let i=0; i < bars.length - 1; i++) {
+bars[i].style.height = bars[i+1].style.height;
+}
+// Setze neuen Peak-Wert ganz rechts
+const dynamicHeight = Math.min(100, Math.max(10, totalActivity * 8));
+bars[bars.length - 1].style.height = ${dynamicHeight}%;
+// Farbe wechselt dynamisch je nach Lastzustand
+if(totalActivity > 15) bars[bars.length - 1].style.background = "#eab308";
+else bars[bars.length - 1].style.background = "#2563eb";
+}
+// Baue langsame Abklingrate für Live-Events ein
+if(this.counts.LOGIN > 0) this.counts.LOGIN--;
+if(this.counts.EVALUATION > 0) this.counts.EVALUATION--;
+if(this.counts.2FA_IMPORT > 0) this.counts.2FA_IMPORT--;
+}, 1500);
+}
+};
+// Aktiviert das Erweiterungssystem unbemerkt im RAM
+window.addEventListener('load', () => {
+ExplorerLiveViewer.init();
+});
+</script>
 </body>
 </html>
+
+
+
+
