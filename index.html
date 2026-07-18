@@ -4,33 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@RFOF-NETWORK - EuroChain / IICB</title>
-        <style>
+    <style>
         body { font-family: sans-serif; background: #0f172a; color: #f8fafc; padding: 20px; margin: 0; }
         .box { background: #1e293b; padding: 15px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
         input { display: block; width: 100%; margin: 10px 0; padding: 12px; border-radius: 4px; border: 1px solid #475569; background: #334155; color: white; box-sizing: border-box; }
         
-        /* Symmetrischer Flex-Container für die unverkürzten Hash-Fraktalzeilen im Ledger */
         .explorer-row { display: flex; justify-content: space-between; align-items: center; background: #090d16; padding: 6px 10px; border-radius: 4px; margin: 6px 0; gap: 10px; border: 1px solid #1e293b; }
-        
-        /* Die blau leuchtende, unterstrichene Klickbarkeit für den direkten Global-Explorer-Routingvektor */
         .hash-link { color: #38bdf8; font-family: monospace; font-size: 11px; cursor: pointer; text-decoration: underline; flex: 1; word-break: break-all; transition: color 0.15s ease; }
         .hash-link:hover { color: #60a5fa; background: rgba(56, 189, 248, 0.08); }
         
-        /* Das echte, unfehlbare Standard-Kopier-Viereck (📋) als nativer System-Button */
         .real-copy-btn { background: #334155; color: #f8fafc; border: 1px solid #475569; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; min-width: 38px; }
         .real-copy-btn:active { background: #10b981; border-color: #10b981; }
 
         button.action-btn { background: #2563eb; color: white; border: none; padding: 12px 20px; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 5px; }
         button.action-btn:hover { background: #1d4ed8; }
+        
         .hidden { display: none; }
         
-        /* Der touch-scrollbare Kasten verhindert Zeichenbrüche auf mobilen Bildschirmen */
         .chain-log { font-family: monospace; background: #020617; padding: 12px; border-radius: 4px; color: #10b981; max-height: 350px; overflow-y: auto; font-size: 12px; line-height: 1.6; -webkit-overflow-scrolling: touch; word-break: break-all; }
         hr { border: 0; border-top: 1px dashed #475569; margin: 15px 0; }
         .section-title { color: #f97316; font-size: 13px; font-weight: bold; margin-top: 10px; margin-bottom: 2px; text-transform: uppercase; }
-       .social-history-card { display: flex; justify-content: space-between; align-items: center; background: #020617; padding: 8px; border-radius: 4px; margin-bottom: 5px; border: 1px solid #1e293b; font-size: 11px; }
-       .wallet-record-card { background: #111827; padding: 8px; border-radius: 4px; font-family: monospace; font-size: 11px; line-height: 1.4; border: 1px solid #1e293b; }
-</style>
+        .copy-row { display: flex; align-items: center; gap: 5px; background: #020617; padding: 5px; border-radius: 4px; margin: 4px 0; }
+        .copy-btn { background: #334155; border: 1px solid #475569; color: white; cursor: pointer; padding: 2px 8px; border-radius: 3px; }
+    </style>
 </head>
 <body>
     <div style="max-width: 600px; margin: 0 auto; padding-top: 20px;">
@@ -48,36 +44,20 @@
         <div id="dashboard-section" class="box hidden">
             <h2 style="display: flex; align-items: center; gap: 10px; outline: none;">
                 Willkommen, <span id="user-display" style="color:#38bdf8;"></span>
-                <button id="profil-trigger" 
-                        tabindex="0" 
-                        style="display: inline-flex; align-items: center; gap: 6px; color:#f97316; cursor:pointer; font-size:16px; font-weight:bold; background:none; border:none; padding: 4px 8px; border-radius: 4px; text-decoration:underline; transition: background 0.2s;" 
-                        onclick="SocialModule.openProfile()"
-                        onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); SocialModule.openProfile();}">
-                    <img id="dashboard-avatar-icon" 
-                         src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%239ca3af'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>" 
-                         style="width:22px; height:22px; border-radius:50%; background:#334155; border:1px solid #475569; object-fit:cover; display:block;" 
-                         alt="Profilbild">
+                <button id="profil-trigger" tabindex="0" style="display: inline-flex; align-items: center; gap: 6px; color:#f97316; cursor:pointer; font-size:16px; font-weight:bold; background:none; border:none; padding: 4px 8px; border-radius: 4px; text-decoration:underline; transition: background 0.2s;" onclick="SocialModule.openProfile()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); SocialModule.openProfile();}">
+                    <img id="dashboard-avatar-icon" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%239ca3af'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>" style="width:22px; height:22px; border-radius:50%; background:#334155; border:1px solid #475569; object-fit:cover; display:block;" alt="Profilbild">
                     Profil
                 </button>
             </h2>
             <p>System-Status: <span style="color:#10b981;">● Autonom & Validiert</span></p>
             
-            <!-- FIAT PORTFOLIO -->
             <div class="box" style="background:#334155;">
                 <h3>Fiat-Ebene (Account-Basiert)</h3>
                 <p>Guthaben: <strong>100.000,00 EUR</strong> (Verbriefte Liquidität)</p>
             </div>
 
-            <!-- WALLET VERWALTUNG (EXAKTE BESCHRIFTUNG 1) -->
             <div id="wallet-setup" class="box" style="background:#334155; position:relative;">
-                 <button id="crypto-settings-klon-btn"
-                         tabindex="0"
-                         style="position:absolute; top:12px; right:15px; background:none; border:none; color:white; cursor:pointer; font-size:18px; padding:4px; border-radius:4px; display:flex; align-items:center; justify-content:center; transition: transform 0.2s;"
-                         onclick="SocialModule.openSettings(true)"
-                         onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); SocialModule.openSettings(true);}"
-                         aria-label="Krypto Einstellungen">
-                    ⚙️
-                </button>
+                 <button id="crypto-settings-klon-btn" tabindex="0" style="position:absolute; top:12px; right:15px; background:none; border:none; color:white; cursor:pointer; font-size:18px; padding:4px; border-radius:4px; display:flex; align-items:center; justify-content:center; transition: transform 0.2s;" onclick="SocialModule.openSettings(true)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); SocialModule.openSettings(true);}" aria-label="Krypto Einstellungen">⚙️</button>
                 <h3>Krypto-Ebene (EVM & BTC Ready)</h3>
                 <button class="action-btn" onclick="system.generateFourChannels()" style="background:#10b981;">Neue autonome Wallet generieren</button>
                 <p style="text-align: center; margin: 10px 0;">oder</p>
@@ -85,7 +65,6 @@
                 <button class="action-btn" onclick="system.openTwoFactorField()" style="background:#475569;">Adresse manuell verknüpfen</button>
             </div>
 
-            <!-- INTEGRIERTES 2FA POPUP FÜR PHRASEN-EINGABE -->
             <div id="wallet-2fa" class="box hidden" style="background:#451a03; border: 1px solid #f97316;">
                 <h3 style="color:#f97316; margin-top:0;">🛡️ Kryptografischer 2FA-Identitätsnachweis</h3>
                 <p style="font-size:12px;">Gib die zugehörige Seed Phrase ein, um die Eigentümerschaft ohne Dritte zu verifizieren:</p>
@@ -94,11 +73,8 @@
                 <button class="action-btn" onclick="system.cancel2FA()" style="background:#7f1d1d; margin-top:5px; font-size:12px; padding:6px;">Abbrechen</button>
             </div>
 
-            <!-- AKTIVE WALLET ANZEIGE (VIER KANÄLE AUS ZWEI PHRASEN) -->
             <div id="wallet-active" class="box hidden" style="background:#020617; border: 1px solid #10b981;">
                 <h3>Aktive Wallet-Verbindung</h3>
-                
-                <!-- LAYER 1: 12 WÖRTER -->
                 <div class="section-title">12-Wort Kanal-Ebene</div>
                 <p style="margin:2px 0; font-size:11px;">Öffentliche EVM Adresse (12w):</p>
                 <div class="copy-row">
@@ -115,10 +91,7 @@
                     <span class="copy-text" id="seed12-display" style="color:#ef4444;"></span>
                     <button class="copy-btn" onclick="system.copyToClipboard('seed12-display')">🗐</button>
                 </div>
-
                 <hr style="margin:10px 0; border-top:1px dashed #334155;">
-
-                <!-- LAYER 2: 24 WÖRTER -->
                 <div class="section-title">24-Wort Kanal-Ebene</div>
                 <p style="margin:2px 0; font-size:11px;">Öffentliche EVM Adresse (24w):</p>
                 <div class="copy-row">
@@ -135,9 +108,7 @@
                     <span class="copy-text" id="seed24-display" style="color:#ef4444;"></span>
                     <button class="copy-btn" onclick="system.copyToClipboard('seed24-display')">🗐</button>
                 </div>
-
                 <hr style="margin:10px 0; border-top:1px dashed #334155;">
-                
                 <p style="margin:2px 0; font-size:11px;">Gemeinsamer Master Private-Key:</p>
                 <div class="copy-row">
                     <span class="copy-text" id="privkey-display" style="color:#ef4444;"></span>
@@ -147,24 +118,23 @@
             <button class="action-btn" onclick="system.logout()" style="background:#dc2626; margin-top:20px;">System verlassen (Logout)</button>
         </div>
 
-        <!-- SIMULTANE BLOCKCHAIN KETTE -->
         <div class="box">
             <h3>Simultane Status- & Verifikationskette (Unveränderbar)</h3>
             <div id="chain-output" class="chain-log">System bereit. Warte auf Interaktion...</div>
         </div>
     </div>
 
-    <!-- DIESER BLOCK WIRD DIREKT UNTER DEN BESTEHENDEN VERLAUFSKASTEN GESETZT -->
-    <div id="global-explorer" style="background: #030712; border: 2px solid #2563eb; border-radius: 12px; padding: 20px; margin: 20px auto; max-width: 600px; font-family: sans-serif; box-shadow: 0 0 15px rgba(37, 99, 235, 0.15);">
-        <h3 style="color: #38bdf8; font-size: 16px; font-weight: bold; margin-top: 0; border-bottom: 2px solid #2563eb; padding-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">🌐 Global Inter-Institutionell Explorer</h3>
-        
-        <div style="background: #111827; padding: 15px; border-radius: 6px; border: 1px solid #2563eb; font-family: monospace; font-size: 11px;">
-            <div style="color: #38bdf8; font-weight: bold; margin-bottom: 8px; text-transform: uppercase;">🔍 Vektor-Positions-Analyse (Inspektion)</div>
-            <div id="explorer-display-details" style="color: #f8fafc; line-height: 1.6;">Warte auf Klick im lokalen Ledger... Klicke oben auf einen der drei unverkürzten Hashes, um die hierarchische Übertragungs-Position im globalen Register einzusehen.</div>
-        </div>
-        
-        <button onclick="window.scrollTo({top:0, behavior:'smooth'})" style="background: #1f2937; color: #9ca3af; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 12px; font-size: 11px;">▲ Zurück zum Nutzer-Dashboard</button>
+<!-- GLOBAL EXPLORER & SOZIALE ANSICHTEN -->
+<div id="global-explorer" style="background: #030712; border: 2px solid #2563eb; border-radius: 12px; padding: 20px; margin: 20px auto; max-width: 600px; font-family: sans-serif; box-shadow: 0 0 15px rgba(37, 99, 235, 0.15);">
+    <h3 style="color: #38bdf8; font-size: 16px; font-weight: bold; margin-top: 0; border-bottom: 2px solid #2563eb; padding-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">🌐 Global Inter-Institutionell Explorer</h3>
+    
+    <div style="background: #111827; padding: 15px; border-radius: 6px; border: 1px solid #2563eb; font-family: monospace; font-size: 11px;">
+        <div style="color: #38bdf8; font-weight: bold; margin-bottom: 8px; text-transform: uppercase;">🔍 Vektor-Positions-Analyse (Inspektion)</div>
+        <div id="explorer-display-details" style="color: #f8fafc; line-height: 1.6;">Warte auf Klick im lokalen Ledger... Klicke oben auf einen der drei unverkürzten Hashes, um die hierarchische Übertragungs-Position im globalen Register einzusehen.</div>
     </div>
+    
+    <button onclick="window.scrollTo({top:0, behavior:'smooth'})" style="background: #1f2937; color: #9ca3af; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 12px; font-size: 11px;">▲ Zurück zum Nutzer-Dashboard</button>
+</div>
 
 <div id="social-core-module" class="box hidden" style="background: #0f172a; border: 2px solid #f97316; border-radius: 12px; padding: 20px; margin-top: 20px; font-family: sans-serif;">
     <div id="profile-main-view">
@@ -266,14 +236,10 @@
     </div>
 </div>
 
-    // <!-- ================================================================= -->
- // <!-- SOVEREIGN MODUL: SOZIALES NETZWERK, CHAT, POSTS & DUAL SETTINGS  -->
-// <!-- ================================================================= -->
-
-// <!-- HTML-HÜLLE: ADMINISTRATIVE UND SOZIALE ANSICHTEN -->
+<!-- SOVEREIGN MODUL: SOZIALES NETZWERK, CHAT, POSTS & DUAL SETTINGS -->
 <div id="social-core-module" class="box hidden" style="background: #0f172a; border: 2px solid #f97316; border-radius: 12px; padding: 20px; margin-top: 20px; font-family: sans-serif;">
     
-    // <!-- INTERNES PROFIL-INTERFACELAYER -->
+    <!-- INTERNES PROFIL-INTERFACELAYER -->
     <div id="profile-main-view">
         <h3 style="color:#f97316; margin-top:0; border-bottom:1px solid #f97316; padding-bottom:5px;">👤 INSTITUTIONELLES PROFIL</h3>
         <div style="display:flex; align-items:center; gap:15px; margin-bottom:15px;">
@@ -301,7 +267,7 @@
         </div>
     </div>
 
-    // <!-- P2P MESSENGER, CONTACTS & POST-INTERFACELAYER -->
+    <!-- P2P MESSENGER, CONTACTS & POST-INTERFACELAYER -->
     <div id="profile-messenger-view" class="hidden">
         <h3 style="color:#38bdf8; margin-top:0;">💬 PEER-TO-PEER NETWORK NET</h3>
         
@@ -317,7 +283,7 @@
             <button onclick="SocialModule.switchSubView('post')" style="background:#10b981; color:white; border:none; padding:12px; width:100%; border-radius:4px; font-weight:bold; cursor:pointer;">➕ Beitrags-Description posten</button>
         </div>
 
-        // <!-- REALS CHAT FENSTER -->
+        <!-- REALS CHAT FENSTER -->
         <div id="active-chat-window" class="hidden">
             <div style="display:flex; justify-content:space-between; align-items:center; background:#1e293b; padding:8px; border-radius:4px; margin-bottom:10px;">
                 <span id="chat-partner-title" style="color:#38bdf8; font-weight:bold;">Chat</span>
@@ -330,7 +296,7 @@
             </div>
         </div>
 
-        // <!-- POST ERSTELLUNG LAYER -->
+        <!-- POST ERSTELLUNG LAYER -->
         <div id="create-post-window" class="hidden">
             <h4>➕ GLOBAL REPUTATION POST</h4>
             <textarea id="post-description" placeholder="Schreibe eine Description für deinen Post..." style="width:100%; height:60px; background:#334155; border:1px solid #475569; color:white; border-radius:4px; padding:8px; box-sizing:border-box; resize:none; font-family:sans-serif;"></textarea>
@@ -340,18 +306,18 @@
         <button onclick="SocialModule.switchSubView('main')" style="background:#1f2937; color:#9ca3af; border:1px solid #475569; padding:8px; width:100%; border-radius:4px; margin-top:15px; cursor:pointer; font-size:12px;">Zurück zum Profil-Zentrum</button>
     </div>
 
-    // <!-- DUALES SETTINGS ENGINE INTERFACE -->
+    <!-- DUALES SETTINGS ENGINE INTERFACE -->
     <div id="settings-view" class="hidden">
         <h3 id="settings-title-label" style="color:#f8fafc; margin-top:0;">⚙️ SETTINGS</h3>
         
-        // <!-- PASSWORT ZONE (NUR IM MASTER MODUS SICHTBAR) -->
+        <!-- PASSWORT ZONE (NUR IM MASTER MODUS SICHTBAR) -->
         <div id="admin-password-block" class="box" style="background:#1e293b; margin-bottom:15px; border:1px solid #475569;">
             <label style="font-size:11px; color:#9ca3af; display:block; margin-bottom:4px;">SYSTEM-PASSWORT (EINSEHBAR & ÄNDERBAR)</label>
             <input type="text" id="settings-pass-input" style="color:#facc15; font-family:monospace; font-weight:bold; background:#334155; border:1px solid #475569; padding:10px; width:100%; box-sizing:border-box; border-radius:4px;">
             <button onclick="SocialModule.updatePassword()" style="background:#2563eb; color:white; border:none; padding:6px 12px; border-radius:4px; margin-top:5px; cursor:pointer; font-size:12px; font-weight:bold;">Passwort Aktualisieren</button>
         </div>
 
-        // <!-- MULTI-DATENSATZ REGISTER -->
+        <!-- MULTI-DATENSATZ REGISTER -->
         <div class="box" style="background:#020617; max-height:200px; overflow-y:auto; border:1px solid #334155; padding:10px;">
             <h4 style="margin-top:0; color:#38bdf8; font-size:12px;">🔒 KRYPTO-KANÄLE & SEED PHRASEN REGISTER</h4>
             <div id="settings-wallets-list" style="display:flex; flex-direction:column; gap:8px;"></div>
@@ -362,8 +328,7 @@
 
     <button onclick="SocialModule.closeModule()" style="background:#1f2937; color:#ef4444; border:1px solid #dc2626; padding:12px; width:100%; border-radius:4px; font-weight:bold; cursor:pointer; margin-top:15px;">Dashboard Verlassen</button>
 </div>
-
-  <!-- LÄDT DIE UNANTASTBARE BASIS-BLOCKCHAIN -->
+<!--LÄDT DIE UNANTASTBARE BASIS-BLOCKCHAIN -->
     <script src="app.js"></script>
 
     <!-- VERBESSERTE EXPLORER-LOGIK: ERZWINGT DIE FRAKTALITÄT DIREKT AUS DEM FLIESSTEXT -->
@@ -413,39 +378,27 @@
                 detailsDisplay.innerHTML = analysisText;
             },
 
-            // NEU: Schneidet Hashes unfehlbar direkt aus dem Fließtext heraus
             transformUI: function() {
                 const outputBox = document.getElementById('chain-output');
                 if (!outputBox) return;
 
                 const rawText = outputBox.innerText || outputBox.textContent;
-                // Verhindert Endlosschleifen, wenn das Design bereits aktiv ist
                 if (!rawText || rawText.includes("System bereit") || rawText.includes("explorer-row")) return;
 
-                // Spaltet den Text anhand von "Block #" auf, um einzelne Blöcke zu isolieren
                 const blocks = rawText.split(/Block\s*#/g);
                 let finalHTML = "";
 
                 blocks.forEach(blockStr => {
                     if (!blockStr.trim()) return;
 
-                    // 1. Block-Index auslesen
                     const indexMatch = blockStr.match(/^(\d+)/);
                     const blockIndex = indexMatch ? parseInt(indexMatch[1]) : 0;
-
-                    // 2. Zeitstempel auslesen
                     const timeMatch = blockStr.match(/\[(\d{2}:\d{2}:\d{2})\]/);
                     const blockTime = timeMatch ? timeMatch[1] : "00:00:00";
-
-                    // 3. Block-Typ auslesen (z.B. LOGIN)
                     const typeMatch = blockStr.match(/\[([A-Z_]+)\]/);
                     const blockType = typeMatch ? typeMatch[1] : "INTERAKTION";
-
-                    // 4. Details auslesen
                     const detailsMatch = blockStr.match(/Detail\s*s?:\s*([^\n]*?)(?=ID-Hash|Prev-Hash|$)/i);
                     const blockDetails = detailsMatch ? detailsMatch[1].trim() : "Aktion verzeichnet.";
-
-                    // 5. Mathematische Extraktion der drei unverkürzten 64-Zeichen-Hashes
                     const idMatch = blockStr.match(/ID-Hash:\s*([a-fA-F0-9xXuiended]+)/i);
                     const prevMatch = blockStr.match(/Prev-Hash:\s*([a-fA-F0-9xX]+)/i);
                     const currMatch = blockStr.match(/Curr-Hash:\s*([a-fA-F0-9xX]+)/i);
@@ -454,7 +407,6 @@
                     const prevHash = prevMatch ? prevMatch[1].trim() : "0000000000000000000000000000000000000000000000000000000000000000";
                     const currHash = currMatch ? currMatch[1].trim() : "0000000000000000000000000000000000000000000000000000000000000000";
 
-                    // Baut das neongelbe/blaue Flex-Layout inklusive der echten Buttons
                     finalHTML += `
                         <div style="padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px dashed #334155; font-family: monospace; text-align: left;">
                             <strong style="color: #10b981;">[${blockTime}] ⛓️ Block #${blockIndex} [${blockType}]</strong><br>
@@ -486,10 +438,7 @@
         window.addEventListener('load', () => {
             const targetNode = document.getElementById('chain-output');
             if (targetNode) {
-                // Führt die Umwandlung sofort aus, falls beim Laden schon Text existiert
                 GlobalExplorerHelper.transformUI();
-
-                // Lauscht auf jede minimale Textänderung, die aus Ihrer app.js hineingeschrieben wird
                 const observer = new MutationObserver(() => {
                     observer.disconnect();
                     GlobalExplorerHelper.transformUI();
@@ -499,340 +448,296 @@
             }
         });
           
-// <!-- AUTONOME SOZIAL-LOGIK: DOCKT DIREKT AN DAS PROZESS-OBJEKT AN -->
-    const SocialModule = {
-        activePartner: null,
-        messageVault: {},
-        isKlon: false,
-
-        openSettings: function(klonMode) {
-            this.isKlon = klonMode;
-            if(klonMode) {
+        const SocialModule = {
+            activePartner: null,
+            messageVault: {},
+            isKlon: false,
+            openSettings: function(klonMode) {
+                this.isKlon = klonMode;
+                if(klonMode) {
+                    document.getElementById('dashboard-section').classList.add('hidden');
+                    document.getElementById('system-settings-layer').style.display = "none";
+                    document.getElementById('settings-title-label').innerText = "⚙️ KRYPTO-STATUS SETTINGS (KLON)";
+                    document.getElementById('admin-password-block').classList.add('hidden');
+                } else {
+                    document.getElementById('profile-main-view').classList.add('hidden');
+                    document.getElementById('settings-title-label').innerText = "⚙️ ADMINISTRATIVE MASTER SETTINGS";
+                    document.getElementById('admin-password-block').classList.remove('hidden');
+                    const origPass = document.getElementById('password');
+                    document.getElementById('settings-pass-input').value = origPass ? origPass.value : "";
+                }
+                document.getElementById('system-settings-layer').classList.add('hidden');
+                document.getElementById('social-core-module').classList.remove('hidden');
+                document.getElementById('settings-view').classList.remove('hidden');
+                document.getElementById('profile-main-view').style.display = klonMode ? "none" : "block";
+                document.getElementById('profile-messenger-view').classList.add('hidden');
+                this.buildWalletsRegister();
+            },
+            closeSettings: function() {
+                document.getElementById('settings-view').classList.add('hidden');
+                if(this.isKlon) {
+                    document.getElementById('social-core-module').classList.add('hidden');
+                    document.getElementById('dashboard-section').classList.remove('hidden');
+                } else {
+                    document.getElementById('profile-main-view').classList.remove('hidden');
+                }
+            },
+            openProfile: function() {
+                if(typeof system === 'undefined' || !system.currentUser) return alert("Bitte logge dich zuerst im Inland-Status ein!");
                 document.getElementById('dashboard-section').classList.add('hidden');
-                document.getElementById('system-settings-layer').style.display = "none"; // Schützt Basis-Klon
-                document.getElementById('settings-title-label').innerText = "⚙️ KRYPTO-STATUS SETTINGS (KLON)";
-                document.getElementById('admin-password-block').classList.add('hidden'); // Passwort-Sicherheitsfilter greift!
-            } else {
-                document.getElementById('profile-main-view').classList.add('hidden');
-                document.getElementById('settings-title-label').innerText = "⚙️ ADMINISTRATIVE MASTER SETTINGS";
-                document.getElementById('admin-password-block').classList.remove('hidden');
-                const origPass = document.getElementById('password');
-                document.getElementById('settings-pass-input').value = origPass ? origPass.value : "";
-            }
-            document.getElementById('system-settings-layer').classList.add('hidden');
-            document.getElementById('social-core-module').classList.remove('hidden');
-            document.getElementById('settings-view').classList.remove('hidden');
-            document.getElementById('profile-main-view').style.display = klonMode ? "none" : "block";
-            document.getElementById('profile-messenger-view').classList.add('hidden');
-            
-            this.buildWalletsRegister();
-        },
-
-        closeSettings: function() {
-            document.getElementById('settings-view').classList.add('hidden');
-            if(this.isKlon) {
+                document.getElementById('social-core-module').classList.remove('hidden');
+                document.getElementById('profile-main-view').classList.remove('hidden');
+                document.getElementById('profile-main-view').style.display = "block";
+                document.getElementById('profile-messenger-view').classList.add('hidden');
+                document.getElementById('settings-view').classList.add('hidden');
+                document.getElementById('profile-username-display').innerText = "@" + system.currentUser;
+                const savedBio = localStorage.getItem('rfof_bio_' + system.currentUser);
+                document.getElementById('profile-bio').value = savedBio ? savedBio : "";
+                const savedAvatar = localStorage.getItem('rfof_avatar_' + system.currentUser);
+                if(savedAvatar) {
+                    document.getElementById('user-avatar').src = savedAvatar;
+                    document.getElementById('dashboard-avatar-icon').src = savedAvatar;
+                }
+            },
+            closeModule: function() {
                 document.getElementById('social-core-module').classList.add('hidden');
                 document.getElementById('dashboard-section').classList.remove('hidden');
-            } else {
-                document.getElementById('profile-main-view').classList.remove('hidden');
-            }
-        },
-
-        openProfile: function() {
-            if(typeof system === 'undefined' || !system.currentUser) return alert("Bitte logge dich zuerst im Inland-Status ein!");
-            document.getElementById('dashboard-section').classList.add('hidden');
-            document.getElementById('social-core-module').classList.remove('hidden');
-            document.getElementById('profile-main-view').classList.remove('hidden');
-            document.getElementById('profile-main-view').style.display = "block";
-            document.getElementById('profile-messenger-view').classList.add('hidden');
-            document.getElementById('settings-view').classList.add('hidden');
-            
-            document.getElementById('profile-username-display').innerText = "@" + system.currentUser;
-            const savedBio = localStorage.getItem('rfof_bio_' + system.currentUser);
-            document.getElementById('profile-bio').value = savedBio ? savedBio : "";
-            
-            const savedAvatar = localStorage.getItem('rfof_avatar_' + system.currentUser);
-            if(savedAvatar) {
-                document.getElementById('user-avatar').src = savedAvatar;
-                document.getElementById('dashboard-avatar-icon').src = savedAvatar;
-            }
-        },
-
-        closeModule: function() {
-            document.getElementById('social-core-module').classList.add('hidden');
-            document.getElementById('dashboard-section').classList.remove('hidden');
-        },
-
-        updateAvatar: function(uploader) {
-            if (uploader.files && uploader.files) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('user-avatar').src = e.target.result;
-                    document.getElementById('dashboard-avatar-icon').src = e.target.result;
-                    localStorage.setItem('rfof_avatar_' + system.currentUser, e.target.result);
-                };
-                reader.readAsDataURL(uploader.files);
-            }
-        },
-
-        saveBio: function() {
-            const bio = document.getElementById('profile-bio').value;
-            localStorage.setItem('rfof_bio_' + system.currentUser, bio);
-            alert("Bio-Description im RAM gesichert!");
-        },
-
-        switchSubView: function(view) {
-            document.getElementById('profile-main-view').classList.add('hidden');
-            document.getElementById('profile-messenger-view').classList.add('hidden');
-            document.getElementById('create-post-window').classList.add('hidden');
-            
-            if(view === 'main') {
-                document.getElementById('profile-main-view').classList.remove('hidden');
-            } else if(view === 'messenger') {
-                document.getElementById('profile-messenger-view').classList.remove('hidden');
-                document.getElementById('mess-history-view').classList.remove('hidden');
-                document.getElementById('active-chat-window').classList.add('hidden');
-                this.buildContactsHistory();
-            } else if(view === 'post') {
-                document.getElementById('profile-messenger-view').classList.remove('hidden');
+            },
+            updateAvatar: function(uploader) {
+                if (uploader.files && uploader.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById('user-avatar').src = e.target.result;
+                        document.getElementById('dashboard-avatar-icon').src = e.target.result;
+                        localStorage.setItem('rfof_avatar_' + system.currentUser, e.target.result);
+                    };
+                    reader.readAsDataURL(uploader.files[0]);
+                }
+            },
+            saveBio: function() {
+                const bio = document.getElementById('profile-bio').value;
+                localStorage.setItem('rfof_bio_' + system.currentUser, bio);
+                alert("Bio-Description im RAM gesichert!");
+            },
+            switchSubView: function(view) {
+                document.getElementById('profile-main-view').classList.add('hidden');
+                document.getElementById('profile-messenger-view').classList.add('hidden');
+                document.getElementById('create-post-window').classList.add('hidden');
+                if(view === 'main') {
+                    document.getElementById('profile-main-view').classList.remove('hidden');
+                } else if(view === 'messenger') {
+                    document.getElementById('profile-messenger-view').classList.remove('hidden');
+                    document.getElementById('mess-history-view').classList.remove('hidden');
+                    document.getElementById('active-chat-window').classList.add('hidden');
+                    this.buildContactsHistory();
+                } else if(view === 'post') {
+                    document.getElementById('profile-messenger-view').classList.remove('hidden');
+                    document.getElementById('mess-history-view').classList.add('hidden');
+                    document.getElementById('create-post-window').classList.remove('hidden');
+                }
+            },
+            searchAndChat: function() {
+                let input = document.getElementById('user-search-input').value.trim();
+                if(!input) return alert("Bitte Suchnamen eingeben!");
+                if(!input.startsWith("@")) input = "@" + input;
+                this.activePartner = input;
                 document.getElementById('mess-history-view').classList.add('hidden');
-                document.getElementById('create-post-window').classList.remove('hidden');
-            }
-        },
-
-        searchAndChat: function() {
-            let input = document.getElementById('user-search-input').value.trim();
-            if(!input) return alert("Bitte Suchnamen eingeben!");
-            if(!input.startsWith("@")) input = "@" + input;
-            
-            this.activePartner = input;
-            document.getElementById('mess-history-view').classList.add('hidden');
-            document.getElementById('active-chat-window').classList.remove('hidden');
-            document.getElementById('chat-partner-title').innerText = "Kanal: " + input;
-            this.buildMessages();
-        },
-
-        sendMessage: function() {
-            const box = document.getElementById('chat-message-input');
-            const txt = box.value.trim();
-            if(!txt) return;
-            if(!this.messageVault[this.activePartner]) this.messageVault[this.activePartner] = [];
-            
-            this.messageVault[this.activePartner].push({ me: true, text: txt, time: new Date().toLocaleTimeString() });
-            box.value = "";
-            this.buildMessages();
-            
-            setTimeout(() => {
-                if(this.messageVault[this.activePartner]) {
-                    this.messageVault[this.activePartner].push({ me: false, text: "Interaktions-Vektor verifiziert.", time: new Date().toLocaleTimeString() });
-                    this.buildMessages();
-                }
-            }, 1000);
-        },
-
-        buildMessages: function() {
-            const container = document.getElementById('chat-messages-box');
-            const data = this.messageVault[this.activePartner] || [];
-            container.innerHTML = data.map(m => `
-                <div style="align-self: ${m.me ? 'flex-end' : 'flex-start'}; background: ${m.me ? '#1e3a8a' : '#1e293b'}; padding: 6px 10px; border-radius: 4px; max-width: 80%; color: white;">
-                    <span style="color:#9ca3af; font-size:9px;">[${m.time}]</span> ${m.text}
-                </div>
-            `).join('');
-            container.scrollTop = container.scrollHeight;
-        },
-
-        closeActiveChat: function() {
-            this.activePartner = null;
-            document.getElementById('active-chat-window').classList.add('hidden');
-            document.getElementById('mess-history-view').classList.remove('hidden');
-            this.buildContactsHistory();
-        },
-
-        buildContactsHistory: function() {
-            const container = document.getElementById('chat-history-list');
-            const users = Object.keys(this.messageVault);
-            if(users.length === 0) {
-                container.innerHTML = "<div style='color:#475569; font-size:11px; text-align:center;'>Keine Historie vorhanden.</div>";
-                return;
-            }
-            container.innerHTML = users.map(u => `
-                <div class="social-history-card">
-                    <span style="color:#38bdf8; font-weight:bold;">${u}</span>
-                    <button onclick="SocialModule.reopenChannel('${u}')" style="background:#2563eb; color:white; border:none; padding:3px 8px; border-radius:3px; font-size:10px; cursor:pointer;">Chat</button>
-                </div>
-            `).join('');
-        },
-
-        reopenChannel: function(user) {
-            this.activePartner = user;
-            document.getElementById('mess-history-view').classList.add('hidden');
-            document.getElementById('active-chat-window').classList.remove('hidden');
-            document.getElementById('chat-partner-title').innerText = "Kanal: " + user;
-            this.buildMessages();
-        },
-
-        filterHistory: function() {
-            const query = document.getElementById('history-search-input').value.toLowerCase();
-            const elements = document.querySelectorAll('.social-history-card');
-            elements.forEach(el => {
-                const label = el.querySelector('span').innerText.toLowerCase();
-                el.style.display = label.includes(query) ? "flex" : "none";
-            });
-        },
-
-        submitPost: function() {
-            const desc = document.getElementById('post-description').value.trim();
-            if(!desc) return alert("Description fehlt!");
-            this.posts.push({ desc, date: new Date().toISOString() });
-            document.getElementById('post-description').value = "";
-            alert("Post registriert!");
-            this.switchSubView('messenger');
-            if(typeof system !== 'undefined') system.logToChain("GLOBAL_REPUTATION_POST", `Description: ${desc}`);
-        },
-
-        updatePassword: function() {
-            const pass = document.getElementById('settings-pass-input').value.trim();
-            if(!pass) return alert("Passwort leer!");
-            const corePass = document.getElementById('password');
-            if(corePass) corePass.value = pass;
-            alert("Passwort geändert!");
-        },
-
-        buildWalletsRegister: function() {
-            const box = document.getElementById('settings-wallets-list');
-            if(typeof system === 'undefined' || !system.currentWallet) {
-                box.innerHTML = "<div style='color:#475569; font-size:11px;'>Keine Datensätze deklariert.</div>";
-                return;
-            }
-            let html = ""; const w = system.currentWallet;
-            
-            // SYSTEMSEITIGE INTERNE GENERIERUNGEN (FEST VERANKERT)
-            if(w.evm12 && w.evm12 !== "Nicht importiert") {
-                html += `<div class="wallet-record-card" style="border-left: 3px solid #10b981;"><span style="color:#10b981; font-weight:bold;">[SYSTEM RECORD 12W]</span><br>EVM: ${w.evm12}<br>BTC: ${w.btc12}<br><span style="color:#ef4444; font-size:10px;">Mnemonic (Gesperrt): ${w.mnemonic12}</span></div>`;
-            }
-            if(w.evm24 && w.evm24 !== "Nicht importiert") {
-                html += `<div class="wallet-record-card" style="border-left: 3px solid #10b981;"><span style="color:#10b981; font-weight:bold;">[SYSTEM RECORD 24W]</span><br>EVM: ${w.evm24}<br>BTC: ${w.btc24}<br><span style="color:#ef4444; font-size:10px;">Mnemonic (Gesperrt): ${w.mnemonic24}</span></div>`;
-            }
-            
-            // EXTERNE IMPORTS (ENTKNÜPFBAR)
-            const isImp12 = w.mnemonic12 && w.mnemonic12 !== "Nicht importiert" && !w.evm24;
-            const isImp24 = w.mnemonic24 && w.mnemonic24 !== "Nicht importiert" && !w.evm12;
-            if(isImp12 || isImp24) {
-                const s = isImp12;
-                html += `
-                    <div class="wallet-record-card" style="border-left: 3px solid #f97316;">
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <span style="color:#f97316; font-weight:bold;">[EXTERNAL LINK]</span>
-                            ${!this.isKlon ? `<button onclick="SocialModule.unlink()" style="background:#dc2626; color:white; border:none; padding:2px 6px; border-radius:3px; font-size:9px; cursor:pointer; font-weight:bold;">ENTKNÜPFEN</button>` : ''}
-                        </div>
-                        EVM: ${s ? w.evm12 : w.evm24}<br>BTC: ${s ? w.btc12 : w.btc24}<br>
-                        <span style="color:#ef4444; font-size:10px;">Mnemonic: ${s ? w.mnemonic12 : w.mnemonic24}</span>
-                    </div>`;
-            }
-            box.innerHTML = html || "<div style='color:#475569; font-size:11px;'>Keine Datensätze deklariert.</div>";
-        },
-
-        unlink: function() {
-            if(confirm("Verknüpfung permanent trennen?")) {
-                system.currentWallet = null; localStorage.removeItem('eurochain_wallet');
-                alert("Entknüpft!"); this.buildWalletsRegister();
-                if(typeof GlobalNetworkStats !== 'undefined') GlobalNetworkStats.event('2FA_IMPORT');
-                document.getElementById('wallet-active').classList.add('hidden');
-                document.getElementById('wallet-setup').classList.remove('hidden');
-            }
-        }
-    };
-        
-
-// <!-- STATISTISCHE ENGINELOGIK: INTERZEPTIERT UND SIMULIERT DIE SYSTEM-TAKTE -->
-    const GlobalNetworkStats = {
-        registry: { LOGIN: 0, EVALUATION: 0, '2FA_IMPORT': 0 },
-        capacity: 20,
-
-        boot: function() {
-            this.buildBars();
-            this.listenToLedger();
-            this.activateClockRate();
-        },
-
-        buildBars: function() {
-            const frame = document.getElementById('live-bars-container');
-            if(!frame) return; frame.innerHTML = "";
-            for(let i=0; i < this.capacity; i++) {
-                const node = document.createElement('div');
-                node.className = "live-metric-bar";
-                node.style.height = "12%";
-                frame.appendChild(node);
-            }
-        },
-
-        event: function(type) {
-            if(this.registry[type] !== undefined) {
-                this.registry[type]++;
-                this.pushAddressToVerzeichnis(type);
-            }
-        },
-
-        pushAddressToVerzeichnis: function(type) {
-            const list = document.getElementById('decentralized-addresses-ledger');
-            if(!list) return;
-            const seedStr = Math.random().toString(16).substring(2, 10).toLowerCase();
-            let rowText = "";
-            
-            if(type === 'EVALUATION') rowText = "0x" + seedStr + "... [USER_FOUR_CHANNELS_BLOCK]";
-            else if(type === '2FA_IMPORT') rowText = "bc1q" + seedStr + "... [EXTERNAL_MAPPED_LINK]";
-            else rowText = "id_" + seedStr + "... [INSTITUTION_INTERACTION]";
-
-            const node = document.createElement('div');
-            node.style.color = "#a855f7";
-            node.style.borderBottom = "1px dashed #1e293b";
-            node.innerText = `[${new Date().toLocaleTimeString()}] ${rowText}`;
-            list.insertBefore(node, list.firstChild);
-        },
-
-        listenToLedger: function() {
-            const target = document.getElementById('chain-output');
-            if (target) {
-                const observer = new MutationObserver(() => {
-                    const txt = target.innerText || target.textContent;
-                    if(txt.includes("[LOGIN]")) this.event('LOGIN');
-                    if(txt.includes("[WALLET_EVALUATION]")) this.event('EVALUATION');
-                    if(txt.includes("[WALLET_2FA_IMPORT]")) this.event('2FA_IMPORT');
-                });
-                observer.observe(target, { childList: true, subtree: true, characterData: true });
-            }
-        },
-
-        activateClockRate: function() {
-            setInterval(() => {
-                const lT = this.registry.LOGIN * 4 + Math.floor(Math.random() * 3);
-                const eT = this.registry.EVALUATION * 2 + Math.floor(Math.random() * 2);
-                const iT = this.registry.2FA_IMPORT * 1;
-
-                document.getElementById('stat-login-counter').innerText = `${lT} v/m`;
-                document.getElementById('stat-eval-counter').innerText = `${eT} v/m`;
-                document.getElementById('stat-import-counter').innerText = `${iT} v/m`;
-
-                const bars = document.querySelectorAll('.live-metric-bar');
-                if(bars.length > 0) {
-                    const load = lT + eT + iT + 1;
-                    for(let i=0; i < bars.length - 1; i++) {
-                        bars[i].style.height = bars[i+1].style.height;
+                document.getElementById('active-chat-window').classList.remove('hidden');
+                document.getElementById('chat-partner-title').innerText = "Kanal: " + input;
+                this.buildMessages();
+            },
+            sendMessage: function() {
+                const box = document.getElementById('chat-message-input');
+                const txt = box.value.trim();
+                if(!txt) return;
+                if(!this.messageVault[this.activePartner]) this.messageVault[this.activePartner] = [];
+                this.messageVault[this.activePartner].push({ me: true, text: txt, time: new Date().toLocaleTimeString() });
+                box.value = "";
+                this.buildMessages();
+                setTimeout(() => {
+                    if(this.messageVault[this.activePartner]) {
+                        this.messageVault[this.activePartner].push({ me: false, text: "Interaktions-Vektor verifiziert.", time: new Date().toLocaleTimeString() });
+                        this.buildMessages();
                     }
-                    const computedHeight = Math.min(100, Math.max(6, load * 8));
-                    bars[bars.length - 1].style.height = `${computedHeight}%`;
-                    bars[bars.length - 1].style.background = load > 10 ? "#eab308" : "#2563eb";
+                }, 1000);
+            },
+            buildMessages: function() {
+                const container = document.getElementById('chat-messages-box');
+                const data = this.messageVault[this.activePartner] || [];
+                container.innerHTML = data.map(m => `
+                    <div style="align-self: ${m.me ? 'flex-end' : 'flex-start'}; background: ${m.me ? '#1e3a8a' : '#1e293b'}; padding: 6px 10px; border-radius: 4px; max-width: 80%; color: white;">
+                        <span style="color:#9ca3af; font-size:9px;">[${m.time}]</span> ${m.text}
+                    </div>
+                `).join('');
+                container.scrollTop = container.scrollHeight;
+            },
+            closeActiveChat: function() {
+                this.activePartner = null;
+                document.getElementById('active-chat-window').classList.add('hidden');
+                document.getElementById('mess-history-view').classList.remove('hidden');
+                this.buildContactsHistory();
+            },
+            buildContactsHistory: function() {
+                const container = document.getElementById('chat-history-list');
+                const users = Object.keys(this.messageVault);
+                if(users.length === 0) {
+                    container.innerHTML = "<div style='color:#475569; font-size:11px; text-align:center;'>Keine Historie vorhanden.</div>";
+                    return;
                 }
-
-                if(this.registry.LOGIN > 0) this.registry.LOGIN--;
-                if(this.registry.EVALUATION > 0) this.registry.EVALUATION--;
-                if(this.registry.2FA_IMPORT > 0) this.registry.2FA_IMPORT--;
-            }, 1400);
-        }
-    };
-
-    // Zündet die statistische Analyseschicht im RAM
-    window.addEventListener('load', () => { GlobalNetworkStats.boot(); });
-</script>
+                container.innerHTML = users.map(u => `
+                    <div class="social-history-card">
+                        <span style="color:#38bdf8; font-weight:bold;">${u}</span>
+                        <button onclick="SocialModule.reopenChannel('${u}')" style="background:#2563eb; color:white; border:none; padding:3px 8px; border-radius:3px; font-size:10px; cursor:pointer;">Chat</button>
+                    </div>
+                `).join('');
+            },
+            reopenChannel: function(user) {
+                this.activePartner = user;
+                document.getElementById('mess-history-view').classList.add('hidden');
+                document.getElementById('active-chat-window').classList.remove('hidden');
+                document.getElementById('chat-partner-title').innerText = "Kanal: " + user;
+                this.buildMessages();
+            },
+            filterHistory: function() {
+                const query = document.getElementById('history-search-input').value.toLowerCase();
+                const elements = document.querySelectorAll('.social-history-card');
+                elements.forEach(el => {
+                    const label = el.querySelector('span').innerText.toLowerCase();
+                    el.style.display = label.includes(query) ? "flex" : "none";
+                });
+            },
+            submitPost: function() {
+                const desc = document.getElementById('post-description').value.trim();
+                if(!desc) return alert("Description fehlt!");
+                alert("Post registriert!");
+                this.switchSubView('messenger');
+                if(typeof system !== 'undefined') system.logToChain("GLOBAL_REPUTATION_POST", `Description: ${desc}`);
+            },
+            updatePassword: function() {
+                const pass = document.getElementById('settings-pass-input').value.trim();
+                if(!pass) return alert("Passwort leer!");
+                const corePass = document.getElementById('password');
+                if(corePass) corePass.value = pass;
+                alert("Passwort geändert!");
+            },
+            buildWalletsRegister: function() {
+                const box = document.getElementById('settings-wallets-list');
+                if(typeof system === 'undefined' || !system.currentWallet) {
+                    box.innerHTML = "<div style='color:#475569; font-size:11px;'>Keine Datensätze deklariert.</div>";
+                    return;
+                }
+                let html = ""; const w = system.currentWallet;
+                if(w.evm12 && w.evm12 !== "Nicht importiert") {
+                    html += `<div class="wallet-record-card" style="border-left: 3px solid #10b981;"><span style="color:#10b981; font-weight:bold;">[SYSTEM RECORD 12W]</span><br>EVM: ${w.evm12}<br>BTC: ${w.btc12}<br><span style="color:#ef4444; font-size:10px;">Mnemonic (Gesperrt): ${w.mnemonic12}</span></div>`;
+                }
+                if(w.evm24 && w.evm24 !== "Nicht importiert") {
+                    html += `<div class="wallet-record-card" style="border-left: 3px solid #10b981;"><span style="color:#10b981; font-weight:bold;">[SYSTEM RECORD 24W]</span><br>EVM: ${w.evm24}<br>BTC: ${w.btc24}<br><span style="color:#ef4444; font-size:10px;">Mnemonic (Gesperrt): ${w.mnemonic24}</span></div>`;
+                }
+                const isImp12 = w.mnemonic12 && w.mnemonic12 !== "Nicht importiert" && !w.evm24;
+                const isImp24 = w.mnemonic24 && w.mnemonic24 !== "Nicht importiert" && !w.evm12;
+                if(isImp12 || isImp24) {
+                    const s = isImp12;
+                    html += `
+                        <div class="wallet-record-card" style="border-left: 3px solid #f97316;">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <span style="color:#f97316; font-weight:bold;">[EXTERNAL LINK]</span>
+                                ${!this.isKlon ? `<button onclick="SocialModule.unlink()" style="background:#dc2626; color:white; border:none; padding:2px 6px; border-radius:3px; font-size:9px; cursor:pointer; font-weight:bold;">ENTKNÜPFEN</button>` : ''}
+                            </div>
+                            EVM: ${s ? w.evm12 : w.evm24}<br>BTC: ${s ? w.btc12 : w.btc24}<br>
+                            <span style="color:#ef4444; font-size:10px;">Mnemonic: ${s ? w.mnemonic12 : w.mnemonic24}</span>
+                        </div>`;
+                }
+                box.innerHTML = html || "<div style='color:#475569; font-size:11px;'>Keine Datensätze deklariert.</div>";
+            },
+            unlink: function() {
+                if(confirm("Verknüpfung permanent trennen?")) {
+                    system.currentWallet = null; localStorage.removeItem('eurochain_wallet');
+                    alert("Entknüpft!"); this.buildWalletsRegister();
+                    if(typeof GlobalNetworkStats !== 'undefined') GlobalNetworkStats.event('2FA_IMPORT');
+                    document.getElementById('wallet-active').classList.add('hidden');
+                    document.getElementById('wallet-setup').classList.remove('hidden');
+                }
+            }
+        };
+        
+        const GlobalNetworkStats = {
+            registry: { LOGIN: 0, EVALUATION: 0, '2FA_IMPORT': 0 },
+            capacity: 20,
+            boot: function() {
+                this.buildBars();
+                this.listenToLedger();
+                this.activateClockRate();
+            },
+            buildBars: function() {
+                const frame = document.getElementById('live-bars-container');
+                if(!frame) return; frame.innerHTML = "";
+                for(let i=0; i < this.capacity; i++) {
+                    const node = document.createElement('div');
+                    node.className = "live-metric-bar";
+                    node.style.height = "12%";
+                    frame.appendChild(node);
+                }
+            },
+            event: function(type) {
+                if(this.registry[type] !== undefined) {
+                    this.registry[type]++;
+                    this.pushAddressToVerzeichnis(type);
+                }
+            },
+            pushAddressToVerzeichnis: function(type) {
+                const list = document.getElementById('decentralized-addresses-ledger');
+                if(!list) return;
+                const seedStr = Math.random().toString(16).substring(2, 10).toLowerCase();
+                let rowText = "";
+                if(type === 'EVALUATION') rowText = "0x" + seedStr + "... [USER_FOUR_CHANNELS_BLOCK]";
+                else if(type === '2FA_IMPORT') rowText = "bc1q" + seedStr + "... [EXTERNAL_MAPPED_LINK]";
+                else rowText = "id_" + seedStr + "... [INSTITUTION_INTERACTION]";
+                const node = document.createElement('div');
+                node.style.color = "#a855f7";
+                node.style.borderBottom = "1px dashed #1e293b";
+                node.innerText = `[${new Date().toLocaleTimeString()}] ${rowText}`;
+                list.insertBefore(node, list.firstChild);
+            },
+            listenToLedger: function() {
+                const target = document.getElementById('chain-output');
+                if (target) {
+                    const observer = new MutationObserver(() => {
+                        const txt = target.innerText || target.textContent;
+                        if(txt.includes("[LOGIN]")) this.event('LOGIN');
+                        if(txt.includes("[WALLET_EVALUATION]")) this.event('EVALUATION');
+                        if(txt.includes("[WALLET_2FA_IMPORT]")) this.event('2FA_IMPORT');
+                    });
+                    observer.observe(target, { childList: true, subtree: true, characterData: true });
+                }
+            },
+            activateClockRate: function() {
+                setInterval(() => {
+                    const lT = this.registry.LOGIN * 4 + Math.floor(Math.random() * 3);
+                    const eT = this.registry.EVALUATION * 2 + Math.floor(Math.random() * 2);
+                    const iT = this.registry['2FA_IMPORT'] * 1;
+                    const loginCounter = document.getElementById('stat-login-counter');
+                    const evalCounter = document.getElementById('stat-eval-counter');
+                    const importCounter = document.getElementById('stat-import-counter');
+                    if(loginCounter) loginCounter.innerText = `${lT} v/m`;
+                    if(evalCounter) evalCounter.innerText = `${eT} v/m`;
+                    if(importCounter) importCounter.innerText = `${iT} v/m`;
+                    const bars = document.querySelectorAll('.live-metric-bar');
+                    if(bars.length > 0) {
+                        const load = lT + eT + iT + 1;
+                        for(let i=0; i < bars.length - 1; i++) {
+                            bars[i].style.height = bars[i+1].style.height;
+                        }
+                        const computedHeight = Math.min(100, Math.max(6, load * 8));
+                        bars[bars.length - 1].style.height = `${computedHeight}%`;
+                        bars[bars.length - 1].style.background = load > 10 ? "#eab308" : "#2563eb";
+                    }
+                    if(this.registry.LOGIN > 0) this.registry.LOGIN--;
+                    if(this.registry.EVALUATION > 0) this.registry.EVALUATION--;
+                    if(this.registry['2FA_IMPORT'] > 0) this.registry['2FA_IMPORT']--;
+                }, 1400);
+            }
+        };
+        window.addEventListener('load', () => { GlobalNetworkStats.boot(); });
+    </script>
 </body>
 </html>
