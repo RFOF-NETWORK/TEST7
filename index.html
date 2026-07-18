@@ -28,6 +28,9 @@
         .chain-log { font-family: monospace; background: #020617; padding: 12px; border-radius: 4px; color: #10b981; max-height: 350px; overflow-y: auto; font-size: 12px; line-height: 1.6; -webkit-overflow-scrolling: touch; word-break: break-all; }
         hr { border: 0; border-top: 1px dashed #475569; margin: 15px 0; }
         .section-title { color: #f97316; font-size: 13px; font-weight: bold; margin-top: 10px; margin-bottom: 2px; text-transform: uppercase; }
+        .social-history-card { display: flex; justify-content: space-between; align-items: center; background: #020617; padding: 8px; border-radius: 4px; margin-bottom: 5px; border: 1px solid #1e293b; font-size: 11px; }
+        .wallet-record-card { background: #111827; padding: 8px; border-radius: 4px; font-family: monospace; font-size: 11px; line-height: 1.4; border: 1px solid #1e293b; }
+        .live-metric-bar { flex:1; background:#2563eb; border-radius:2px 2px 0 0; transition: height 0.25s ease; min-height:4px; }
     </style>
 
 </head>
@@ -45,7 +48,20 @@
 
         <!-- SCHRITT 2: DASHBOARD (NACH LOGIN) -->
         <div id="dashboard-section" class="box hidden">
-            <h2>Willkommen, <span id="user-display" style="color:#38bdf8;"></span></h2>
+            <h2 style="display: flex; align-items: center; gap: 10px; outline: none;">
+                Willkommen, <span id="user-display" style="color:#38bdf8;"></span>
+                <button id="profil-trigger" 
+                        tabindex="0" 
+                        style="display: inline-flex; align-items: center; gap: 6px; color:#f97316; cursor:pointer; font-size:16px; font-weight:bold; background:none; border:none; padding: 4px 8px; border-radius: 4px; text-decoration:underline; transition: background 0.2s;" 
+                        onclick="SocialModule.openProfile()"
+                        onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); SocialModule.openProfile();}">
+                    <img id="dashboard-avatar-icon" 
+                         src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%239ca3af'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>" 
+                         style="width:22px; height:22px; border-radius:50%; background:#334155; border:1px solid #475569; object-fit:cover; display:block;" 
+                         alt="Profilbild">
+                    Profil
+                </button>
+            </h2>
             <p>System-Status: <span style="color:#10b981;">● Autonom & Validiert</span></p>
             
             <!-- FIAT PORTFOLIO -->
@@ -55,7 +71,15 @@
             </div>
 
             <!-- WALLET VERWALTUNG (EXAKTE BESCHRIFTUNG 1) -->
-            <div id="wallet-setup" class="box" style="background:#334155;">
+            <div id="wallet-setup" class="box" style="background:#334155; position:relative;">
+                 <button id="crypto-settings-klon-btn"
+                         tabindex="0"
+                         style="position:absolute; top:12px; right:15px; background:none; border:none; color:white; cursor:pointer; font-size:18px; padding:4px; border-radius:4px; display:flex; align-items:center; justify-content:center; transition: transform 0.2s;"
+                         onclick="SocialModule.openSettings(true)"
+                         onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); SocialModule.openSettings(true);}"
+                         aria-label="Krypto Einstellungen">
+                    ⚙️
+                </button>
                 <h3>Krypto-Ebene (EVM & BTC Ready)</h3>
                 <button class="action-btn" onclick="system.generateFourChannels()" style="background:#10b981;">Neue autonome Wallet generieren</button>
                 <p style="text-align: center; margin: 10px 0;">oder</p>
@@ -143,6 +167,133 @@
         
         <button onclick="window.scrollTo({top:0, behavior:'smooth'})" style="background: #1f2937; color: #9ca3af; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 12px; font-size: 11px;">▲ Zurück zum Nutzer-Dashboard</button>
     </div>
+
+    <!-- HTML-HÜLLE: ADMINISTRATIVE UND SOZIALE ANSICHTEN -->
+<div id="social-core-module" class="box hidden" style="background: #0f172a; border: 2px solid #f97316; border-radius: 12px; padding: 20px; margin-top: 20px; font-family: sans-serif;">
+    
+    <!-- INTERNES PROFIL-INTERFACELAYER -->
+    <div id="profile-main-view">
+        <h3 style="color:#f97316; margin-top:0; border-bottom:1px solid #f97316; padding-bottom:5px;">👤 INSTITUTIONELLES PROFIL</h3>
+        <div style="display:flex; align-items:center; gap:15px; margin-bottom:15px;">
+            <div style="position:relative;">
+                <img id="user-avatar" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%239ca3af'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>" style="width:70px; height:70px; border-radius:50%; background:#334155; border:2px solid #475569; object-fit:cover;">
+                <input type="file" id="avatar-upload" accept="image/*" style="display:none;" onchange="SocialModule.updateAvatar(this)">
+                <button onclick="document.getElementById('avatar-upload').click()" style="position:absolute; bottom:0; right:0; background:#f97316; color:white; border:none; border-radius:50%; width:24px; height:24px; font-size:12px; cursor:pointer;">✎</button>
+            </div>
+            <div>
+                <div style="font-size:12px; color:#9ca3af;">ANONYMER NUTZERNAME (GESPERRT)</div>
+                <strong id="profile-username-display" style="font-size:18px; color:#38bdf8;">-</strong>
+            </div>
+        </div>
+
+        <div style="margin-bottom:15px;">
+            <div style="font-size:11px; color:#9ca3af; margin-bottom:4px;">BIO / DESCRIPTION</div>
+            <textarea id="profile-bio" placeholder="Füge eine institutionelle Beschreibung hinzu..." style="width:100%; height:60px; background:#334155; border:1px solid #475569; color:white; border-radius:4px; padding:8px; box-sizing:border-box; font-family:sans-serif; resize:none;"></textarea>
+            <button onclick="SocialModule.saveBio()" style="background:#f97316; font-size:11px; color:white; border:none; padding:6px 12px; border-radius:4px; margin-top:5px; float:right; cursor:pointer; font-weight:bold;">Bio Sichern</button>
+            <div style="clear:both;"></div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:15px;">
+            <button onclick="SocialModule.switchSubView('messenger')" style="background:#2563eb; color:white; border:none; padding:12px; border-radius:4px; font-weight:bold; cursor:pointer;">💬 P2P Messenger & Posts</button>
+            <button onclick="SocialModule.openSettings(false)" style="background:#475569; color:white; border:none; padding:12px; border-radius:4px; font-weight:bold; cursor:pointer;">⚙️ Profil-Settings</button>
+        </div>
+    </div>
+
+    <!-- P2P MESSENGER, CONTACTS & POST-INTERFACELAYER -->
+    <div id="profile-messenger-view" class="hidden">
+        <h3 style="color:#38bdf8; margin-top:0;">💬 PEER-TO-PEER NETWORK NET</h3>
+        
+        <div id="messenger-hub">
+            <input type="text" id="user-search-input" placeholder="Nutzer Suchen..." style="width:100%; padding:10px; background:#334155; border:1px solid #475569; color:white; border-radius:4px; box-sizing:border-box;">
+            <button onclick="SocialModule.searchAndChat()" style="background:#2563eb; color:white; border:none; padding:10px; width:100%; border-radius:4px; font-weight:bold; margin-top:5px; margin-bottom:15px; cursor:pointer;">✉ Öffnen & Chatten (Papierflieger)</button>
+            
+            <div style="font-size:11px; color:#9ca3af; margin-bottom:4px;">NACHRICHTEN & KONTAKTE VERLAUF</div>
+            <input type="text" id="history-search-input" placeholder="Verlauf durchsuchen..." oninput="SocialModule.filterHistory()" style="width:100%; padding:10px; background:#334155; border:1px solid #475569; color:white; border-radius:4px; box-sizing:border-box; margin-bottom:8px;">
+            <div id="chat-history-list" style="max-height:120px; overflow-y:auto; background:#020617; border-radius:4px; padding:5px;"></div>
+            
+            <hr style="border-top:1px dashed #334155; margin:15px 0;">
+            <button onclick="SocialModule.switchSubView('post')" style="background:#10b981; color:white; border:none; padding:12px; width:100%; border-radius:4px; font-weight:bold; cursor:pointer;">➕ Beitrags-Description posten</button>
+        </div>
+
+        <!-- REALS CHAT FENSTER -->
+        <div id="active-chat-window" class="hidden">
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#1e293b; padding:8px; border-radius:4px; margin-bottom:10px;">
+                <span id="chat-partner-title" style="color:#38bdf8; font-weight:bold;">Chat</span>
+                <button onclick="SocialModule.closeActiveChat()" style="background:none; border:none; color:#ef4444; cursor:pointer; font-weight:bold; font-size:14px;">✕</button>
+            </div>
+            <div id="chat-messages-box" style="height:150px; overflow-y:auto; background:#020617; border-radius:4px; padding:10px; margin-bottom:10px; display:flex; flex-direction:column; gap:5px; font-family:monospace;"></div>
+            <div style="display:flex; gap:5px;">
+                <input type="text" id="chat-message-input" placeholder="Nachricht schreiben..." style="margin:0; flex:1; background:#334155; border:1px solid #475569; color:white; padding:10px; border-radius:4px;">
+                <button onclick="SocialModule.sendMessage()" style="background:#2563eb; color:white; border:none; padding:0 15px; border-radius:4px; cursor:pointer;">🚀</button>
+            </div>
+        </div>
+
+        <!-- POST ERSTELLUNG LAYER -->
+        <div id="create-post-window" class="hidden">
+            <h4>➕ GLOBAL REPUTATION POST</h4>
+            <textarea id="post-description" placeholder="Schreibe eine Description für deinen Post..." style="width:100%; height:60px; background:#334155; border:1px solid #475569; color:white; border-radius:4px; padding:8px; box-sizing:border-box; resize:none; font-family:sans-serif;"></textarea>
+            <button onclick="SocialModule.submitPost()" style="background:#10b981; color:white; border:none; padding:10px; width:100%; border-radius:4px; font-weight:bold; margin-top:5px; cursor:pointer;">Beitrag veröffentlichen</button>
+        </div>
+        
+        <button onclick="SocialModule.switchSubView('main')" style="background:#1f2937; color:#9ca3af; border:1px solid #475569; padding:8px; width:100%; border-radius:4px; margin-top:15px; cursor:pointer; font-size:12px;">Zurück zum Profil-Zentrum</button>
+    </div>
+
+    <!-- DUALES SETTINGS ENGINE INTERFACE -->
+    <div id="settings-view" class="hidden">
+        <h3 id="settings-title-label" style="color:#f8fafc; margin-top:0;">⚙️ SETTINGS</h3>
+        
+        <!-- PASSWORT ZONE (NUR IM MASTER MODUS SICHTBAR) -->
+        <div id="admin-password-block" class="box" style="background:#1e293b; margin-bottom:15px; border:1px solid #475569;">
+            <label style="font-size:11px; color:#9ca3af; display:block; margin-bottom:4px;">SYSTEM-PASSWORT (EINSEHBAR & ÄNDERBAR)</label>
+            <input type="text" id="settings-pass-input" style="color:#facc15; font-family:monospace; font-weight:bold; background:#334155; border:1px solid #475569; padding:10px; width:100%; box-sizing:border-box; border-radius:4px;">
+            <button onclick="SocialModule.updatePassword()" style="background:#2563eb; color:white; border:none; padding:6px 12px; border-radius:4px; margin-top:5px; cursor:pointer; font-size:12px; font-weight:bold;">Passwort Aktualisieren</button>
+        </div>
+
+        <!-- MULTI-DATENSATZ REGISTER -->
+        <div class="box" style="background:#020617; max-height:200px; overflow-y:auto; border:1px solid #334155; padding:10px;">
+            <h4 style="margin-top:0; color:#38bdf8; font-size:12px;">🔒 KRYPTO-KANÄLE & SEED PHRASEN REGISTER</h4>
+            <div id="settings-wallets-list" style="display:flex; flex-direction:column; gap:8px;"></div>
+        </div>
+
+        <button onclick="SocialModule.closeSettings()" style="background:#1f2937; color:#f8fafc; border:1px solid #475569; padding:12px; width:100%; border-radius:4px; cursor:pointer; font-weight:bold; margin-top:10px;">Settings Schließen</button>
+    </div>
+
+    <button onclick="SocialModule.closeModule()" style="background:#1f2937; color:#ef4444; border:1px solid #dc2626; padding:12px; width:100%; border-radius:4px; font-weight:bold; cursor:pointer; margin-top:15px;">Dashboard Verlassen</button>
+</div>
+
+    
+<!-- INTERFACELAYER: STATISTISCHE GRAPHEN & ADRESS-LISTE -->
+<div id="network-statistics-module" style="background: #030712; border: 2px solid #2563eb; border-top:none; border-radius: 0 0 12px 12px; padding: 0 20px 20px 20px; margin: -15px auto 30px auto; max-width: 600px; font-family: sans-serif; box-shadow: 0 10px 15px rgba(37, 99, 235, 0.15);">
+    <hr style="border:0; border-top:1px dashed #2563eb; margin:0 0 15px 0;">
+    <h4 style="color:#eab308; margin-top:0; text-transform:uppercase; font-size:12px; letter-spacing:1px; font-family:sans-serif;">📊 Live-Interaktions Volumen Statistischer Viewer</h4>
+    
+    <!-- STATISTISCHE VEKTOR-ZÄHLER MATRIX -->
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:5px; margin-bottom:15px; font-family:monospace; font-size:10px; text-align:center;">
+        <div style="background:#111827; padding:6px; border-radius:4px; border:1px solid #1e293b;">
+            <span style="color:#38bdf8; font-weight:bold;">[LOGIN]</span><br><span id="stat-login-counter" style="color:#10b981; font-weight:bold; font-size:12px;">0 v/m</span>
+        </div>
+        <div style="background:#111827; padding:6px; border-radius:4px; border:1px solid #1e293b;">
+            <span style="color:#10b981; font-weight:bold;">[EVALUATION]</span><br><span id="stat-eval-counter" style="color:#eab308; font-weight:bold; font-size:12px;">0 v/m</span>
+        </div>
+        <div style="background:#111827; padding:6px; border-radius:4px; border:1px solid #1e293b;">
+            <span style="color:#f97316; font-weight:bold;">[2FA_IMPORT]</span><br><span id="stat-import-counter" style="color:#ef4444; font-weight:bold; font-size:12px;">0 v/m</span>
+        </div>
+    </div>
+
+    <!-- DYNAMISCHES FREQUENZ DIAGRAMM (RAM SIMULIERT) -->
+    <div style="background:#111827; border:1px solid #1e293b; padding:12px; border-radius:6px; margin-bottom:15px;">
+        <div style="font-size:10px; color:#9ca3af; margin-bottom:6px; text-transform:uppercase; font-family:monospace; font-weight:bold;">📈 Aggregierte Interaktions-Frequenz (Live Taktung)</div>
+        <div style="display:flex; align-items:flex-end; height:45px; gap:4px; padding-top:5px;" id="live-bars-container"></div>
+    </div>
+
+    <!-- NETZWERK-GESAMT-ADRESSLISTE -->
+    <div style="background:#111827; border:1px solid #1e293b; padding:12px; border-radius:6px;">
+        <div style="font-size:10px; color:#9ca3af; margin-bottom:6px; text-transform:uppercase; font-family:monospace; font-weight:bold;">⛓️ Existierende Blockchain Gesamt-Adressliste</div>
+        <div id="decentralized-addresses-ledger" style="max-height:90px; overflow-y:auto; font-family:monospace; font-size:10px; color:#38bdf8; display:flex; flex-direction:column; gap:4px; -webkit-overflow-scrolling: touch;">
+            <div style="color:#475569; font-style:italic;">bc1qUr-Genesis-Anker_Kanal_aktiviert_0x00000</div>
+        </div>
+    </div>
+</div>
 
         <!-- LÄDT DIE UNANTASTBARE BASIS-BLOCKCHAIN -->
     <script src="app.js"></script>
@@ -279,6 +430,339 @@
                 observer.observe(targetNode, { childList: true, subtree: true, characterData: true });
             }
         });
-    </script>
+    
+     // AUTONOME SOZIAL-LOGIK: DOCKT DIREKT AN DAS PROZESS-OBJEKT AN 
+    const SocialModule = {
+        activePartner: null,
+        messageVault: {},
+        isKlon: false,
+
+        openSettings: function(klonMode) {
+            this.isKlon = klonMode;
+            if(klonMode) {
+                document.getElementById('dashboard-section').classList.add('hidden');
+                document.getElementById('system-settings-layer').style.display = "none"; // Schützt Basis-Klon
+                document.getElementById('settings-title-label').innerText = "⚙️ KRYPTO-STATUS SETTINGS (KLON)";
+                document.getElementById('admin-password-block').classList.add('hidden'); // Passwort-Sicherheitsfilter greift!
+            } else {
+                document.getElementById('profile-main-view').classList.add('hidden');
+                document.getElementById('settings-title-label').innerText = "⚙️ ADMINISTRATIVE MASTER SETTINGS";
+                document.getElementById('admin-password-block').classList.remove('hidden');
+                const origPass = document.getElementById('password');
+                document.getElementById('settings-pass-input').value = origPass ? origPass.value : "";
+            }
+            document.getElementById('system-settings-layer').classList.add('hidden');
+            document.getElementById('social-core-module').classList.remove('hidden');
+            document.getElementById('settings-view').classList.remove('hidden');
+            document.getElementById('profile-main-view').style.display = klonMode ? "none" : "block";
+            document.getElementById('profile-messenger-view').classList.add('hidden');
+            
+            this.buildWalletsRegister();
+        },
+
+        closeSettings: function() {
+            document.getElementById('settings-view').classList.add('hidden');
+            if(this.isKlon) {
+                document.getElementById('social-core-module').classList.add('hidden');
+                document.getElementById('dashboard-section').classList.remove('hidden');
+            } else {
+                document.getElementById('profile-main-view').classList.remove('hidden');
+            }
+        },
+
+        openProfile: function() {
+            if(typeof system === 'undefined' || !system.currentUser) return alert("Bitte logge dich zuerst im Inland-Status ein!");
+            document.getElementById('dashboard-section').classList.add('hidden');
+            document.getElementById('social-core-module').classList.remove('hidden');
+            document.getElementById('profile-main-view').classList.remove('hidden');
+            document.getElementById('profile-main-view').style.display = "block";
+            document.getElementById('profile-messenger-view').classList.add('hidden');
+            document.getElementById('settings-view').classList.add('hidden');
+            
+            document.getElementById('profile-username-display').innerText = "@" + system.currentUser;
+            const savedBio = localStorage.getItem('rfof_bio_' + system.currentUser);
+            document.getElementById('profile-bio').value = savedBio ? savedBio : "";
+            
+            const savedAvatar = localStorage.getItem('rfof_avatar_' + system.currentUser);
+            if(savedAvatar) {
+                document.getElementById('user-avatar').src = savedAvatar;
+                document.getElementById('dashboard-avatar-icon').src = savedAvatar;
+            }
+        },
+
+        closeModule: function() {
+            document.getElementById('social-core-module').classList.add('hidden');
+            document.getElementById('dashboard-section').classList.remove('hidden');
+        },
+
+        updateAvatar: function(uploader) {
+            if (uploader.files && uploader.files) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('user-avatar').src = e.target.result;
+                    document.getElementById('dashboard-avatar-icon').src = e.target.result;
+                    localStorage.setItem('rfof_avatar_' + system.currentUser, e.target.result);
+                };
+                reader.readAsDataURL(uploader.files);
+            }
+        },
+
+        saveBio: function() {
+            const bio = document.getElementById('profile-bio').value;
+            localStorage.setItem('rfof_bio_' + system.currentUser, bio);
+            alert("Bio-Description im RAM gesichert!");
+        },
+
+        switchSubView: function(view) {
+            document.getElementById('profile-main-view').classList.add('hidden');
+            document.getElementById('profile-messenger-view').classList.add('hidden');
+            document.getElementById('create-post-window').classList.add('hidden');
+            
+            if(view === 'main') {
+                document.getElementById('profile-main-view').classList.remove('hidden');
+            } else if(view === 'messenger') {
+                document.getElementById('profile-messenger-view').classList.remove('hidden');
+                document.getElementById('mess-history-view').classList.remove('hidden');
+                document.getElementById('active-chat-window').classList.add('hidden');
+                this.buildContactsHistory();
+            } else if(view === 'post') {
+                document.getElementById('profile-messenger-view').classList.remove('hidden');
+                document.getElementById('mess-history-view').classList.add('hidden');
+                document.getElementById('create-post-window').classList.remove('hidden');
+            }
+        },
+
+        searchAndChat: function() {
+            let input = document.getElementById('user-search-input').value.trim();
+            if(!input) return alert("Bitte Suchnamen eingeben!");
+            if(!input.startsWith("@")) input = "@" + input;
+            
+            this.activePartner = input;
+            document.getElementById('mess-history-view').classList.add('hidden');
+            document.getElementById('active-chat-window').classList.remove('hidden');
+            document.getElementById('chat-partner-title').innerText = "Kanal: " + input;
+            this.buildMessages();
+        },
+
+        sendMessage: function() {
+            const box = document.getElementById('chat-message-input');
+            const txt = box.value.trim();
+            if(!txt) return;
+            if(!this.messageVault[this.activePartner]) this.messageVault[this.activePartner] = [];
+            
+            this.messageVault[this.activePartner].push({ me: true, text: txt, time: new Date().toLocaleTimeString() });
+            box.value = "";
+            this.buildMessages();
+            
+            setTimeout(() => {
+                if(this.messageVault[this.activePartner]) {
+                    this.messageVault[this.activePartner].push({ me: false, text: "Interaktions-Vektor verifiziert.", time: new Date().toLocaleTimeString() });
+                    this.buildMessages();
+                }
+            }, 1000);
+        },
+
+        buildMessages: function() {
+            const container = document.getElementById('chat-messages-box');
+            const data = this.messageVault[this.activePartner] || [];
+            container.innerHTML = data.map(m => `
+                <div style="align-self: ${m.me ? 'flex-end' : 'flex-start'}; background: ${m.me ? '#1e3a8a' : '#1e293b'}; padding: 6px 10px; border-radius: 4px; max-width: 80%; color: white;">
+                    <span style="color:#9ca3af; font-size:9px;">[${m.time}]</span> ${m.text}
+                </div>
+            `).join('');
+            container.scrollTop = container.scrollHeight;
+        },
+
+        closeActiveChat: function() {
+            this.activePartner = null;
+            document.getElementById('active-chat-window').classList.add('hidden');
+            document.getElementById('mess-history-view').classList.remove('hidden');
+            this.buildContactsHistory();
+        },
+
+        buildContactsHistory: function() {
+            const container = document.getElementById('chat-history-list');
+            const users = Object.keys(this.messageVault);
+            if(users.length === 0) {
+                container.innerHTML = "<div style='color:#475569; font-size:11px; text-align:center;'>Keine Historie vorhanden.</div>";
+                return;
+            }
+            container.innerHTML = users.map(u => `
+                <div class="social-history-card">
+                    <span style="color:#38bdf8; font-weight:bold;">${u}</span>
+                    <button onclick="SocialModule.reopenChannel('${u}')" style="background:#2563eb; color:white; border:none; padding:3px 8px; border-radius:3px; font-size:10px; cursor:pointer;">Chat</button>
+                </div>
+            `).join('');
+        },
+
+        reopenChannel: function(user) {
+            this.activePartner = user;
+            document.getElementById('mess-history-view').classList.add('hidden');
+            document.getElementById('active-chat-window').classList.remove('hidden');
+            document.getElementById('chat-partner-title').innerText = "Kanal: " + user;
+            this.buildMessages();
+        },
+
+        filterHistory: function() {
+            const query = document.getElementById('history-search-input').value.toLowerCase();
+            const elements = document.querySelectorAll('.social-history-card');
+            elements.forEach(el => {
+                const label = el.querySelector('span').innerText.toLowerCase();
+                el.style.display = label.includes(query) ? "flex" : "none";
+            });
+        },
+
+        submitPost: function() {
+            const desc = document.getElementById('post-description').value.trim();
+            if(!desc) return alert("Description fehlt!");
+            this.posts.push({ desc, date: new Date().toISOString() });
+            document.getElementById('post-description').value = "";
+            alert("Post registriert!");
+            this.switchSubView('messenger');
+            if(typeof system !== 'undefined') system.logToChain("GLOBAL_REPUTATION_POST", `Description: ${desc}`);
+        },
+
+        updatePassword: function() {
+            const pass = document.getElementById('settings-pass-input').value.trim();
+            if(!pass) return alert("Passwort leer!");
+            const corePass = document.getElementById('password');
+            if(corePass) corePass.value = pass;
+            alert("Passwort geändert!");
+        },
+
+        buildWalletsRegister: function() {
+            const box = document.getElementById('settings-wallets-list');
+            if(typeof system === 'undefined' || !system.currentWallet) {
+                box.innerHTML = "<div style='color:#475569; font-size:11px;'>Keine Datensätze deklariert.</div>";
+                return;
+            }
+            let html = ""; const w = system.currentWallet;
+            
+            // SYSTEMSEITIGE INTERNE GENERIERUNGEN (FEST VERANKERT)
+            if(w.evm12 && w.evm12 !== "Nicht importiert") {
+                html += `<div class="wallet-record-card" style="border-left: 3px solid #10b981;"><span style="color:#10b981; font-weight:bold;">[SYSTEM RECORD 12W]</span><br>EVM: ${w.evm12}<br>BTC: ${w.btc12}<br><span style="color:#ef4444; font-size:10px;">Mnemonic (Gesperrt): ${w.mnemonic12}</span></div>`;
+            }
+            if(w.evm24 && w.evm24 !== "Nicht importiert") {
+                html += `<div class="wallet-record-card" style="border-left: 3px solid #10b981;"><span style="color:#10b981; font-weight:bold;">[SYSTEM RECORD 24W]</span><br>EVM: ${w.evm24}<br>BTC: ${w.btc24}<br><span style="color:#ef4444; font-size:10px;">Mnemonic (Gesperrt): ${w.mnemonic24}</span></div>`;
+            }
+            
+            // EXTERNE IMPORTS (ENTKNÜPFBAR)
+            const isImp12 = w.mnemonic12 && w.mnemonic12 !== "Nicht importiert" && !w.evm24;
+            const isImp24 = w.mnemonic24 && w.mnemonic24 !== "Nicht importiert" && !w.evm12;
+            if(isImp12 || isImp24) {
+                const s = isImp12;
+                html += `
+                    <div class="wallet-record-card" style="border-left: 3px solid #f97316;">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span style="color:#f97316; font-weight:bold;">[EXTERNAL LINK]</span>
+                            ${!this.isKlon ? `<button onclick="SocialModule.unlink()" style="background:#dc2626; color:white; border:none; padding:2px 6px; border-radius:3px; font-size:9px; cursor:pointer; font-weight:bold;">ENTKNÜPFEN</button>` : ''}
+                        </div>
+                        EVM: ${s ? w.evm12 : w.evm24}<br>BTC: ${s ? w.btc12 : w.btc24}<br>
+                        <span style="color:#ef4444; font-size:10px;">Mnemonic: ${s ? w.mnemonic12 : w.mnemonic24}</span>
+                    </div>`;
+            }
+            box.innerHTML = html || "<div style='color:#475569; font-size:11px;'>Keine Datensätze deklariert.</div>";
+        },
+
+        unlink: function() {
+            if(confirm("Verknüpfung permanent trennen?")) {
+                system.currentWallet = null; localStorage.removeItem('eurochain_wallet');
+                alert("Entknüpft!"); this.buildWalletsRegister();
+                if(typeof GlobalNetworkStats !== 'undefined') GlobalNetworkStats.event('2FA_IMPORT');
+                document.getElementById('wallet-active').classList.add('hidden');
+                document.getElementById('wallet-setup').classList.remove('hidden');
+            }
+        }
+    };
+
+    const GlobalNetworkStats = {
+        registry: { LOGIN: 0, EVALUATION: 0, '2FA_IMPORT': 0 },
+        capacity: 20,
+
+        boot: function() {
+            this.buildBars();
+            this.listenToLedger();
+            this.activateClockRate();
+        },
+
+        buildBars: function() {
+            const frame = document.getElementById('live-bars-container');
+            if(!frame) return; frame.innerHTML = "";
+            for(let i=0; i < this.capacity; i++) {
+                const node = document.createElement('div');
+                node.className = "live-metric-bar";
+                node.style.height = "12%";
+                frame.appendChild(node);
+            }
+        },
+
+        event: function(type) {
+            if(this.registry[type] !== undefined) {
+                this.registry[type]++;
+                this.pushAddressToVerzeichnis(type);
+            }
+        },
+
+        pushAddressToVerzeichnis: function(type) {
+            const list = document.getElementById('decentralized-addresses-ledger');
+            if(!list) return;
+            const seedStr = Math.random().toString(16).substring(2, 10).toLowerCase();
+            let rowText = "";
+            
+            if(type === 'EVALUATION') rowText = "0x" + seedStr + "... [USER_FOUR_CHANNELS_BLOCK]";
+            else if(type === '2FA_IMPORT') rowText = "bc1q" + seedStr + "... [EXTERNAL_MAPPED_LINK]";
+            else rowText = "id_" + seedStr + "... [INSTITUTION_INTERACTION]";
+
+            const node = document.createElement('div');
+            node.style.color = "#a855f7";
+            node.style.borderBottom = "1px dashed #1e293b";
+            node.innerText = `[${new Date().toLocaleTimeString()}] ${rowText}`;
+            list.insertBefore(node, list.firstChild);
+        },
+
+        listenToLedger: function() {
+            const target = document.getElementById('chain-output');
+            if (target) {
+                const observer = new MutationObserver(() => {
+                    const txt = target.innerText || target.textContent;
+                    if(txt.includes("[LOGIN]")) this.event('LOGIN');
+                    if(txt.includes("[WALLET_EVALUATION]")) this.event('EVALUATION');
+                    if(txt.includes("[WALLET_2FA_IMPORT]")) this.event('2FA_IMPORT');
+                });
+                observer.observe(target, { childList: true, subtree: true, characterData: true });
+            }
+        },
+
+        activateClockRate: function() {
+            setInterval(() => {
+                const lT = this.registry.LOGIN * 4 + Math.floor(Math.random() * 3);
+                const eT = this.registry.EVALUATION * 2 + Math.floor(Math.random() * 2);
+                const iT = this.registry.2FA_IMPORT * 1;
+
+                document.getElementById('stat-login-counter').innerText = `${lT} v/m`;
+                document.getElementById('stat-eval-counter').innerText = `${eT} v/m`;
+                document.getElementById('stat-import-counter').innerText = `${iT} v/m`;
+
+                const bars = document.querySelectorAll('.live-metric-bar');
+                if(bars.length > 0) {
+                    const load = lT + eT + iT + 1;
+                    for(let i=0; i < bars.length - 1; i++) {
+                        bars[i].style.height = bars[i+1].style.height;
+                    }
+                    const computedHeight = Math.min(100, Math.max(6, load * 8));
+                    bars[bars.length - 1].style.height = `${computedHeight}%`;
+                    bars[bars.length - 1].style.background = load > 10 ? "#eab308" : "#2563eb";
+                }
+
+                if(this.registry.LOGIN > 0) this.registry.LOGIN--;
+                if(this.registry.EVALUATION > 0) this.registry.EVALUATION--;
+                if(this.registry.2FA_IMPORT > 0) this.registry.2FA_IMPORT--;
+            }, 1400);
+        }
+    };
+
+    // Zündet die statistische Analyseschicht im RAM
+    window.addEventListener('load', () => { GlobalNetworkStats.boot(); });
+</script>
 </body>
-</html>
+</html> 
