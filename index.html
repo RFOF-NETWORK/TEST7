@@ -28,8 +28,9 @@
         .chain-log { font-family: monospace; background: #020617; padding: 12px; border-radius: 4px; color: #10b981; max-height: 350px; overflow-y: auto; font-size: 12px; line-height: 1.6; -webkit-overflow-scrolling: touch; word-break: break-all; }
         hr { border: 0; border-top: 1px dashed #475569; margin: 15px 0; }
         .section-title { color: #f97316; font-size: 13px; font-weight: bold; margin-top: 10px; margin-bottom: 2px; text-transform: uppercase; }
-        </style>
-
+       .social-history-card { display: flex; justify-content: space-between; align-items: center; background: #020617; padding: 8px; border-radius: 4px; margin-bottom: 5px; border: 1px solid #1e293b; font-size: 11px; }
+       .wallet-record-card { background: #111827; padding: 8px; border-radius: 4px; font-family: monospace; font-size: 11px; line-height: 1.4; border: 1px solid #1e293b; }
+</style>
 </head>
 <body>
     <div style="max-width: 600px; margin: 0 auto; padding-top: 20px;">
@@ -292,7 +293,141 @@
     </div>
 </div>
 
-        <!-- LÄDT DIE UNANTASTBARE BASIS-BLOCKCHAIN -->
+          // <!-- ================================================================= -->
+   // <!-- SOVEREIGN MODUL: GLOBAL NETWORK METRICS & LIVE VOLUME TICKER     -->
+// <!-- ================================================================= -->
+
+// <!-- INTERFACELAYER: STATISTISCHE GRAPHEN & ADRESS-LISTE -->
+<div id="network-statistics-module" style="background: #030712; border: 2px solid #2563eb; border-top:none; border-radius: 0 0 12px 12px; padding: 0 20px 20px 20px; margin: -15px auto 30px auto; max-width: 600px; font-family: sans-serif; box-shadow: 0 10px 15px rgba(37, 99, 235, 0.15);">
+    <hr style="border:0; border-top:1px dashed #2563eb; margin:0 0 15px 0;">
+    <h4 style="color:#eab308; margin-top:0; text-transform:uppercase; font-size:12px; letter-spacing:1px; font-family:sans-serif;">📊 Live-Interaktions Volumen Statistischer Viewer</h4>
+    
+    // <!-- STATISTISCHE VEKTOR-ZÄHLER MATRIX -->
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:5px; margin-bottom:15px; font-family:monospace; font-size:10px; text-align:center;">
+        <div style="background:#111827; padding:6px; border-radius:4px; border:1px solid #1e293b;">
+            <span style="color:#38bdf8; font-weight:bold;">[LOGIN]</span><br><span id="stat-login-counter" style="color:#10b981; font-weight:bold; font-size:12px;">0 v/m</span>
+        </div>
+        <div style="background:#111827; padding:6px; border-radius:4px; border:1px solid #1e293b;">
+            <span style="color:#10b981; font-weight:bold;">[EVALUATION]</span><br><span id="stat-eval-counter" style="color:#eab308; font-weight:bold; font-size:12px;">0 v/m</span>
+        </div>
+        <div style="background:#111827; padding:6px; border-radius:4px; border:1px solid #1e293b;">
+            <span style="color:#f97316; font-weight:bold;">[2FA_IMPORT]</span><br><span id="stat-import-counter" style="color:#ef4444; font-weight:bold; font-size:12px;">0 v/m</span>
+        </div>
+    </div>
+
+    // <!-- DYNAMISCHES FREQUENZ DIAGRAMM (RAM SIMULIERT) -->
+    <div style="background:#111827; border:1px solid #1e293b; padding:12px; border-radius:6px; margin-bottom:15px;">
+        <div style="font-size:10px; color:#9ca3af; margin-bottom:6px; text-transform:uppercase; font-family:monospace; font-weight:bold;">📈 Aggregierte Interaktions-Frequenz (Live Taktung)</div>
+        <div style="display:flex; align-items:flex-end; height:45px; gap:4px; padding-top:5px;" id="live-bars-container"></div>
+    </div>
+
+    // <!-- NETZWERK-GESAMT-ADRESSLISTE -->
+    <div style="background:#111827; border:1px solid #1e293b; padding:12px; border-radius:6px;">
+        <div style="font-size:10px; color:#9ca3af; margin-bottom:6px; text-transform:uppercase; font-family:monospace; font-weight:bold;">⛓️ Existierende Blockchain Gesamt-Adressliste</div>
+        <div id="decentralized-addresses-ledger" style="max-height:90px; overflow-y:auto; font-family:monospace; font-size:10px; color:#38bdf8; display:flex; flex-direction:column; gap:4px; -webkit-overflow-scrolling: touch;">
+            <div style="color:#475569; font-style:italic;">bc1qUr-Genesis-Anker_Kanal_aktiviert_0x00000</div>
+        </div>
+    </div>
+</div>
+
+    // <!-- ================================================================= -->
+ // <!-- SOVEREIGN MODUL: SOZIALES NETZWERK, CHAT, POSTS & DUAL SETTINGS  -->
+// <!-- ================================================================= -->
+
+// <!-- HTML-HÜLLE: ADMINISTRATIVE UND SOZIALE ANSICHTEN -->
+<div id="social-core-module" class="box hidden" style="background: #0f172a; border: 2px solid #f97316; border-radius: 12px; padding: 20px; margin-top: 20px; font-family: sans-serif;">
+    
+    // <!-- INTERNES PROFIL-INTERFACELAYER -->
+    <div id="profile-main-view">
+        <h3 style="color:#f97316; margin-top:0; border-bottom:1px solid #f97316; padding-bottom:5px;">👤 INSTITUTIONELLES PROFIL</h3>
+        <div style="display:flex; align-items:center; gap:15px; margin-bottom:15px;">
+            <div style="position:relative;">
+                <img id="user-avatar" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%239ca3af'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>" style="width:70px; height:70px; border-radius:50%; background:#334155; border:2px solid #475569; object-fit:cover;">
+                <input type="file" id="avatar-upload" accept="image/*" style="display:none;" onchange="SocialModule.updateAvatar(this)">
+                <button onclick="document.getElementById('avatar-upload').click()" style="position:absolute; bottom:0; right:0; background:#f97316; color:white; border:none; border-radius:50%; width:24px; height:24px; font-size:12px; cursor:pointer;">✎</button>
+            </div>
+            <div>
+                <div style="font-size:12px; color:#9ca3af;">ANONYMER NUTZERNAME (GESPERRT)</div>
+                <strong id="profile-username-display" style="font-size:18px; color:#38bdf8;">-</strong>
+            </div>
+        </div>
+
+        <div style="margin-bottom:15px;">
+            <div style="font-size:11px; color:#9ca3af; margin-bottom:4px;">BIO / DESCRIPTION</div>
+            <textarea id="profile-bio" placeholder="Füge eine institutionelle Beschreibung hinzu..." style="width:100%; height:60px; background:#334155; border:1px solid #475569; color:white; border-radius:4px; padding:8px; box-sizing:border-box; font-family:sans-serif; resize:none;"></textarea>
+            <button onclick="SocialModule.saveBio()" style="background:#f97316; font-size:11px; color:white; border:none; padding:6px 12px; border-radius:4px; margin-top:5px; float:right; cursor:pointer; font-weight:bold;">Bio Sichern</button>
+            <div style="clear:both;"></div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:15px;">
+            <button onclick="SocialModule.switchSubView('messenger')" style="background:#2563eb; color:white; border:none; padding:12px; border-radius:4px; font-weight:bold; cursor:pointer;">💬 P2P Messenger & Posts</button>
+            <button onclick="SocialModule.openSettings(false)" style="background:#475569; color:white; border:none; padding:12px; border-radius:4px; font-weight:bold; cursor:pointer;">⚙️ Profil-Settings</button>
+        </div>
+    </div>
+
+    // <!-- P2P MESSENGER, CONTACTS & POST-INTERFACELAYER -->
+    <div id="profile-messenger-view" class="hidden">
+        <h3 style="color:#38bdf8; margin-top:0;">💬 PEER-TO-PEER NETWORK NET</h3>
+        
+        <div id="messenger-hub">
+            <input type="text" id="user-search-input" placeholder="Nutzer Suchen..." style="width:100%; padding:10px; background:#334155; border:1px solid #475569; color:white; border-radius:4px; box-sizing:border-box;">
+            <button onclick="SocialModule.searchAndChat()" style="background:#2563eb; color:white; border:none; padding:10px; width:100%; border-radius:4px; font-weight:bold; margin-top:5px; margin-bottom:15px; cursor:pointer;">✉ Öffnen & Chatten (Papierflieger)</button>
+            
+            <div style="font-size:11px; color:#9ca3af; margin-bottom:4px;">NACHRICHTEN & KONTAKTE VERLAUF</div>
+            <input type="text" id="history-search-input" placeholder="Verlauf durchsuchen..." oninput="SocialModule.filterHistory()" style="width:100%; padding:10px; background:#334155; border:1px solid #475569; color:white; border-radius:4px; box-sizing:border-box; margin-bottom:8px;">
+            <div id="chat-history-list" style="max-height:120px; overflow-y:auto; background:#020617; border-radius:4px; padding:5px;"></div>
+            
+            <hr style="border-top:1px dashed #334155; margin:15px 0;">
+            <button onclick="SocialModule.switchSubView('post')" style="background:#10b981; color:white; border:none; padding:12px; width:100%; border-radius:4px; font-weight:bold; cursor:pointer;">➕ Beitrags-Description posten</button>
+        </div>
+
+        // <!-- REALS CHAT FENSTER -->
+        <div id="active-chat-window" class="hidden">
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#1e293b; padding:8px; border-radius:4px; margin-bottom:10px;">
+                <span id="chat-partner-title" style="color:#38bdf8; font-weight:bold;">Chat</span>
+                <button onclick="SocialModule.closeActiveChat()" style="background:none; border:none; color:#ef4444; cursor:pointer; font-weight:bold; font-size:14px;">✕</button>
+            </div>
+            <div id="chat-messages-box" style="height:150px; overflow-y:auto; background:#020617; border-radius:4px; padding:10px; margin-bottom:10px; display:flex; flex-direction:column; gap:5px; font-family:monospace;"></div>
+            <div style="display:flex; gap:5px;">
+                <input type="text" id="chat-message-input" placeholder="Nachricht schreiben..." style="margin:0; flex:1; background:#334155; border:1px solid #475569; color:white; padding:10px; border-radius:4px;">
+                <button onclick="SocialModule.sendMessage()" style="background:#2563eb; color:white; border:none; padding:0 15px; border-radius:4px; cursor:pointer;">🚀</button>
+            </div>
+        </div>
+
+        // <!-- POST ERSTELLUNG LAYER -->
+        <div id="create-post-window" class="hidden">
+            <h4>➕ GLOBAL REPUTATION POST</h4>
+            <textarea id="post-description" placeholder="Schreibe eine Description für deinen Post..." style="width:100%; height:60px; background:#334155; border:1px solid #475569; color:white; border-radius:4px; padding:8px; box-sizing:border-box; resize:none; font-family:sans-serif;"></textarea>
+            <button onclick="SocialModule.submitPost()" style="background:#10b981; color:white; border:none; padding:10px; width:100%; border-radius:4px; font-weight:bold; margin-top:5px; cursor:pointer;">Beitrag veröffentlichen</button>
+        </div>
+        
+        <button onclick="SocialModule.switchSubView('main')" style="background:#1f2937; color:#9ca3af; border:1px solid #475569; padding:8px; width:100%; border-radius:4px; margin-top:15px; cursor:pointer; font-size:12px;">Zurück zum Profil-Zentrum</button>
+    </div>
+
+    // <!-- DUALES SETTINGS ENGINE INTERFACE -->
+    <div id="settings-view" class="hidden">
+        <h3 id="settings-title-label" style="color:#f8fafc; margin-top:0;">⚙️ SETTINGS</h3>
+        
+        // <!-- PASSWORT ZONE (NUR IM MASTER MODUS SICHTBAR) -->
+        <div id="admin-password-block" class="box" style="background:#1e293b; margin-bottom:15px; border:1px solid #475569;">
+            <label style="font-size:11px; color:#9ca3af; display:block; margin-bottom:4px;">SYSTEM-PASSWORT (EINSEHBAR & ÄNDERBAR)</label>
+            <input type="text" id="settings-pass-input" style="color:#facc15; font-family:monospace; font-weight:bold; background:#334155; border:1px solid #475569; padding:10px; width:100%; box-sizing:border-box; border-radius:4px;">
+            <button onclick="SocialModule.updatePassword()" style="background:#2563eb; color:white; border:none; padding:6px 12px; border-radius:4px; margin-top:5px; cursor:pointer; font-size:12px; font-weight:bold;">Passwort Aktualisieren</button>
+        </div>
+
+        // <!-- MULTI-DATENSATZ REGISTER -->
+        <div class="box" style="background:#020617; max-height:200px; overflow-y:auto; border:1px solid #334155; padding:10px;">
+            <h4 style="margin-top:0; color:#38bdf8; font-size:12px;">🔒 KRYPTO-KANÄLE & SEED PHRASEN REGISTER</h4>
+            <div id="settings-wallets-list" style="display:flex; flex-direction:column; gap:8px;"></div>
+        </div>
+
+        <button onclick="SocialModule.closeSettings()" style="background:#1f2937; color:#f8fafc; border:1px solid #475569; padding:12px; width:100%; border-radius:4px; cursor:pointer; font-weight:bold; margin-top:10px;">Settings Schließen</button>
+    </div>
+
+    <button onclick="SocialModule.closeModule()" style="background:#1f2937; color:#ef4444; border:1px solid #dc2626; padding:12px; width:100%; border-radius:4px; font-weight:bold; cursor:pointer; margin-top:15px;">Dashboard Verlassen</button>
+</div>
+
+  <!-- LÄDT DIE UNANTASTBARE BASIS-BLOCKCHAIN -->
     <script src="app.js"></script>
 
     <!-- VERBESSERTE EXPLORER-LOGIK: ERZWINGT DIE FRAKTALITÄT DIREKT AUS DEM FLIESSTEXT -->
@@ -427,113 +562,8 @@
                 observer.observe(targetNode, { childList: true, subtree: true, characterData: true });
             }
         });
-        </script>
-<script    
-<!-- ================================================================= -->
-<!-- SOVEREIGN MODUL: SOZIALES NETZWERK, CHAT, POSTS & DUAL SETTINGS  -->
-<!-- ================================================================= -->
-
-<!-- HTML-HÜLLE: ADMINISTRATIVE UND SOZIALE ANSICHTEN -->
-<div id="social-core-module" class="box hidden" style="background: #0f172a; border: 2px solid #f97316; border-radius: 12px; padding: 20px; margin-top: 20px; font-family: sans-serif;">
-    
-    <!-- INTERNES PROFIL-INTERFACELAYER -->
-    <div id="profile-main-view">
-        <h3 style="color:#f97316; margin-top:0; border-bottom:1px solid #f97316; padding-bottom:5px;">👤 INSTITUTIONELLES PROFIL</h3>
-        <div style="display:flex; align-items:center; gap:15px; margin-bottom:15px;">
-            <div style="position:relative;">
-                <img id="user-avatar" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%239ca3af'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>" style="width:70px; height:70px; border-radius:50%; background:#334155; border:2px solid #475569; object-fit:cover;">
-                <input type="file" id="avatar-upload" accept="image/*" style="display:none;" onchange="SocialModule.updateAvatar(this)">
-                <button onclick="document.getElementById('avatar-upload').click()" style="position:absolute; bottom:0; right:0; background:#f97316; color:white; border:none; border-radius:50%; width:24px; height:24px; font-size:12px; cursor:pointer;">✎</button>
-            </div>
-            <div>
-                <div style="font-size:12px; color:#9ca3af;">ANONYMER NUTZERNAME (GESPERRT)</div>
-                <strong id="profile-username-display" style="font-size:18px; color:#38bdf8;">-</strong>
-            </div>
-        </div>
-
-        <div style="margin-bottom:15px;">
-            <div style="font-size:11px; color:#9ca3af; margin-bottom:4px;">BIO / DESCRIPTION</div>
-            <textarea id="profile-bio" placeholder="Füge eine institutionelle Beschreibung hinzu..." style="width:100%; height:60px; background:#334155; border:1px solid #475569; color:white; border-radius:4px; padding:8px; box-sizing:border-box; font-family:sans-serif; resize:none;"></textarea>
-            <button onclick="SocialModule.saveBio()" style="background:#f97316; font-size:11px; color:white; border:none; padding:6px 12px; border-radius:4px; margin-top:5px; float:right; cursor:pointer; font-weight:bold;">Bio Sichern</button>
-            <div style="clear:both;"></div>
-        </div>
-
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:15px;">
-            <button onclick="SocialModule.switchSubView('messenger')" style="background:#2563eb; color:white; border:none; padding:12px; border-radius:4px; font-weight:bold; cursor:pointer;">💬 P2P Messenger & Posts</button>
-            <button onclick="SocialModule.openSettings(false)" style="background:#475569; color:white; border:none; padding:12px; border-radius:4px; font-weight:bold; cursor:pointer;">⚙️ Profil-Settings</button>
-        </div>
-    </div>
-
-    <!-- P2P MESSENGER, CONTACTS & POST-INTERFACELAYER -->
-    <div id="profile-messenger-view" class="hidden">
-        <h3 style="color:#38bdf8; margin-top:0;">💬 PEER-TO-PEER NETWORK NET</h3>
-        
-        <div id="messenger-hub">
-            <input type="text" id="user-search-input" placeholder="Nutzer Suchen..." style="width:100%; padding:10px; background:#334155; border:1px solid #475569; color:white; border-radius:4px; box-sizing:border-box;">
-            <button onclick="SocialModule.searchAndChat()" style="background:#2563eb; color:white; border:none; padding:10px; width:100%; border-radius:4px; font-weight:bold; margin-top:5px; margin-bottom:15px; cursor:pointer;">✉ Öffnen & Chatten (Papierflieger)</button>
-            
-            <div style="font-size:11px; color:#9ca3af; margin-bottom:4px;">NACHRICHTEN & KONTAKTE VERLAUF</div>
-            <input type="text" id="history-search-input" placeholder="Verlauf durchsuchen..." oninput="SocialModule.filterHistory()" style="width:100%; padding:10px; background:#334155; border:1px solid #475569; color:white; border-radius:4px; box-sizing:border-box; margin-bottom:8px;">
-            <div id="chat-history-list" style="max-height:120px; overflow-y:auto; background:#020617; border-radius:4px; padding:5px;"></div>
-            
-            <hr style="border-top:1px dashed #334155; margin:15px 0;">
-            <button onclick="SocialModule.switchSubView('post')" style="background:#10b981; color:white; border:none; padding:12px; width:100%; border-radius:4px; font-weight:bold; cursor:pointer;">➕ Beitrags-Description posten</button>
-        </div>
-
-        <!-- REALS CHAT FENSTER -->
-        <div id="active-chat-window" class="hidden">
-            <div style="display:flex; justify-content:space-between; align-items:center; background:#1e293b; padding:8px; border-radius:4px; margin-bottom:10px;">
-                <span id="chat-partner-title" style="color:#38bdf8; font-weight:bold;">Chat</span>
-                <button onclick="SocialModule.closeActiveChat()" style="background:none; border:none; color:#ef4444; cursor:pointer; font-weight:bold; font-size:14px;">✕</button>
-            </div>
-            <div id="chat-messages-box" style="height:150px; overflow-y:auto; background:#020617; border-radius:4px; padding:10px; margin-bottom:10px; display:flex; flex-direction:column; gap:5px; font-family:monospace;"></div>
-            <div style="display:flex; gap:5px;">
-                <input type="text" id="chat-message-input" placeholder="Nachricht schreiben..." style="margin:0; flex:1; background:#334155; border:1px solid #475569; color:white; padding:10px; border-radius:4px;">
-                <button onclick="SocialModule.sendMessage()" style="background:#2563eb; color:white; border:none; padding:0 15px; border-radius:4px; cursor:pointer;">🚀</button>
-            </div>
-        </div>
-
-        <!-- POST ERSTELLUNG LAYER -->
-        <div id="create-post-window" class="hidden">
-            <h4>➕ GLOBAL REPUTATION POST</h4>
-            <textarea id="post-description" placeholder="Schreibe eine Description für deinen Post..." style="width:100%; height:60px; background:#334155; border:1px solid #475569; color:white; border-radius:4px; padding:8px; box-sizing:border-box; resize:none; font-family:sans-serif;"></textarea>
-            <button onclick="SocialModule.submitPost()" style="background:#10b981; color:white; border:none; padding:10px; width:100%; border-radius:4px; font-weight:bold; margin-top:5px; cursor:pointer;">Beitrag veröffentlichen</button>
-        </div>
-        
-        <button onclick="SocialModule.switchSubView('main')" style="background:#1f2937; color:#9ca3af; border:1px solid #475569; padding:8px; width:100%; border-radius:4px; margin-top:15px; cursor:pointer; font-size:12px;">Zurück zum Profil-Zentrum</button>
-    </div>
-
-    <!-- DUALES SETTINGS ENGINE INTERFACE -->
-    <div id="settings-view" class="hidden">
-        <h3 id="settings-title-label" style="color:#f8fafc; margin-top:0;">⚙️ SETTINGS</h3>
-        
-        <!-- PASSWORT ZONE (NUR IM MASTER MODUS SICHTBAR) -->
-        <div id="admin-password-block" class="box" style="background:#1e293b; margin-bottom:15px; border:1px solid #475569;">
-            <label style="font-size:11px; color:#9ca3af; display:block; margin-bottom:4px;">SYSTEM-PASSWORT (EINSEHBAR & ÄNDERBAR)</label>
-            <input type="text" id="settings-pass-input" style="color:#facc15; font-family:monospace; font-weight:bold; background:#334155; border:1px solid #475569; padding:10px; width:100%; box-sizing:border-box; border-radius:4px;">
-            <button onclick="SocialModule.updatePassword()" style="background:#2563eb; color:white; border:none; padding:6px 12px; border-radius:4px; margin-top:5px; cursor:pointer; font-size:12px; font-weight:bold;">Passwort Aktualisieren</button>
-        </div>
-
-        <!-- MULTI-DATENSATZ REGISTER -->
-        <div class="box" style="background:#020617; max-height:200px; overflow-y:auto; border:1px solid #334155; padding:10px;">
-            <h4 style="margin-top:0; color:#38bdf8; font-size:12px;">🔒 KRYPTO-KANÄLE & SEED PHRASEN REGISTER</h4>
-            <div id="settings-wallets-list" style="display:flex; flex-direction:column; gap:8px;"></div>
-        </div>
-
-        <button onclick="SocialModule.closeSettings()" style="background:#1f2937; color:#f8fafc; border:1px solid #475569; padding:12px; width:100%; border-radius:4px; cursor:pointer; font-weight:bold; margin-top:10px;">Settings Schließen</button>
-    </div>
-
-    <button onclick="SocialModule.closeModule()" style="background:#1f2937; color:#ef4444; border:1px solid #dc2626; padding:12px; width:100%; border-radius:4px; font-weight:bold; cursor:pointer; margin-top:15px;">Dashboard Verlassen</button>
-</div>
-
-<!-- SPEZIFISCHES DESIGN FÜR PROFIL & INTERAKTIONEN -->
-<style>
-    .social-history-card { display: flex; justify-content: space-between; align-items: center; background: #020617; padding: 8px; border-radius: 4px; margin-bottom: 5px; border: 1px solid #1e293b; font-size: 11px; }
-    .wallet-record-card { background: #111827; padding: 8px; border-radius: 4px; font-family: monospace; font-size: 11px; line-height: 1.4; border: 1px solid #1e293b; }
-</style>
-
-<!-- AUTONOME SOZIAL-LOGIK: DOCKT DIREKT AN DAS PROZESS-OBJEKT AN -->
-<script>
+          
+// <!-- AUTONOME SOZIAL-LOGIK: DOCKT DIREKT AN DAS PROZESS-OBJEKT AN -->
     const SocialModule = {
         activePartner: null,
         messageVault: {},
@@ -776,52 +806,9 @@
             }
         }
     };
-    </script>
-<script>
-<!-- ================================================================= -->
-<!-- SOVEREIGN MODUL: GLOBAL NETWORK METRICS & LIVE VOLUME TICKER     -->
-<!-- ================================================================= -->
+        
 
-<!-- INTERFACELAYER: STATISTISCHE GRAPHEN & ADRESS-LISTE -->
-<div id="network-statistics-module" style="background: #030712; border: 2px solid #2563eb; border-top:none; border-radius: 0 0 12px 12px; padding: 0 20px 20px 20px; margin: -15px auto 30px auto; max-width: 600px; font-family: sans-serif; box-shadow: 0 10px 15px rgba(37, 99, 235, 0.15);">
-    <hr style="border:0; border-top:1px dashed #2563eb; margin:0 0 15px 0;">
-    <h4 style="color:#eab308; margin-top:0; text-transform:uppercase; font-size:12px; letter-spacing:1px; font-family:sans-serif;">📊 Live-Interaktions Volumen Statistischer Viewer</h4>
-    
-    <!-- STATISTISCHE VEKTOR-ZÄHLER MATRIX -->
-    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:5px; margin-bottom:15px; font-family:monospace; font-size:10px; text-align:center;">
-        <div style="background:#111827; padding:6px; border-radius:4px; border:1px solid #1e293b;">
-            <span style="color:#38bdf8; font-weight:bold;">[LOGIN]</span><br><span id="stat-login-counter" style="color:#10b981; font-weight:bold; font-size:12px;">0 v/m</span>
-        </div>
-        <div style="background:#111827; padding:6px; border-radius:4px; border:1px solid #1e293b;">
-            <span style="color:#10b981; font-weight:bold;">[EVALUATION]</span><br><span id="stat-eval-counter" style="color:#eab308; font-weight:bold; font-size:12px;">0 v/m</span>
-        </div>
-        <div style="background:#111827; padding:6px; border-radius:4px; border:1px solid #1e293b;">
-            <span style="color:#f97316; font-weight:bold;">[2FA_IMPORT]</span><br><span id="stat-import-counter" style="color:#ef4444; font-weight:bold; font-size:12px;">0 v/m</span>
-        </div>
-    </div>
-
-    <!-- DYNAMISCHES FREQUENZ DIAGRAMM (RAM SIMULIERT) -->
-    <div style="background:#111827; border:1px solid #1e293b; padding:12px; border-radius:6px; margin-bottom:15px;">
-        <div style="font-size:10px; color:#9ca3af; margin-bottom:6px; text-transform:uppercase; font-family:monospace; font-weight:bold;">📈 Aggregierte Interaktions-Frequenz (Live Taktung)</div>
-        <div style="display:flex; align-items:flex-end; height:45px; gap:4px; padding-top:5px;" id="live-bars-container"></div>
-    </div>
-
-    <!-- NETZWERK-GESAMT-ADRESSLISTE -->
-    <div style="background:#111827; border:1px solid #1e293b; padding:12px; border-radius:6px;">
-        <div style="font-size:10px; color:#9ca3af; margin-bottom:6px; text-transform:uppercase; font-family:monospace; font-weight:bold;">⛓️ Existierende Blockchain Gesamt-Adressliste</div>
-        <div id="decentralized-addresses-ledger" style="max-height:90px; overflow-y:auto; font-family:monospace; font-size:10px; color:#38bdf8; display:flex; flex-direction:column; gap:4px; -webkit-overflow-scrolling: touch;">
-            <div style="color:#475569; font-style:italic;">bc1qUr-Genesis-Anker_Kanal_aktiviert_0x00000</div>
-        </div>
-    </div>
-</div>
-
-<!-- LOKALE STYLE ZUWEISUNGEN FÜR DIE LIVE GRAPHIK -->
-<style>
-    .live-metric-bar { flex:1; background:#2563eb; border-radius:2px 2px 0 0; transition: height 0.25s ease; min-height:4px; }
-</style>
-
-<!-- STATISTISCHE ENGINELOGIK: INTERZEPTIERT UND SIMULIERT DIE SYSTEM-TAKTE -->
-<script>
+// <!-- STATISTISCHE ENGINELOGIK: INTERZEPTIERT UND SIMULIERT DIE SYSTEM-TAKTE -->
     const GlobalNetworkStats = {
         registry: { LOGIN: 0, EVALUATION: 0, '2FA_IMPORT': 0 },
         capacity: 20,
