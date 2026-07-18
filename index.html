@@ -125,17 +125,44 @@
     </div>
 
 <!-- GLOBAL EXPLORER & SOZIALE ANSICHTEN -->
-<div id="global-explorer" style="background: #030712; border: 2px solid #2563eb; border-radius: 12px; padding: 20px; margin: 20px auto; max-width: 600px; font-family: sans-serif; box-shadow: 0 0 15px rgba(37, 99, 235, 0.15);">
-    <h3 style="color: #38bdf8; font-size: 16px; font-weight: bold; margin-top: 0; border-bottom: 2px solid #2563eb; padding-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">🌐 Global Inter-Institutionell Explorer</h3>
+<div id="global-explorer-unified" style="background: #030712; border: 2px solid #2563eb; border-radius: 12px; padding: 20px; margin: 20px auto; max-width: 600px; font-family: sans-serif; box-shadow: 0 0 15px rgba(37, 99, 235, 0.15);">
     
-    <div style="background: #111827; padding: 15px; border-radius: 6px; border: 1px solid #2563eb; font-family: monospace; font-size: 11px;">
+    <!-- EXPLORER TEIL -->
+    <h3 style="color: #38bdf8; font-size: 16px; font-weight: bold; margin-top: 0; border-bottom: 2px solid #2563eb; padding-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">🌐 Global Inter-Institutionell Explorer</h3>
+    <div style="background: #111827; padding: 15px; border-radius: 6px; border: 1px solid #2563eb; font-family: monospace; font-size: 11px; margin-bottom: 20px;">
         <div style="color: #38bdf8; font-weight: bold; margin-bottom: 8px; text-transform: uppercase;">🔍 Vektor-Positions-Analyse (Inspektion)</div>
         <div id="explorer-display-details" style="color: #f8fafc; line-height: 1.6;">Warte auf Klick im lokalen Ledger... Klicke oben auf einen der drei unverkürzten Hashes, um die hierarchische Übertragungs-Position im globalen Register einzusehen.</div>
     </div>
-    
-    <button onclick="window.scrollTo({top:0, behavior:'smooth'})" style="background: #1f2937; color: #9ca3af; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 12px; font-size: 11px;">▲ Zurück zum Nutzer-Dashboard</button>
-</div>
 
+    <!-- STATISTIK TEIL -->
+    <hr style="border:0; border-top:1px dashed #2563eb; margin:0 0 15px 0;">
+    <h4 style="color:#eab308; margin-top:0; text-transform:uppercase; font-size:12px; letter-spacing:1px; font-family:sans-serif;">📊 Live-Interaktions Volumen Statistischer Viewer</h4>
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:5px; margin-bottom:15px; font-family:monospace; font-size:10px; text-align:center;">
+        <div style="background:#111827; padding:6px; border-radius:4px; border:1px solid #1e293b;">
+            <span style="color:#38bdf8; font-weight:bold;">[LOGIN]</span><br><span id="stat-login-counter" style="color:#10b981; font-weight:bold; font-size:12px;">0 v/m</span>
+        </div>
+        <div style="background:#111827; padding:6px; border-radius:4px; border:1px solid #1e293b;">
+            <span style="color:#10b981; font-weight:bold;">[EVALUATION]</span><br><span id="stat-eval-counter" style="color:#eab308; font-weight:bold; font-size:12px;">0 v/m</span>
+        </div>
+        <div style="background:#111827; padding:6px; border-radius:4px; border:1px solid #1e293b;">
+            <span style="color:#f97316; font-weight:bold;">[2FA_IMPORT]</span><br><span id="stat-import-counter" style="color:#ef4444; font-weight:bold; font-size:12px;">0 v/m</span>
+        </div>
+    </div>
+    <div style="background:#111827; border:1px solid #1e293b; padding:12px; border-radius:6px; margin-bottom:15px;">
+        <div style="font-size:10px; color:#9ca3af; margin-bottom:6px; text-transform:uppercase; font-family:monospace; font-weight:bold;">📈 Aggregierte Interaktions-Frequenz (Live Taktung)</div>
+        <div style="display:flex; align-items:flex-end; height:45px; gap:4px; padding-top:5px;" id="live-bars-container"></div>
+    </div>
+    <div style="background:#111827; border:1px solid #1e293b; padding:12px; border-radius:6px; margin-bottom: 20px;">
+        <div style="font-size:10px; color:#9ca3af; margin-bottom:6px; text-transform:uppercase; font-family:monospace; font-weight:bold;">⛓️ Existierende Blockchain Gesamt-Adressliste</div>
+        <div id="decentralized-addresses-ledger" style="max-height:90px; overflow-y:auto; font-family:monospace; font-size:10px; color:#38bdf8; display:flex; flex-direction:column; gap:4px; -webkit-overflow-scrolling: touch;">
+            <div style="color:#475569; font-style:italic;">bc1qUr-Genesis-Anker_Kanal_aktiviert_0x00000</div>
+        </div>
+    </div>
+
+    <!-- ABSCHLUSS-BUTTON -->
+    <button onclick="window.scrollTo({top:0, behavior:'smooth'})" style="background: #1f2937; color: #9ca3af; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; font-size: 11px;">▲ Zurück zum Nutzer-Dashboard</button>
+</div>
+    
 <div id="social-core-module" class="box hidden" style="background: #0f172a; border: 2px solid #f97316; border-radius: 12px; padding: 20px; margin-top: 20px; font-family: sans-serif;">
     <div id="profile-main-view">
         <h3 style="color:#f97316; margin-top:0; border-bottom:1px solid #f97316; padding-bottom:5px;">👤 INSTITUTIONELLES PROFIL</h3>
@@ -209,32 +236,6 @@
     <button onclick="SocialModule.closeModule()" style="background:#1f2937; color:#ef4444; border:1px solid #dc2626; padding:12px; width:100%; border-radius:4px; font-weight:bold; cursor:pointer; margin-top:15px;">Dashboard Verlassen</button>
 </div>
 
-<!-- NETWORK STATISTICS MODULE -->
-<div id="network-statistics-module" style="background: #030712; border: 2px solid #2563eb; border-top:none; border-radius: 0 0 12px 12px; padding: 0 20px 20px 20px; margin: -15px auto 30px auto; max-width: 600px; font-family: sans-serif; box-shadow: 0 10px 15px rgba(37, 99, 235, 0.15);">
-    <hr style="border:0; border-top:1px dashed #2563eb; margin:0 0 15px 0;">
-    <h4 style="color:#eab308; margin-top:0; text-transform:uppercase; font-size:12px; letter-spacing:1px; font-family:sans-serif;">📊 Live-Interaktions Volumen Statistischer Viewer</h4>
-    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:5px; margin-bottom:15px; font-family:monospace; font-size:10px; text-align:center;">
-        <div style="background:#111827; padding:6px; border-radius:4px; border:1px solid #1e293b;">
-            <span style="color:#38bdf8; font-weight:bold;">[LOGIN]</span><br><span id="stat-login-counter" style="color:#10b981; font-weight:bold; font-size:12px;">0 v/m</span>
-        </div>
-        <div style="background:#111827; padding:6px; border-radius:4px; border:1px solid #1e293b;">
-            <span style="color:#10b981; font-weight:bold;">[EVALUATION]</span><br><span id="stat-eval-counter" style="color:#eab308; font-weight:bold; font-size:12px;">0 v/m</span>
-        </div>
-        <div style="background:#111827; padding:6px; border-radius:4px; border:1px solid #1e293b;">
-            <span style="color:#f97316; font-weight:bold;">[2FA_IMPORT]</span><br><span id="stat-import-counter" style="color:#ef4444; font-weight:bold; font-size:12px;">0 v/m</span>
-        </div>
-    </div>
-    <div style="background:#111827; border:1px solid #1e293b; padding:12px; border-radius:6px; margin-bottom:15px;">
-        <div style="font-size:10px; color:#9ca3af; margin-bottom:6px; text-transform:uppercase; font-family:monospace; font-weight:bold;">📈 Aggregierte Interaktions-Frequenz (Live Taktung)</div>
-        <div style="display:flex; align-items:flex-end; height:45px; gap:4px; padding-top:5px;" id="live-bars-container"></div>
-    </div>
-    <div style="background:#111827; border:1px solid #1e293b; padding:12px; border-radius:6px;">
-        <div style="font-size:10px; color:#9ca3af; margin-bottom:6px; text-transform:uppercase; font-family:monospace; font-weight:bold;">⛓️ Existierende Blockchain Gesamt-Adressliste</div>
-        <div id="decentralized-addresses-ledger" style="max-height:90px; overflow-y:auto; font-family:monospace; font-size:10px; color:#38bdf8; display:flex; flex-direction:column; gap:4px; -webkit-overflow-scrolling: touch;">
-            <div style="color:#475569; font-style:italic;">bc1qUr-Genesis-Anker_Kanal_aktiviert_0x00000</div>
-        </div>
-    </div>
-</div>
 
 <!-- SOVEREIGN MODUL: SOZIALES NETZWERK, CHAT, POSTS & DUAL SETTINGS -->
 <div id="social-core-module" class="box hidden" style="background: #0f172a; border: 2px solid #f97316; border-radius: 12px; padding: 20px; margin-top: 20px; font-family: sans-serif;">
